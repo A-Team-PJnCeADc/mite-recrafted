@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "M ",
+    " M"
+  ],
+  "result": {
+    "id": "mite-recrafted:rusted_iron_shears"
+  }
+}

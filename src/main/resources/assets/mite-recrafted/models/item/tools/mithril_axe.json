@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "mite-recrafted:item/tools/mithril_axe"
+  }
+}

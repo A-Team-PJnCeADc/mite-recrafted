@@ -1,0 +1,179 @@
+package com.mite.recraft.datagen;
+
+import com.mite.recraft.item.material.ModMaterials;
+import com.mite.recraft.item.tools.toolItem.*;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
+
+import java.util.concurrent.CompletableFuture;
+
+public class ModRecipeProvider extends FabricRecipeProvider {
+    public ModRecipeProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, registriesFuture);
+    }
+
+    @Override
+    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registryLookup, RecipeOutput exporter) {
+        return new RecipeProvider(registryLookup, exporter) {
+            @Override
+            public void buildRecipes() {
+
+                // ============ 斧头 (3材料) ============
+                axe(Items.FLINT, AexItems.FLINT_AXE);
+                axe(ModMaterials.OBSIDIAN_CHIP, AexItems.OBSIDIAN_AXE);
+                axe(ModMaterials.COPPER_INGOT, AexItems.COPPER_AXE);
+                axe(ModMaterials.SILVER_INGOT, AexItems.SILVER_AXE);
+                axe(Items.GOLD_INGOT, AexItems.GOLD_AXE);
+                axe(Items.IRON_INGOT, AexItems.RUSTED_IRON_AXE);
+                axe(Items.IRON_INGOT, AexItems.IRON_AXE);
+                axe(ModMaterials.ANCIENT_METAL_INGOT, AexItems.ANCIENT_METAL_AXE);
+                axe(ModMaterials.MITHRIL_INGOT, AexItems.MITHRIL_AXE);
+                axe(ModMaterials.ADAMANTIUM_INGOT, AexItems.ADAMANTIUM_AXE);
+
+                // ============ 手斧 (2材料) ============
+                hatchet(Items.FLINT, HatchetItems.FLINT_HATCHET);
+                hatchet(ModMaterials.OBSIDIAN_CHIP, HatchetItems.OBSIDIAN_HATCHET);
+                hatchet(ModMaterials.COPPER_INGOT, HatchetItems.COPPER_HATCHET);
+                hatchet(ModMaterials.SILVER_INGOT, HatchetItems.SILVER_HATCHET);
+                hatchet(Items.GOLD_INGOT, HatchetItems.GOLD_HATCHET);
+                hatchet(Items.IRON_INGOT, HatchetItems.RUSTED_IRON_HATCHET);
+                hatchet(Items.IRON_INGOT, HatchetItems.IRON_HATCHET);
+                hatchet(ModMaterials.ANCIENT_METAL_INGOT, HatchetItems.ANCIENT_METAL_HATCHET);
+                hatchet(ModMaterials.MITHRIL_INGOT, HatchetItems.MITHRIL_HATCHET);
+                hatchet(ModMaterials.ADAMANTIUM_INGOT, HatchetItems.ADAMANTIUM_HATCHET);
+
+                // ============ 镐 (3材料) ============
+                pickaxe(ModMaterials.COPPER_INGOT, PickaxeItems.COPPER_PICKAXE);
+                pickaxe(ModMaterials.SILVER_INGOT, PickaxeItems.SILVER_PICKAXE);
+                pickaxe(Items.GOLD_INGOT, PickaxeItems.GOLD_PICKAXE);
+                pickaxe(Items.IRON_INGOT, PickaxeItems.RUSTED_IRON_PICKAXE);
+                pickaxe(Items.IRON_INGOT, PickaxeItems.IRON_PICKAXE);
+                pickaxe(ModMaterials.ANCIENT_METAL_INGOT, PickaxeItems.ANCIENT_METAL_PICKAXE);
+                pickaxe(ModMaterials.MITHRIL_INGOT, PickaxeItems.MITHRIL_PICKAXE);
+                pickaxe(ModMaterials.ADAMANTIUM_INGOT, PickaxeItems.ADAMANTIUM_PICKAXE);
+
+                // ============ 锹 (1材料) ============
+                shovel(Items.FLINT, ShovelItems.FLINT_SHOVEL);
+                shovel(ModMaterials.OBSIDIAN_CHIP, ShovelItems.OBSIDIAN_SHOVEL);
+                shovel(ModMaterials.COPPER_INGOT, ShovelItems.COPPER_SHOVEL);
+                shovel(ModMaterials.SILVER_INGOT, ShovelItems.SILVER_SHOVEL);
+                shovel(Items.GOLD_INGOT, ShovelItems.GOLD_SHOVEL);
+                shovel(Items.IRON_INGOT, ShovelItems.RUSTED_IRON_SHOVEL);
+                shovel(Items.IRON_INGOT, ShovelItems.IRON_SHOVEL);
+                shovel(ModMaterials.ANCIENT_METAL_INGOT, ShovelItems.ANCIENT_METAL_SHOVEL);
+                shovel(ModMaterials.MITHRIL_INGOT, ShovelItems.MITHRIL_SHOVEL);
+                shovel(ModMaterials.ADAMANTIUM_INGOT, ShovelItems.ADAMANTIUM_SHOVEL);
+
+                // ============ 锄 (2材料, 仅金属) ============
+                hoe(ModMaterials.COPPER_INGOT, HoeItems.COPPER_HOE);
+                hoe(ModMaterials.SILVER_INGOT, HoeItems.SILVER_HOE);
+                hoe(Items.GOLD_INGOT, HoeItems.GOLD_HOE);
+                hoe(Items.IRON_INGOT, HoeItems.RUSTED_IRON_HOE);
+                hoe(Items.IRON_INGOT, HoeItems.IRON_HOE);
+                hoe(ModMaterials.ANCIENT_METAL_INGOT, HoeItems.ANCIENT_METAL_HOE);
+                hoe(ModMaterials.MITHRIL_INGOT, HoeItems.MITHRIL_HOE);
+                hoe(ModMaterials.ADAMANTIUM_INGOT, HoeItems.ADAMANTIUM_HOE);
+
+                // ============ 剪刀 (对角2锭, 仅金属) ============
+                shears(ModMaterials.COPPER_INGOT, ShearsItems.COPPER_SHEARS);
+                shears(ModMaterials.SILVER_INGOT, ShearsItems.SILVER_SHEARS);
+                shears(Items.GOLD_INGOT, ShearsItems.GOLD_SHEARS);
+                shears(Items.IRON_INGOT, ShearsItems.RUSTED_IRON_SHEARS);
+                shears(ModMaterials.ANCIENT_METAL_INGOT, ShearsItems.ANCIENT_METAL_SHEARS);
+                shears(ModMaterials.MITHRIL_INGOT, ShearsItems.MITHRIL_SHEARS);
+                shears(ModMaterials.ADAMANTIUM_INGOT, ShearsItems.ADAMANTIUM_SHEARS);
+
+                // ============ 钓鱼竿 (1粒/碎片+3棍+2线, AND解锁) ============
+                fishingRod(ModMaterials.FLINT_CHIP, FishingRodItems.FLINT_FISHING_ROD);
+                fishingRod(ModMaterials.OBSIDIAN_CHIP, FishingRodItems.OBSIDIAN_FISHING_ROD);
+                fishingRod(ModMaterials.COPPER_NUGGET, FishingRodItems.COPPER_FISHING_ROD);
+                fishingRod(ModMaterials.SILVER_NUGGET, FishingRodItems.SILVER_FISHING_ROD);
+                fishingRod(Items.GOLD_NUGGET, FishingRodItems.GOLD_FISHING_ROD);
+                fishingRod(ModMaterials.IRON_NUGGET, FishingRodItems.IRON_FISHING_ROD);
+                fishingRod(ModMaterials.ANCIENT_METAL_NUGGET, FishingRodItems.ANCIENT_METAL_FISHING_ROD);
+                fishingRod(ModMaterials.MITHRIL_NUGGET, FishingRodItems.MITHRIL_FISHING_ROD);
+                fishingRod(ModMaterials.ADAMANTIUM_NUGGET, FishingRodItems.ADAMANTIUM_FISHING_ROD);
+
+                // ============ 剑 (2锭+1棍) ============
+                sword(ModMaterials.COPPER_INGOT, SwordItems.COPPER_SWORD);
+                sword(Items.GOLD_INGOT, SwordItems.GOLD_SWORD);
+                sword(Items.IRON_INGOT, SwordItems.IRON_SWORD);
+                sword(ModMaterials.SILVER_INGOT, SwordItems.SILVER_SWORD);
+                sword(Items.IRON_INGOT, SwordItems.RUSTED_IRON_SWORD);
+                sword(ModMaterials.ANCIENT_METAL_INGOT, SwordItems.ANCIENT_METAL_SWORD);
+                sword(ModMaterials.MITHRIL_INGOT, SwordItems.MITHRIL_SWORD);
+                sword(ModMaterials.ADAMANTIUM_INGOT, SwordItems.ADAMANTIUM_SWORD);
+            }
+
+            void axe(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("MMM").pattern("MS ").pattern(" S ")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void hatchet(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("MM").pattern("MS").pattern(" S")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void pickaxe(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("MMM").pattern(" S ").pattern(" S ")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void shovel(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("M").pattern("S").pattern("S")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void hoe(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("MM").pattern(" S").pattern(" S")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void shears(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("M ").pattern(" M")
+                        .define('M', m)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void fishingRod(ItemLike hook, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("  S").pattern(" SL").pattern("SML")
+                        .define('M', hook).define('S', Items.STICK).define('L', Items.STRING)
+                        .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+                        .unlockedBy(getHasName(hook), has(hook))
+                        .save(output);
+            }
+
+            void sword(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("M").pattern("M").pattern("S")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+        };
+    }
+
+    @Override
+    public String getName() {
+        return "MITE Recrafted Recipes";
+    }
+}

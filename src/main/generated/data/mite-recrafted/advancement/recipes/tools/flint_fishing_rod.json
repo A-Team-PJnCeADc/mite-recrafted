@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_flint_chip": {
+      "conditions": {
+        "items": [
+          {
+            "items": "mite-recrafted:flint_chip"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_string": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:string"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "mite-recrafted:flint_fishing_rod"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_string",
+      "has_flint_chip"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mite-recrafted:flint_fishing_rod"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": "minecraft:string",
+    "M": "mite-recrafted:flint_chip",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "  S",
+    " SL",
+    "SML"
+  ],
+  "result": {
+    "id": "mite-recrafted:flint_fishing_rod"
+  }
+}

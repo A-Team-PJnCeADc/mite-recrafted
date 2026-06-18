@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "minecraft:flint",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "MMM",
+    "MS ",
+    " S "
+  ],
+  "result": {
+    "id": "mite-recrafted:flint_axe"
+  }
+}

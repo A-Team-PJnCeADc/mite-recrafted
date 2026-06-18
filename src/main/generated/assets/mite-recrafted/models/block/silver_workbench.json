@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "bottom": "mite-recrafted:block/workbench/crafting_table_top",
+    "front": "mite-recrafted:block/workbench/silver/front",
+    "side": "mite-recrafted:block/workbench/silver/side",
+    "top": "mite-recrafted:block/workbench/crafting_table_top"
+  }
+}

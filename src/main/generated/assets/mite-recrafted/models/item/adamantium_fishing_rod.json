@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld_rod",
+  "textures": {
+    "layer0": "mite-recrafted:item/fishing_rods/adamantium_fishing_rod"
+  }
+}

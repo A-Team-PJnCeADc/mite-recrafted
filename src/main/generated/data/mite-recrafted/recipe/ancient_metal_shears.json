@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "mite-recrafted:ancient_metal_ingot"
+  },
+  "pattern": [
+    "M ",
+    " M"
+  ],
+  "result": {
+    "id": "mite-recrafted:ancient_metal_shears"
+  }
+}

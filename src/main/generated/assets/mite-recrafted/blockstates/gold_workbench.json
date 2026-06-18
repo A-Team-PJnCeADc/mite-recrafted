@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "mite-recrafted:block/gold_workbench"
+    }
+  }
+}

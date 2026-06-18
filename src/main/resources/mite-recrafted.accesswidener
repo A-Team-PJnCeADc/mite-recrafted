@@ -1,0 +1,4 @@
+accessWidener v2 intermediary
+
+# ItemModelGenerators.itemModelOutput — allow manual item model registration
+accessible field net/minecraft/class_4915 field_22843 Lnet/minecraft/client/data/models/ItemModelOutput;

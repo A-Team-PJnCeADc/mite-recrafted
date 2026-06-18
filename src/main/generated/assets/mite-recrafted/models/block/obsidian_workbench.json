@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "mite-recrafted:block/workbench/obsidian/top",
+    "side": "mite-recrafted:block/workbench/crafting_table_side"
+  }
+}
