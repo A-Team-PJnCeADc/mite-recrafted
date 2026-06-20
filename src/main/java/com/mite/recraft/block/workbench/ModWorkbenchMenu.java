@@ -1,6 +1,7 @@
 package com.mite.recraft.block.workbench;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -116,11 +117,11 @@ public class ModWorkbenchMenu extends CraftingMenu {
          * 匹配 mite-recrafted 物品名称中的材料前缀
          */
         private static float getItemDurability(ItemStack stack) {
-            var key = stack.getItem().builtInRegistryHolder().key();
-            if (key == null || !key.identifier().getNamespace().equals("mite-recrafted")) {
+            var key = BuiltInRegistries.ITEM.getKey(stack.getItem());
+            if (key == null || !key.getNamespace().equals("mite-recrafted")) {
                 return 1.0f; // 原版物品 → 最低等级
             }
-            String path = key.identifier().getPath();
+            String path = key.getPath();
             for (WorkbenchMaterial mat : WorkbenchMaterial.values()) {
                 if (path.contains(mat.getName())) {
                     return mat.getToolMaterial().getDurabilityCoefficient();
