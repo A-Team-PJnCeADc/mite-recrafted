@@ -38,3 +38,4 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+/zh-6.7.20.jar

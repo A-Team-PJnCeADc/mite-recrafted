@@ -9,9 +9,9 @@
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/A-Team-PJnCeADc/mite-recrafted"
 	},
-	"license": "CC0-1.0",
+	"license": "CC BY-NC-SA 4.0",
 	"icon": "assets/mite-recrafted/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -34,7 +34,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.19.3",
-		"minecraft": "~26.1.2",
+		"minecraft": "~26.2",
 		"java": ">=25",
 		"fabric-api": "*"
 	}
