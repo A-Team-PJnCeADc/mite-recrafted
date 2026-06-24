@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.block.ModBlocks;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
+import com.mite.recraft.item.tools.toolItem.AexItems;
 import com.mite.recraft.item.tools.toolItem.FishingRodItems;
 import com.mite.recraft.item.tools.toolItem.HatchetItems;
 import com.mite.recraft.item.tools.toolItem.HoeItems;
@@ -11,6 +12,7 @@ import com.mite.recraft.item.tools.toolItem.PickaxeItems;
 import com.mite.recraft.item.tools.toolItem.ShearsItems;
 import com.mite.recraft.item.tools.toolItem.ShovelItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
+import com.mite.recraft.item.material.ModMaterials;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -103,6 +105,16 @@ public class ModModelProvider extends FabricModelProvider {
     public void generateItemModels(@NonNull ItemModelGenerators gen) {
         Map<Identifier, JsonObject> itemDefs = new LinkedHashMap<>();
 
+        // 斧头
+        List<Item> axes = List.of(
+                AexItems.FLINT_AXE, AexItems.OBSIDIAN_AXE,
+                AexItems.COPPER_AXE, AexItems.SILVER_AXE,
+                AexItems.GOLD_AXE, AexItems.RUSTED_IRON_AXE,
+                AexItems.IRON_AXE, AexItems.ANCIENT_METAL_AXE,
+                AexItems.MITHRIL_AXE, AexItems.ADAMANTIUM_AXE
+        );
+        generateToolModels(gen, axes, itemDefs);
+
         // 手斧
         List<Item> hatchets = List.of(
                 HatchetItems.FLINT_HATCHET, HatchetItems.OBSIDIAN_HATCHET,
@@ -169,6 +181,33 @@ public class ModModelProvider extends FabricModelProvider {
         );
         generateToolModels(gen, swords, itemDefs);
 
+        // 材料物品
+        generateFlatModels(gen, "ingots", itemDefs,
+                ModMaterials.COPPER_INGOT, ModMaterials.SILVER_INGOT,
+                ModMaterials.ANCIENT_METAL_INGOT, ModMaterials.MITHRIL_INGOT,
+                ModMaterials.ADAMANTIUM_INGOT);
+
+        generateFlatModels(gen, "nuggets", itemDefs,
+                ModMaterials.COPPER_NUGGET, ModMaterials.SILVER_NUGGET,
+                ModMaterials.IRON_NUGGET, ModMaterials.ANCIENT_METAL_NUGGET,
+                ModMaterials.MITHRIL_NUGGET, ModMaterials.ADAMANTIUM_NUGGET);
+
+        generateFlatModels(gen, "chains", itemDefs,
+                ModMaterials.COPPER_CHAIN, ModMaterials.SILVER_CHAIN,
+                ModMaterials.GOLDEN_CHAIN, ModMaterials.RUSTED_IRON_CHAIN,
+                ModMaterials.IRON_CHAIN, ModMaterials.ANCIENT_METAL_CHAIN,
+                ModMaterials.MITHRIL_CHAIN, ModMaterials.ADAMANTIUM_CHAIN);
+
+        generateFlatModels(gen, "coins", itemDefs,
+                ModMaterials.COPPER_COIN, ModMaterials.SILVER_COIN,
+                ModMaterials.GOLDEN_COIN, ModMaterials.ANCIENT_METAL_COIN,
+                ModMaterials.MITHRIL_COIN, ModMaterials.ADAMANTIUM_COIN);
+
+        generateFlatModels(gen, "shards", itemDefs,
+                ModMaterials.FLINT_CHIP, ModMaterials.OBSIDIAN_CHIP,
+                ModMaterials.DIAMOND_CHIP, ModMaterials.EMERALD_CHIP,
+                ModMaterials.GLASS_SHARD, ModMaterials.NETHER_QUARTZ_SHARD);
+
         // 写入 items/*.json
         Path itemsDir = dataOutput.getOutputFolder().resolve("assets").resolve(MiteRecrafted.MOD_ID).resolve("items");
         try {
@@ -185,10 +224,36 @@ public class ModModelProvider extends FabricModelProvider {
     private void generateToolModels(ItemModelGenerators gen, List<Item> tools, Map<Identifier, JsonObject> itemDefs) {
         for (Item tool : tools) {
             String itemName = BuiltInRegistries.ITEM.getKey(tool).getPath();
-            Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/" + itemName);
+            Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/tools/" + itemName);
             Identifier textureId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/tools/" + itemName);
 
             ModelTemplates.FLAT_HANDHELD_ITEM.create(
+                    modelId,
+                    TextureMapping.layer0(new Material(textureId)),
+                    gen.modelOutput
+            );
+
+            JsonObject json = new JsonObject();
+            JsonObject model = new JsonObject();
+            model.addProperty("type", "minecraft:model");
+            model.addProperty("model", modelId.toString());
+            json.add("model", model);
+            itemDefs.put(Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, itemName), json);
+        }
+    }
+
+    /**
+     * 生成普通材料物品模型（父模板 item/generated）
+     * 模型和纹理都在 item/<category>/ 子目录下
+     */
+    private void generateFlatModels(ItemModelGenerators gen, String category,
+                                     Map<Identifier, JsonObject> itemDefs, Item... items) {
+        for (Item item : items) {
+            String itemName = BuiltInRegistries.ITEM.getKey(item).getPath();
+            Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/" + category + "/" + itemName);
+            Identifier textureId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/" + category + "/" + itemName);
+
+            ModelTemplates.FLAT_ITEM.create(
                     modelId,
                     TextureMapping.layer0(new Material(textureId)),
                     gen.modelOutput
@@ -212,7 +277,7 @@ public class ModModelProvider extends FabricModelProvider {
 
         for (Item rod : rods) {
             String itemName = BuiltInRegistries.ITEM.getKey(rod).getPath();
-            Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/" + itemName);
+            Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/tools/" + itemName);
             Identifier texId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/fishing_rods/" + itemName);
 
             // 未抛竿模型（杆+线，材质特有）
@@ -222,9 +287,8 @@ public class ModModelProvider extends FabricModelProvider {
                     gen.modelOutput
             );
 
-            // 鱼漂暂无贴图
             // 抛竿模型（纯杆，所有材质共用 fishing_rod_cast.png）
-            Identifier castModelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/" + itemName + "_cast");
+            Identifier castModelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/tools/" + itemName + "_cast");
             ModelTemplates.FLAT_HANDHELD_ROD_ITEM.create(
                     castModelId,
                     TextureMapping.layer0(new Material(sharedCastTex)),
