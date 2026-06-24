@@ -30,9 +30,9 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 axe(ModMaterials.OBSIDIAN_CHIP, AexItems.OBSIDIAN_AXE);
                 axe(ModMaterials.COPPER_INGOT, AexItems.COPPER_AXE);
                 axe(ModMaterials.SILVER_INGOT, AexItems.SILVER_AXE);
-                axe(Items.GOLD_INGOT, AexItems.GOLD_AXE);
-                axe(Items.IRON_INGOT, AexItems.RUSTED_IRON_AXE);
-                axe(Items.IRON_INGOT, AexItems.IRON_AXE);
+                axe(ModMaterials.GOLD_INGOT, AexItems.GOLD_AXE);
+                axe(ModMaterials.IRON_INGOT, AexItems.RUSTED_IRON_AXE);
+                axe(ModMaterials.IRON_INGOT, AexItems.IRON_AXE);
                 axe(ModMaterials.ANCIENT_METAL_INGOT, AexItems.ANCIENT_METAL_AXE);
                 axe(ModMaterials.MITHRIL_INGOT, AexItems.MITHRIL_AXE);
                 axe(ModMaterials.ADAMANTIUM_INGOT, AexItems.ADAMANTIUM_AXE);
@@ -42,9 +42,9 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 hatchet(ModMaterials.OBSIDIAN_CHIP, HatchetItems.OBSIDIAN_HATCHET);
                 hatchet(ModMaterials.COPPER_INGOT, HatchetItems.COPPER_HATCHET);
                 hatchet(ModMaterials.SILVER_INGOT, HatchetItems.SILVER_HATCHET);
-                hatchet(Items.GOLD_INGOT, HatchetItems.GOLD_HATCHET);
-                hatchet(Items.IRON_INGOT, HatchetItems.RUSTED_IRON_HATCHET);
-                hatchet(Items.IRON_INGOT, HatchetItems.IRON_HATCHET);
+                hatchet(ModMaterials.GOLD_INGOT, HatchetItems.GOLD_HATCHET);
+                hatchet(ModMaterials.IRON_INGOT, HatchetItems.RUSTED_IRON_HATCHET);
+                hatchet(ModMaterials.IRON_INGOT, HatchetItems.IRON_HATCHET);
                 hatchet(ModMaterials.ANCIENT_METAL_INGOT, HatchetItems.ANCIENT_METAL_HATCHET);
                 hatchet(ModMaterials.MITHRIL_INGOT, HatchetItems.MITHRIL_HATCHET);
                 hatchet(ModMaterials.ADAMANTIUM_INGOT, HatchetItems.ADAMANTIUM_HATCHET);
@@ -52,9 +52,9 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 // ============ 镐 (3材料) ============
                 pickaxe(ModMaterials.COPPER_INGOT, PickaxeItems.COPPER_PICKAXE);
                 pickaxe(ModMaterials.SILVER_INGOT, PickaxeItems.SILVER_PICKAXE);
-                pickaxe(Items.GOLD_INGOT, PickaxeItems.GOLD_PICKAXE);
-                pickaxe(Items.IRON_INGOT, PickaxeItems.RUSTED_IRON_PICKAXE);
-                pickaxe(Items.IRON_INGOT, PickaxeItems.IRON_PICKAXE);
+                pickaxe(ModMaterials.GOLD_INGOT, PickaxeItems.GOLD_PICKAXE);
+                pickaxe(ModMaterials.IRON_INGOT, PickaxeItems.RUSTED_IRON_PICKAXE);
+                pickaxe(ModMaterials.IRON_INGOT, PickaxeItems.IRON_PICKAXE);
                 pickaxe(ModMaterials.ANCIENT_METAL_INGOT, PickaxeItems.ANCIENT_METAL_PICKAXE);
                 pickaxe(ModMaterials.MITHRIL_INGOT, PickaxeItems.MITHRIL_PICKAXE);
                 pickaxe(ModMaterials.ADAMANTIUM_INGOT, PickaxeItems.ADAMANTIUM_PICKAXE);
@@ -64,9 +64,9 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 shovel(ModMaterials.OBSIDIAN_CHIP, ShovelItems.OBSIDIAN_SHOVEL);
                 shovel(ModMaterials.COPPER_INGOT, ShovelItems.COPPER_SHOVEL);
                 shovel(ModMaterials.SILVER_INGOT, ShovelItems.SILVER_SHOVEL);
-                shovel(Items.GOLD_INGOT, ShovelItems.GOLD_SHOVEL);
-                shovel(Items.IRON_INGOT, ShovelItems.RUSTED_IRON_SHOVEL);
-                shovel(Items.IRON_INGOT, ShovelItems.IRON_SHOVEL);
+                shovel(ModMaterials.GOLD_INGOT, ShovelItems.GOLD_SHOVEL);
+                shovel(ModMaterials.IRON_INGOT, ShovelItems.RUSTED_IRON_SHOVEL);
+                shovel(ModMaterials.IRON_INGOT, ShovelItems.IRON_SHOVEL);
                 shovel(ModMaterials.ANCIENT_METAL_INGOT, ShovelItems.ANCIENT_METAL_SHOVEL);
                 shovel(ModMaterials.MITHRIL_INGOT, ShovelItems.MITHRIL_SHOVEL);
                 shovel(ModMaterials.ADAMANTIUM_INGOT, ShovelItems.ADAMANTIUM_SHOVEL);
@@ -74,9 +74,9 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 // ============ 锄 (2材料, 仅金属) ============
                 hoe(ModMaterials.COPPER_INGOT, HoeItems.COPPER_HOE);
                 hoe(ModMaterials.SILVER_INGOT, HoeItems.SILVER_HOE);
-                hoe(Items.GOLD_INGOT, HoeItems.GOLD_HOE);
-                hoe(Items.IRON_INGOT, HoeItems.RUSTED_IRON_HOE);
-                hoe(Items.IRON_INGOT, HoeItems.IRON_HOE);
+                hoe(ModMaterials.GOLD_INGOT, HoeItems.GOLD_HOE);
+                hoe(ModMaterials.IRON_INGOT, HoeItems.RUSTED_IRON_HOE);
+                hoe(ModMaterials.IRON_INGOT, HoeItems.IRON_HOE);
                 hoe(ModMaterials.ANCIENT_METAL_INGOT, HoeItems.ANCIENT_METAL_HOE);
                 hoe(ModMaterials.MITHRIL_INGOT, HoeItems.MITHRIL_HOE);
                 hoe(ModMaterials.ADAMANTIUM_INGOT, HoeItems.ADAMANTIUM_HOE);
@@ -84,8 +84,8 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 // ============ 剪刀 (对角2锭, 仅金属) ============
                 shears(ModMaterials.COPPER_INGOT, ShearsItems.COPPER_SHEARS);
                 shears(ModMaterials.SILVER_INGOT, ShearsItems.SILVER_SHEARS);
-                shears(Items.GOLD_INGOT, ShearsItems.GOLD_SHEARS);
-                shears(Items.IRON_INGOT, ShearsItems.RUSTED_IRON_SHEARS);
+                shears(ModMaterials.GOLD_INGOT, ShearsItems.GOLD_SHEARS);
+                shears(ModMaterials.IRON_INGOT, ShearsItems.RUSTED_IRON_SHEARS);
                 shears(ModMaterials.ANCIENT_METAL_INGOT, ShearsItems.ANCIENT_METAL_SHEARS);
                 shears(ModMaterials.MITHRIL_INGOT, ShearsItems.MITHRIL_SHEARS);
                 shears(ModMaterials.ADAMANTIUM_INGOT, ShearsItems.ADAMANTIUM_SHEARS);
@@ -103,13 +103,35 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 
                 // ============ 剑 (2锭+1棍) ============
                 sword(ModMaterials.COPPER_INGOT, SwordItems.COPPER_SWORD);
-                sword(Items.GOLD_INGOT, SwordItems.GOLD_SWORD);
-                sword(Items.IRON_INGOT, SwordItems.IRON_SWORD);
+                sword(ModMaterials.GOLD_INGOT, SwordItems.GOLD_SWORD);
+                sword(ModMaterials.IRON_INGOT, SwordItems.IRON_SWORD);
                 sword(ModMaterials.SILVER_INGOT, SwordItems.SILVER_SWORD);
-                sword(Items.IRON_INGOT, SwordItems.RUSTED_IRON_SWORD);
+                sword(ModMaterials.IRON_INGOT, SwordItems.RUSTED_IRON_SWORD);
                 sword(ModMaterials.ANCIENT_METAL_INGOT, SwordItems.ANCIENT_METAL_SWORD);
                 sword(ModMaterials.MITHRIL_INGOT, SwordItems.MITHRIL_SWORD);
                 sword(ModMaterials.ADAMANTIUM_INGOT, SwordItems.ADAMANTIUM_SWORD);
+
+                // ============ 短剑 (1锭+1棍, 2x1配方) ============
+                dagger(ModMaterials.COPPER_INGOT, DaggerItems.COPPER_DAGGER);
+                dagger(ModMaterials.SILVER_INGOT, DaggerItems.SILVER_DAGGER);
+                dagger(ModMaterials.GOLD_INGOT, DaggerItems.GOLD_DAGGER);
+                dagger(ModMaterials.IRON_INGOT, DaggerItems.RUSTED_IRON_DAGGER);
+                dagger(ModMaterials.IRON_INGOT, DaggerItems.IRON_DAGGER);
+                dagger(ModMaterials.ANCIENT_METAL_INGOT, DaggerItems.ANCIENT_METAL_DAGGER);
+                dagger(ModMaterials.MITHRIL_INGOT, DaggerItems.MITHRIL_DAGGER);
+                dagger(ModMaterials.ADAMANTIUM_INGOT, DaggerItems.ADAMANTIUM_DAGGER);
+
+                // ============ 箭 (碎片/粒+棍+羽毛, 3x1) ============
+                arrow(ModMaterials.FLINT_CHIP, ArrowItems.FLINT_ARROW);
+                arrow(ModMaterials.OBSIDIAN_CHIP, ArrowItems.OBSIDIAN_ARROW);
+                arrow(ModMaterials.COPPER_NUGGET, ArrowItems.COPPER_ARROW);
+                arrow(ModMaterials.SILVER_NUGGET, ArrowItems.SILVER_ARROW);
+                arrow(Items.GOLD_NUGGET, ArrowItems.GOLD_ARROW);
+                arrow(ModMaterials.IRON_NUGGET, ArrowItems.RUSTED_IRON_ARROW);
+                arrow(ModMaterials.IRON_NUGGET, ArrowItems.IRON_ARROW);
+                arrow(ModMaterials.ANCIENT_METAL_NUGGET, ArrowItems.ANCIENT_METAL_ARROW);
+                arrow(ModMaterials.MITHRIL_NUGGET, ArrowItems.MITHRIL_ARROW);
+                arrow(ModMaterials.ADAMANTIUM_NUGGET, ArrowItems.ADAMANTIUM_ARROW);
             }
 
             void axe(ItemLike m, Item result) {
@@ -168,6 +190,20 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .pattern("M").pattern("M").pattern("S")
                         .define('M', m).define('S', Items.STICK)
                         .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void dagger(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("M").pattern("S")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void arrow(ItemLike tip, Item result) {
+                shaped(RecipeCategory.COMBAT, result)
+                        .pattern("M").pattern("S").pattern("F")
+                        .define('M', tip).define('S', Items.STICK).define('F', Items.FEATHER)
+                        .unlockedBy(getHasName(tip), has(tip)).save(output);
             }
         };
     }

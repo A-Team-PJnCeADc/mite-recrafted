@@ -2,6 +2,8 @@ package com.mite.recraft.item.tools.register;
 
 import com.mite.recraft.item.ModItems;
 import com.mite.recraft.item.tools.toolItem.AexItems;
+import com.mite.recraft.item.tools.toolItem.ArrowItems;
+import com.mite.recraft.item.tools.toolItem.DaggerItems;
 import com.mite.recraft.item.tools.toolItem.FishingRodItems;
 import com.mite.recraft.item.tools.toolItem.HatchetItems;
 import com.mite.recraft.item.tools.toolItem.HoeItems;
@@ -101,6 +103,28 @@ public class ModToolRegister {
         register("ancient_metal_sword", SwordItems.ANCIENT_METAL_SWORD);
         register("mithril_sword", SwordItems.MITHRIL_SWORD);
         register("adamantium_sword", SwordItems.ADAMANTIUM_SWORD);
+
+        // 短剑
+        register("copper_dagger", DaggerItems.COPPER_DAGGER);
+        register("silver_dagger", DaggerItems.SILVER_DAGGER);
+        register("gold_dagger", DaggerItems.GOLD_DAGGER);
+        register("rusted_iron_dagger", DaggerItems.RUSTED_IRON_DAGGER);
+        register("iron_dagger", DaggerItems.IRON_DAGGER);
+        register("ancient_metal_dagger", DaggerItems.ANCIENT_METAL_DAGGER);
+        register("mithril_dagger", DaggerItems.MITHRIL_DAGGER);
+        register("adamantium_dagger", DaggerItems.ADAMANTIUM_DAGGER);
+
+        // 箭
+        register("flint_arrow", ArrowItems.FLINT_ARROW);
+        register("obsidian_arrow", ArrowItems.OBSIDIAN_ARROW);
+        register("copper_arrow", ArrowItems.COPPER_ARROW);
+        register("silver_arrow", ArrowItems.SILVER_ARROW);
+        register("gold_arrow", ArrowItems.GOLD_ARROW);
+        register("rusted_iron_arrow", ArrowItems.RUSTED_IRON_ARROW);
+        register("iron_arrow", ArrowItems.IRON_ARROW);
+        register("ancient_metal_arrow", ArrowItems.ANCIENT_METAL_ARROW);
+        register("mithril_arrow", ArrowItems.MITHRIL_ARROW);
+        register("adamantium_arrow", ArrowItems.ADAMANTIUM_ARROW);
     }
 
     private static void register(String name, Item item) {

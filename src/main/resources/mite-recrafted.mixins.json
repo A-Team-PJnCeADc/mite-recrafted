@@ -3,8 +3,10 @@
 	"package": "com.mite.recraft.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
-		"ExampleMixin",
-		"FishingHookMixin"
+	    "FishingHookMixin",
+	    "AbstractArrowInvoker",
+	    "ArrowRecoveryMixin",
+	    "LivingEntityStuckArrowsMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

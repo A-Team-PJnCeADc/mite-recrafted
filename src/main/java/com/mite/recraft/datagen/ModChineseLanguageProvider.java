@@ -117,6 +117,8 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (id.equals(mat + "_shears")) return name + "剪刀";
             if (id.equals(mat + "_fishing_rod")) return name + "钓鱼竿";
             if (id.equals(mat + "_sword")) return name + "剑";
+            if (id.equals(mat + "_dagger")) return name + "短剑";
+            if (id.equals(mat + "_arrow")) return name + "箭";
         }
         return null;
     }

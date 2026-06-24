@@ -2,6 +2,7 @@ package com.mite.recraft;
 
 import com.mite.recraft.block.ModBlocks;
 import com.mite.recraft.component.ModDataComponents;
+import com.mite.recraft.entity.ModEntitys;
 import com.mite.recraft.item.ModCreativeTabs;
 import com.mite.recraft.item.ModItems;
 import net.fabricmc.api.ModInitializer;
@@ -27,5 +28,6 @@ public class MiteRecrafted implements ModInitializer {
 		ModItems.init();
 		ModCreativeTabs.init();
         ModBlocks.init();
-	}
+		ModEntitys.init();
+    }
 }

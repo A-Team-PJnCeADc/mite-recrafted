@@ -5,6 +5,8 @@ import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.block.ModBlocks;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
 import com.mite.recraft.item.tools.toolItem.AexItems;
+import com.mite.recraft.item.tools.toolItem.ArrowItems;
+import com.mite.recraft.item.tools.toolItem.DaggerItems;
 import com.mite.recraft.item.tools.toolItem.FishingRodItems;
 import com.mite.recraft.item.tools.toolItem.HatchetItems;
 import com.mite.recraft.item.tools.toolItem.HoeItems;
@@ -181,9 +183,29 @@ public class ModModelProvider extends FabricModelProvider {
         );
         generateToolModels(gen, swords, itemDefs);
 
-        // 材料物品
+        // 短剑
+        List<Item> daggers = List.of(
+                DaggerItems.COPPER_DAGGER, DaggerItems.SILVER_DAGGER,
+                DaggerItems.GOLD_DAGGER, DaggerItems.RUSTED_IRON_DAGGER,
+                DaggerItems.IRON_DAGGER, DaggerItems.ANCIENT_METAL_DAGGER,
+                DaggerItems.MITHRIL_DAGGER, DaggerItems.ADAMANTIUM_DAGGER
+        );
+        generateToolModels(gen, daggers, itemDefs);
+
+        // 箭
+        List<Item> arrows = List.of(
+                ArrowItems.FLINT_ARROW, ArrowItems.OBSIDIAN_ARROW,
+                ArrowItems.COPPER_ARROW, ArrowItems.SILVER_ARROW,
+                ArrowItems.GOLD_ARROW, ArrowItems.RUSTED_IRON_ARROW,
+                ArrowItems.IRON_ARROW, ArrowItems.ANCIENT_METAL_ARROW,
+                ArrowItems.MITHRIL_ARROW, ArrowItems.ADAMANTIUM_ARROW
+        );
+        generateToolModels(gen, arrows, "arrows", itemDefs);
+
+        // ====== 材料物品 (FLAT_ITEM, 不同的纹理目录) ======
         generateFlatModels(gen, "ingots", itemDefs,
-                ModMaterials.COPPER_INGOT, ModMaterials.SILVER_INGOT,
+                ModMaterials.COPPER_INGOT, ModMaterials.GOLD_INGOT,
+                ModMaterials.IRON_INGOT, ModMaterials.SILVER_INGOT,
                 ModMaterials.ANCIENT_METAL_INGOT, ModMaterials.MITHRIL_INGOT,
                 ModMaterials.ADAMANTIUM_INGOT);
 
@@ -222,10 +244,15 @@ public class ModModelProvider extends FabricModelProvider {
     }
 
     private void generateToolModels(ItemModelGenerators gen, List<Item> tools, Map<Identifier, JsonObject> itemDefs) {
+        generateToolModels(gen, tools, "tools", itemDefs);
+    }
+
+    private void generateToolModels(ItemModelGenerators gen, List<Item> tools, String texDir,
+                                     Map<Identifier, JsonObject> itemDefs) {
         for (Item tool : tools) {
             String itemName = BuiltInRegistries.ITEM.getKey(tool).getPath();
             Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/tools/" + itemName);
-            Identifier textureId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/tools/" + itemName);
+            Identifier textureId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/" + texDir + "/" + itemName);
 
             ModelTemplates.FLAT_HANDHELD_ITEM.create(
                     modelId,

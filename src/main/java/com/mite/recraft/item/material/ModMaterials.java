@@ -25,6 +25,8 @@ public class ModMaterials {
     public static final Item ADAMANTIUM_NUGGET = registerMaterials("adamantium_nugget", 64);
 
     public static final Item COPPER_INGOT = registerMaterials("copper_ingot", 8);
+    public static final Item GOLD_INGOT = registerMaterials("gold_ingot", 8);
+    public static final Item IRON_INGOT = registerMaterials("iron_ingot", 8);
     public static final Item SILVER_INGOT = registerMaterials("silver_ingot", 8);
     public static final Item ANCIENT_METAL_INGOT = registerMaterials("ancient_metal_ingot", 8);
     public static final Item MITHRIL_INGOT = registerMaterials("mithril_ingot", 8);
