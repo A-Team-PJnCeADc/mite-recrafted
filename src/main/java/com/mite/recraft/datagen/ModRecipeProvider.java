@@ -8,6 +8,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -27,8 +29,8 @@ public class ModRecipeProvider extends FabricRecipeProvider {
             public void buildRecipes() {
 
                 // ============ 木棒/短木棒 ============
-                club(Blocks.OAK_PLANKS, WoodenItems.CLUB);
-                cudgel(Blocks.OAK_PLANKS, WoodenItems.CUDGEL);
+                club(ItemTags.PLANKS, WoodenItems.CLUB);
+                cudgel(ItemTags.PLANKS, WoodenItems.CUDGEL);
 
                 // ============ 斧头 (3材料) ============
                 axe(Items.FLINT, AexItems.FLINT_AXE);
@@ -42,7 +44,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 axe(ModMaterials.MITHRIL_INGOT, AexItems.MITHRIL_AXE);
                 axe(ModMaterials.ADAMANTIUM_INGOT, AexItems.ADAMANTIUM_AXE);
 
-                // ============ 手斧 (2材料) ============
+                // ============ 手斧 (1材料) ============
                 hatchet(Items.FLINT, HatchetItems.FLINT_HATCHET);
                 hatchet(ModMaterials.OBSIDIAN_CHIP, HatchetItems.OBSIDIAN_HATCHET);
                 hatchet(ModMaterials.COPPER_INGOT, HatchetItems.COPPER_HATCHET);
@@ -64,7 +66,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 battleAxe(ModMaterials.MITHRIL_INGOT, BattleAxeItems.MITHRIL_BATTLE_AXE);
                 battleAxe(ModMaterials.ADAMANTIUM_INGOT, BattleAxeItems.ADAMANTIUM_BATTLE_AXE);
 
-                // ============ 战锤 (3材料+2棍, 高耐久, 仅金属) ============
+                // ============ 战锤 (5材料+2棍, 仅金属) ============
                 warHammer(ModMaterials.COPPER_INGOT, WarHammerItems.COPPER_WAR_HAMMER);
                 warHammer(ModMaterials.SILVER_INGOT, WarHammerItems.SILVER_WAR_HAMMER);
                 warHammer(ModMaterials.GOLD_INGOT, WarHammerItems.GOLD_WAR_HAMMER);
@@ -106,7 +108,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 hoe(ModMaterials.MITHRIL_INGOT, HoeItems.MITHRIL_HOE);
                 hoe(ModMaterials.ADAMANTIUM_INGOT, HoeItems.ADAMANTIUM_HOE);
 
-                // ============ 鹤嘴锄 (2材料+2棍, 仅金属) ============
+                // ============ 鹤嘴锄 (4材料+2棍, 仅金属) ============
                 mattock(ModMaterials.COPPER_INGOT, MattockItems.COPPER_MATTOCK);
                 mattock(ModMaterials.SILVER_INGOT, MattockItems.SILVER_MATTOCK);
                 mattock(ModMaterials.GOLD_INGOT, MattockItems.GOLD_MATTOCK);
@@ -146,7 +148,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 sword(ModMaterials.MITHRIL_INGOT, SwordItems.MITHRIL_SWORD);
                 sword(ModMaterials.ADAMANTIUM_INGOT, SwordItems.ADAMANTIUM_SWORD);
 
-                // ============ 短剑 (1锭+1棍, 2x1配方) ============
+                // ============ 短剑 (1锭+1棍) ============
                 dagger(ModMaterials.COPPER_INGOT, DaggerItems.COPPER_DAGGER);
                 dagger(ModMaterials.SILVER_INGOT, DaggerItems.SILVER_DAGGER);
                 dagger(ModMaterials.GOLD_INGOT, DaggerItems.GOLD_DAGGER);
@@ -171,20 +173,31 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 arrow(ModMaterials.ANCIENT_METAL_NUGGET, ArrowItems.ANCIENT_METAL_ARROW);
                 arrow(ModMaterials.MITHRIL_NUGGET, ArrowItems.MITHRIL_ARROW);
                 arrow(ModMaterials.ADAMANTIUM_NUGGET, ArrowItems.ADAMANTIUM_ARROW);
+
+                // ============ 弓 ============
+                // 木弓：3木棍+3线
+                shaped(RecipeCategory.COMBAT, BowItems.WOOD_BOW)
+                        .pattern(" SL").pattern("S L").pattern(" SL")
+                        .define('S', Items.STICK).define('L', Items.STRING)
+                        .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+                        .save(output);
+                // 金属弓：3木棍+3线+1锭
+                bow(ModMaterials.ANCIENT_METAL_INGOT, BowItems.ANCIENT_METAL_BOW);
+                bow(ModMaterials.MITHRIL_INGOT, BowItems.MITHRIL_BOW);
             }
 
-            void club(ItemLike m, Item result) {
+            void club(TagKey<Item> m, Item result) {
                 shaped(RecipeCategory.TOOLS, result)
                         .pattern("M").pattern("M").pattern("S")
                         .define('M', m).define('S', Items.STICK)
-                        .unlockedBy(getHasName(m), has(m)).save(output);
+                        .unlockedBy("has_planks", has(m)).save(output);
             }
 
-            void cudgel(ItemLike m, Item result) {
+            void cudgel(TagKey<Item> m, Item result) {
                 shaped(RecipeCategory.TOOLS, result)
                         .pattern("M").pattern("S")
                         .define('M', m).define('S', Items.STICK)
-                        .unlockedBy(getHasName(m), has(m)).save(output);
+                        .unlockedBy("has_planks", has(m)).save(output);
             }
 
             void axe(ItemLike m, Item result) {
@@ -285,6 +298,15 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .pattern("M").pattern("S").pattern("F")
                         .define('M', tip).define('S', Items.STICK).define('F', Items.FEATHER)
                         .unlockedBy(getHasName(tip), has(tip)).save(output);
+            }
+
+            void bow(ItemLike m, Item result) {
+                shaped(RecipeCategory.COMBAT, result)
+                        .pattern(" SL").pattern("SML").pattern(" SL")
+                        .define('S', Items.STICK).define('L', Items.STRING).define('M', m)
+                        .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+                        .unlockedBy(getHasName(m), has(m))
+                        .save(output);
             }
         };
     }

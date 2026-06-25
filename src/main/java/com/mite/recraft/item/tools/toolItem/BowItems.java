@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 
 /**
  * 弓（Bow）—— wood(32), ancient_metal(64), mithril(128)
- * 拉弓动画 + 箭矢材质匹配由 ItemProperties + 模型 JSON select 实现
+ * 拉弓动画 + 箭矢材质匹配由 SelectItemModelProperty (NockedArrowProperty) + 模型 JSON select 实现
  */
 public class BowItems {
     public static final Item WOOD_BOW = new BowItem(new Item.Properties()
