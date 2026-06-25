@@ -10,6 +10,7 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.concurrent.CompletableFuture;
@@ -24,6 +25,10 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         return new RecipeProvider(registryLookup, exporter) {
             @Override
             public void buildRecipes() {
+
+                // ============ 木棒/短木棒 ============
+                club(Blocks.OAK_PLANKS, WoodenItems.CLUB);
+                cudgel(Blocks.OAK_PLANKS, WoodenItems.CUDGEL);
 
                 // ============ 斧头 (3材料) ============
                 axe(Items.FLINT, AexItems.FLINT_AXE);
@@ -151,6 +156,10 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 dagger(ModMaterials.MITHRIL_INGOT, DaggerItems.MITHRIL_DAGGER);
                 dagger(ModMaterials.ADAMANTIUM_INGOT, DaggerItems.ADAMANTIUM_DAGGER);
 
+                // ============ 小刀 (1材料+1棍) ============
+                knife(Items.FLINT, KnifeItems.FLINT_KNIFE);
+                knife(Items.OBSIDIAN, KnifeItems.OBSIDIAN_KNIFE);
+
                 // ============ 箭 (碎片/粒+棍+羽毛, 3x1) ============
                 arrow(ModMaterials.FLINT_CHIP, ArrowItems.FLINT_ARROW);
                 arrow(ModMaterials.OBSIDIAN_CHIP, ArrowItems.OBSIDIAN_ARROW);
@@ -162,6 +171,20 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 arrow(ModMaterials.ANCIENT_METAL_NUGGET, ArrowItems.ANCIENT_METAL_ARROW);
                 arrow(ModMaterials.MITHRIL_NUGGET, ArrowItems.MITHRIL_ARROW);
                 arrow(ModMaterials.ADAMANTIUM_NUGGET, ArrowItems.ADAMANTIUM_ARROW);
+            }
+
+            void club(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("M").pattern("M").pattern("S")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void cudgel(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("M").pattern("S")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
             }
 
             void axe(ItemLike m, Item result) {
@@ -244,6 +267,13 @@ public class ModRecipeProvider extends FabricRecipeProvider {
             }
 
             void dagger(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("M").pattern("S")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void knife(ItemLike m, Item result) {
                 shaped(RecipeCategory.TOOLS, result)
                         .pattern("M").pattern("S")
                         .define('M', m).define('S', Items.STICK)

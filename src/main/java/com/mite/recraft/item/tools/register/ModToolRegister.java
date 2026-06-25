@@ -2,18 +2,22 @@ package com.mite.recraft.item.tools.register;
 
 import com.mite.recraft.item.ModItems;
 import com.mite.recraft.item.tools.toolItem.AexItems;
+import com.mite.recraft.item.tools.toolItem.BowItems;
 import com.mite.recraft.item.tools.toolItem.ArrowItems;
 import com.mite.recraft.item.tools.toolItem.BattleAxeItems;
 import com.mite.recraft.item.tools.toolItem.DaggerItems;
 import com.mite.recraft.item.tools.toolItem.FishingRodItems;
 import com.mite.recraft.item.tools.toolItem.HatchetItems;
 import com.mite.recraft.item.tools.toolItem.HoeItems;
+import com.mite.recraft.item.tools.toolItem.KnifeItems;
 import com.mite.recraft.item.tools.toolItem.MattockItems;
 import com.mite.recraft.item.tools.toolItem.PickaxeItems;
 import com.mite.recraft.item.tools.toolItem.ShearsItems;
 import com.mite.recraft.item.tools.toolItem.ShovelItems;
+import com.mite.recraft.item.tools.toolItem.WoodenItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
 import com.mite.recraft.item.tools.toolItem.WarHammerItems;
+import net.fabricmc.fabric.api.registry.FuelValueEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -21,6 +25,15 @@ import net.minecraft.world.item.Item;
 
 public class ModToolRegister {
     public static void registerAll() {
+        // 木棒/短木棒
+        register("wood_club", WoodenItems.CLUB);
+        register("wood_cudgel", WoodenItems.CUDGEL);
+
+        // 弓
+        register("wood_bow", BowItems.WOOD_BOW);
+        register("ancient_metal_bow", BowItems.ANCIENT_METAL_BOW);
+        register("mithril_bow", BowItems.MITHRIL_BOW);
+
         // 斧头
         register("flint_axe", AexItems.FLINT_AXE);
         register("obsidian_axe", AexItems.OBSIDIAN_AXE);
@@ -146,6 +159,10 @@ public class ModToolRegister {
         register("ancient_metal_dagger", DaggerItems.ANCIENT_METAL_DAGGER);
         register("mithril_dagger", DaggerItems.MITHRIL_DAGGER);
         register("adamantium_dagger", DaggerItems.ADAMANTIUM_DAGGER);
+
+        // 小刀
+        register("flint_knife", KnifeItems.FLINT_KNIFE);
+        register("obsidian_knife", KnifeItems.OBSIDIAN_KNIFE);
 
         // 箭
         register("flint_arrow", ArrowItems.FLINT_ARROW);

@@ -25,6 +25,7 @@ public enum ToolType {
     WAR_HAMMER  ("war_hammer",  5, ModToolMaterial.METALS,   plainItem(Item.Properties::pickaxe)),
     MATTOCK     ("mattock",     4, ModToolMaterial.METALS,   plainItem(Item.Properties::shovel)),
     SHEARS      ("shears",      2, ModToolMaterial.METALS,   (tm, d, s, p) -> new ShearsItem(p.durability(tm.durability()))),
+    KNIFE       ("knife",       1, ModToolMaterial.ALL,      (tm, d, s, p) -> new Item(p.sword(tm, d, s))),
     FISHING_ROD ("fishing_rod", 1, ModToolMaterial.ALL,      (tm, d, s, p) -> new FishingRodItem(p.durability(tm.durability()))),
     ;
 

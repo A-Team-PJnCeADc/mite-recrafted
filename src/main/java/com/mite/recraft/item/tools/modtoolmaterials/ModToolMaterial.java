@@ -154,6 +154,11 @@ public enum ModToolMaterial {
             ANCIENT_METAL, MITHRIL, ADAMANTIUM
     };
 
+    /** 仅非金属工具材质 */
+    public static final ModToolMaterial[] NON_METALS = {
+            FLINT, OBSIDIAN,
+    };
+
     /**
      * 根据名称获取枚举（用于反序列化）
      */

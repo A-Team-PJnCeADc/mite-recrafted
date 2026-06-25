@@ -1,21 +1,25 @@
 package com.mite.recraft.client.datagen;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.block.ModBlocks;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
 import com.mite.recraft.item.tools.toolItem.AexItems;
+import com.mite.recraft.item.tools.toolItem.BowItems;
 import com.mite.recraft.item.tools.toolItem.ArrowItems;
 import com.mite.recraft.item.tools.toolItem.BattleAxeItems;
 import com.mite.recraft.item.tools.toolItem.DaggerItems;
 import com.mite.recraft.item.tools.toolItem.FishingRodItems;
 import com.mite.recraft.item.tools.toolItem.HatchetItems;
 import com.mite.recraft.item.tools.toolItem.HoeItems;
+import com.mite.recraft.item.tools.toolItem.KnifeItems;
 import com.mite.recraft.item.tools.toolItem.MattockItems;
 import com.mite.recraft.item.tools.toolItem.PickaxeItems;
 import com.mite.recraft.item.tools.toolItem.ShearsItems;
 import com.mite.recraft.item.tools.toolItem.ShovelItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
+import com.mite.recraft.item.tools.toolItem.WoodenItems;
 import com.mite.recraft.item.tools.toolItem.WarHammerItems;
 import com.mite.recraft.item.material.ModMaterials;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
@@ -109,6 +113,14 @@ public class ModModelProvider extends FabricModelProvider {
     @Override
     public void generateItemModels(@NonNull ItemModelGenerators gen) {
         Map<Identifier, JsonObject> itemDefs = new LinkedHashMap<>();
+
+        // 木棒/短木棒
+        List<Item> wooden = List.of(WoodenItems.CLUB, WoodenItems.CUDGEL);
+        generateToolModels(gen, wooden, itemDefs);
+
+        // 弓（拉弓动画由 BowItem 属性驱动）
+        List<Item> bows = List.of(BowItems.WOOD_BOW, BowItems.ANCIENT_METAL_BOW, BowItems.MITHRIL_BOW);
+        generateBowModels(gen, bows, itemDefs);
 
         // 斧头
         List<Item> axes = List.of(
@@ -222,6 +234,12 @@ public class ModModelProvider extends FabricModelProvider {
                 DaggerItems.MITHRIL_DAGGER, DaggerItems.ADAMANTIUM_DAGGER
         );
         generateToolModels(gen, daggers, itemDefs);
+
+        // 小刀
+        List<Item> knives = List.of(
+                KnifeItems.FLINT_KNIFE, KnifeItems.OBSIDIAN_KNIFE
+        );
+        generateToolModels(gen, knives, itemDefs);
 
         // 箭
         List<Item> arrows = List.of(
@@ -357,6 +375,79 @@ public class ModModelProvider extends FabricModelProvider {
             var cast = ItemModelUtils.plainModel(castModelId);
             gen.itemModelOutput.accept(rod,
                     ItemModelUtils.conditional(new FishingRodCast(), cast, uncast));
+        }
+    }
+    
+    private void generateBowModels(ItemModelGenerators gen, List<Item> bows, Map<Identifier, JsonObject> itemDefs) {
+        String modId = MiteRecrafted.MOD_ID;
+        String[] arrowMaterials = {"flint","obsidian","copper","silver","gold",
+                "rusted_iron","iron","ancient_metal","mithril","adamantium"};
+
+        for (Item bow : bows) {
+            String itemName = BuiltInRegistries.ITEM.getKey(bow).getPath();
+            String bowMat = itemName.replace("_bow", "");
+
+            // standby
+            Identifier standbyId = Identifier.fromNamespaceAndPath(modId, "item/tools/" + itemName + "_standby");
+            ModelTemplates.FLAT_ITEM.create(standbyId,
+                    TextureMapping.layer0(new Material(Identifier.fromNamespaceAndPath(modId,
+                            "item/bows/" + bowMat + "/standby"))), gen.modelOutput);
+
+            // 10箭种 × 3拉弓阶段
+            String[][][] pullIds = new String[3][10][1];
+            for (int pull = 0; pull < 3; pull++)
+                for (int ai = 0; ai < 10; ai++) {
+                    String fn = itemName + "_" + arrowMaterials[ai] + "_" + pull;
+                    Identifier mid = Identifier.fromNamespaceAndPath(modId, "item/tools/" + fn);
+                    ModelTemplates.FLAT_ITEM.create(mid,
+                            TextureMapping.layer0(new Material(Identifier.fromNamespaceAndPath(modId,
+                                    "item/bows/" + bowMat + "/" + arrowMaterials[ai] + "_arrow_" + pull))),
+                            gen.modelOutput);
+                    pullIds[pull][ai][0] = mid.toString();
+                }
+
+            // select 节点（按 nocked_arrow 分发）
+            java.util.function.Function<String[], JsonObject> makeSelect = (models) -> {
+                JsonObject sel = new JsonObject();
+                sel.addProperty("type", "minecraft:select");
+                sel.addProperty("property", "mite-recrafted:nocked_arrow");
+                JsonArray cases = new JsonArray();
+                for (int i = 0; i < models.length; i++) {
+                    JsonObject c = new JsonObject();
+                    JsonArray when = new JsonArray(); when.add(i);
+                    c.add("when", when);
+                    JsonObject m = new JsonObject(); m.addProperty("type", "minecraft:model"); m.addProperty("model", models[i]);
+                    c.add("model", m); cases.add(c);
+                }
+                sel.add("cases", cases);
+                return sel;
+            };
+
+            // items JSON
+            JsonObject root = new JsonObject();
+            JsonObject cond = new JsonObject();
+            cond.addProperty("type", "minecraft:condition");
+            cond.addProperty("property", "minecraft:using_item");
+            JsonObject off = new JsonObject(); off.addProperty("type", "minecraft:model"); off.addProperty("model", standbyId.toString());
+            cond.add("on_false", off);
+
+            JsonObject rd = new JsonObject();
+            rd.addProperty("type", "minecraft:range_dispatch");
+            rd.addProperty("property", "minecraft:use_duration");
+            rd.addProperty("scale", 0.05);
+
+            JsonArray entries = new JsonArray();
+            String[] stage1 = new String[10]; for (int i = 0; i < 10; i++) stage1[i] = pullIds[1][i][0];
+            JsonObject e1 = new JsonObject(); e1.addProperty("threshold", 0.65); e1.add("model", makeSelect.apply(stage1)); entries.add(e1);
+            String[] stage2 = new String[10]; for (int i = 0; i < 10; i++) stage2[i] = pullIds[2][i][0];
+            JsonObject e2 = new JsonObject(); e2.addProperty("threshold", 0.9); e2.add("model", makeSelect.apply(stage2)); entries.add(e2);
+            rd.add("entries", entries);
+            String[] stage0 = new String[10]; for (int i = 0; i < 10; i++) stage0[i] = pullIds[0][i][0];
+            rd.add("fallback", makeSelect.apply(stage0));
+            cond.add("on_true", rd);
+            root.add("model", cond);
+
+            itemDefs.put(Identifier.fromNamespaceAndPath(modId, itemName), root);
         }
     }
 
