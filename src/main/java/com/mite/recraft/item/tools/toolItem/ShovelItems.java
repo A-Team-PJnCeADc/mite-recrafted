@@ -1,36 +1,17 @@
 package com.mite.recraft.item.tools.toolItem;
 
 import com.mite.recraft.item.tools.modtoolmaterials.ModToolMaterial;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ShovelItem;
 
-/**
- * 锹（Shovel）
- */
 public class ShovelItems {
-    //todo 获取实际的数值
-    public static final ShovelItem FLINT_SHOVEL = create("flint", ModToolMaterial.FLINT, 0.5F);
-    public static final ShovelItem OBSIDIAN_SHOVEL = create("obsidian", ModToolMaterial.OBSIDIAN, 1.5F);
-    public static final ShovelItem COPPER_SHOVEL = create("copper", ModToolMaterial.COPPER, 2.5F);
-    public static final ShovelItem SILVER_SHOVEL = create("silver", ModToolMaterial.SILVER, 2.5F);
-    public static final ShovelItem GOLD_SHOVEL = create("gold", ModToolMaterial.GOLD, 1.5F);
-    public static final ShovelItem RUSTED_IRON_SHOVEL = create("rusted_iron", ModToolMaterial.RUSTED_IRON, 1.5F);
-    public static final ShovelItem IRON_SHOVEL = create("iron", ModToolMaterial.IRON, 2.5F);
-    public static final ShovelItem ANCIENT_METAL_SHOVEL = create("ancient_metal", ModToolMaterial.ANCIENT_METAL, 3.5F);
-    public static final ShovelItem MITHRIL_SHOVEL = create("mithril", ModToolMaterial.MITHRIL, 4.5F);
-    public static final ShovelItem ADAMANTIUM_SHOVEL = create("adamantium", ModToolMaterial.ADAMANTIUM, 5.5F);
-
-    private static ShovelItem create(String name, ModToolMaterial mat, float attackDamage) {
-        return new ShovelItem(
-                mat.getToolMaterial(),
-                attackDamage,
-                -3.0F,
-                new Item.Properties()
-                        .setId(ResourceKey.create(Registries.ITEM,
-                                Identifier.fromNamespaceAndPath("mite-recrafted", name + "_shovel")))
-        );
-    }
+    public static final Item FLINT_SHOVEL       = ToolType.SHOVEL.create(ModToolMaterial.FLINT, "flint", 0.5F, -3.0F);
+    public static final Item OBSIDIAN_SHOVEL    = ToolType.SHOVEL.create(ModToolMaterial.OBSIDIAN, "obsidian", 1.5F, -3.0F);
+    public static final Item COPPER_SHOVEL      = ToolType.SHOVEL.create(ModToolMaterial.COPPER, "copper", 2.5F, -3.0F);
+    public static final Item SILVER_SHOVEL      = ToolType.SHOVEL.create(ModToolMaterial.SILVER, "silver", 2.5F, -3.0F);
+    public static final Item GOLD_SHOVEL        = ToolType.SHOVEL.create(ModToolMaterial.GOLD, "gold", 1.5F, -3.0F);
+    public static final Item RUSTED_IRON_SHOVEL = ToolType.SHOVEL.create(ModToolMaterial.RUSTED_IRON, "rusted_iron", 1.5F, -3.0F);
+    public static final Item IRON_SHOVEL        = ToolType.SHOVEL.create(ModToolMaterial.IRON, "iron", 2.5F, -3.0F);
+    public static final Item ANCIENT_METAL_SHOVEL = ToolType.SHOVEL.create(ModToolMaterial.ANCIENT_METAL, "ancient_metal", 3.5F, -3.0F);
+    public static final Item MITHRIL_SHOVEL     = ToolType.SHOVEL.create(ModToolMaterial.MITHRIL, "mithril", 4.5F, -3.0F);
+    public static final Item ADAMANTIUM_SHOVEL  = ToolType.SHOVEL.create(ModToolMaterial.ADAMANTIUM, "adamantium", 5.5F, -3.0F);
 }

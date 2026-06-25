@@ -49,6 +49,26 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 hatchet(ModMaterials.MITHRIL_INGOT, HatchetItems.MITHRIL_HATCHET);
                 hatchet(ModMaterials.ADAMANTIUM_INGOT, HatchetItems.ADAMANTIUM_HATCHET);
 
+                // ============ 战斧 (4材料+2棍, 仅金属) ============
+                battleAxe(ModMaterials.COPPER_INGOT, BattleAxeItems.COPPER_BATTLE_AXE);
+                battleAxe(ModMaterials.SILVER_INGOT, BattleAxeItems.SILVER_BATTLE_AXE);
+                battleAxe(ModMaterials.GOLD_INGOT, BattleAxeItems.GOLD_BATTLE_AXE);
+                battleAxe(ModMaterials.IRON_INGOT, BattleAxeItems.RUSTED_IRON_BATTLE_AXE);
+                battleAxe(ModMaterials.IRON_INGOT, BattleAxeItems.IRON_BATTLE_AXE);
+                battleAxe(ModMaterials.ANCIENT_METAL_INGOT, BattleAxeItems.ANCIENT_METAL_BATTLE_AXE);
+                battleAxe(ModMaterials.MITHRIL_INGOT, BattleAxeItems.MITHRIL_BATTLE_AXE);
+                battleAxe(ModMaterials.ADAMANTIUM_INGOT, BattleAxeItems.ADAMANTIUM_BATTLE_AXE);
+
+                // ============ 战锤 (3材料+2棍, 高耐久, 仅金属) ============
+                warHammer(ModMaterials.COPPER_INGOT, WarHammerItems.COPPER_WAR_HAMMER);
+                warHammer(ModMaterials.SILVER_INGOT, WarHammerItems.SILVER_WAR_HAMMER);
+                warHammer(ModMaterials.GOLD_INGOT, WarHammerItems.GOLD_WAR_HAMMER);
+                warHammer(ModMaterials.IRON_INGOT, WarHammerItems.RUSTED_IRON_WAR_HAMMER);
+                warHammer(ModMaterials.IRON_INGOT, WarHammerItems.IRON_WAR_HAMMER);
+                warHammer(ModMaterials.ANCIENT_METAL_INGOT, WarHammerItems.ANCIENT_METAL_WAR_HAMMER);
+                warHammer(ModMaterials.MITHRIL_INGOT, WarHammerItems.MITHRIL_WAR_HAMMER);
+                warHammer(ModMaterials.ADAMANTIUM_INGOT, WarHammerItems.ADAMANTIUM_WAR_HAMMER);
+
                 // ============ 镐 (3材料) ============
                 pickaxe(ModMaterials.COPPER_INGOT, PickaxeItems.COPPER_PICKAXE);
                 pickaxe(ModMaterials.SILVER_INGOT, PickaxeItems.SILVER_PICKAXE);
@@ -80,6 +100,16 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 hoe(ModMaterials.ANCIENT_METAL_INGOT, HoeItems.ANCIENT_METAL_HOE);
                 hoe(ModMaterials.MITHRIL_INGOT, HoeItems.MITHRIL_HOE);
                 hoe(ModMaterials.ADAMANTIUM_INGOT, HoeItems.ADAMANTIUM_HOE);
+
+                // ============ 鹤嘴锄 (2材料+2棍, 仅金属) ============
+                mattock(ModMaterials.COPPER_INGOT, MattockItems.COPPER_MATTOCK);
+                mattock(ModMaterials.SILVER_INGOT, MattockItems.SILVER_MATTOCK);
+                mattock(ModMaterials.GOLD_INGOT, MattockItems.GOLD_MATTOCK);
+                mattock(ModMaterials.IRON_INGOT, MattockItems.RUSTED_IRON_MATTOCK);
+                mattock(ModMaterials.IRON_INGOT, MattockItems.IRON_MATTOCK);
+                mattock(ModMaterials.ANCIENT_METAL_INGOT, MattockItems.ANCIENT_METAL_MATTOCK);
+                mattock(ModMaterials.MITHRIL_INGOT, MattockItems.MITHRIL_MATTOCK);
+                mattock(ModMaterials.ADAMANTIUM_INGOT, MattockItems.ADAMANTIUM_MATTOCK);
 
                 // ============ 剪刀 (对角2锭, 仅金属) ============
                 shears(ModMaterials.COPPER_INGOT, ShearsItems.COPPER_SHEARS);
@@ -136,14 +166,28 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 
             void axe(ItemLike m, Item result) {
                 shaped(RecipeCategory.TOOLS, result)
-                        .pattern("MMM").pattern("MS ").pattern(" S ")
+                        .pattern("MM ").pattern("MS ").pattern(" S ")
                         .define('M', m).define('S', Items.STICK)
                         .unlockedBy(getHasName(m), has(m)).save(output);
             }
 
             void hatchet(ItemLike m, Item result) {
                 shaped(RecipeCategory.TOOLS, result)
-                        .pattern("MM").pattern("MS").pattern(" S")
+                        .pattern("MS").pattern(" S")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void battleAxe(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("M M").pattern("MSM").pattern(" S ")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void warHammer(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("MMM").pattern("MSM").pattern(" S ")
                         .define('M', m).define('S', Items.STICK)
                         .unlockedBy(getHasName(m), has(m)).save(output);
             }
@@ -165,6 +209,13 @@ public class ModRecipeProvider extends FabricRecipeProvider {
             void hoe(ItemLike m, Item result) {
                 shaped(RecipeCategory.TOOLS, result)
                         .pattern("MM").pattern(" S").pattern(" S")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void mattock(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("MMM").pattern(" SM").pattern(" S ")
                         .define('M', m).define('S', Items.STICK)
                         .unlockedBy(getHasName(m), has(m)).save(output);
             }

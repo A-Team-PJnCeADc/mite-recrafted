@@ -3,14 +3,17 @@ package com.mite.recraft.item.tools.register;
 import com.mite.recraft.item.ModItems;
 import com.mite.recraft.item.tools.toolItem.AexItems;
 import com.mite.recraft.item.tools.toolItem.ArrowItems;
+import com.mite.recraft.item.tools.toolItem.BattleAxeItems;
 import com.mite.recraft.item.tools.toolItem.DaggerItems;
 import com.mite.recraft.item.tools.toolItem.FishingRodItems;
 import com.mite.recraft.item.tools.toolItem.HatchetItems;
 import com.mite.recraft.item.tools.toolItem.HoeItems;
+import com.mite.recraft.item.tools.toolItem.MattockItems;
 import com.mite.recraft.item.tools.toolItem.PickaxeItems;
 import com.mite.recraft.item.tools.toolItem.ShearsItems;
 import com.mite.recraft.item.tools.toolItem.ShovelItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
+import com.mite.recraft.item.tools.toolItem.WarHammerItems;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -41,6 +44,26 @@ public class ModToolRegister {
         register("ancient_metal_hatchet", HatchetItems.ANCIENT_METAL_HATCHET);
         register("mithril_hatchet", HatchetItems.MITHRIL_HATCHET);
         register("adamantium_hatchet", HatchetItems.ADAMANTIUM_HATCHET);
+
+        // 战斧（剑+斧混合工具，仅金属）
+        register("copper_battle_axe", BattleAxeItems.COPPER_BATTLE_AXE);
+        register("silver_battle_axe", BattleAxeItems.SILVER_BATTLE_AXE);
+        register("gold_battle_axe", BattleAxeItems.GOLD_BATTLE_AXE);
+        register("rusted_iron_battle_axe", BattleAxeItems.RUSTED_IRON_BATTLE_AXE);
+        register("iron_battle_axe", BattleAxeItems.IRON_BATTLE_AXE);
+        register("ancient_metal_battle_axe", BattleAxeItems.ANCIENT_METAL_BATTLE_AXE);
+        register("mithril_battle_axe", BattleAxeItems.MITHRIL_BATTLE_AXE);
+        register("adamantium_battle_axe", BattleAxeItems.ADAMANTIUM_BATTLE_AXE);
+
+        // 战锤（镐+剑混合，高耐久，仅金属）
+        register("copper_war_hammer", WarHammerItems.COPPER_WAR_HAMMER);
+        register("silver_war_hammer", WarHammerItems.SILVER_WAR_HAMMER);
+        register("gold_war_hammer", WarHammerItems.GOLD_WAR_HAMMER);
+        register("rusted_iron_war_hammer", WarHammerItems.RUSTED_IRON_WAR_HAMMER);
+        register("iron_war_hammer", WarHammerItems.IRON_WAR_HAMMER);
+        register("ancient_metal_war_hammer", WarHammerItems.ANCIENT_METAL_WAR_HAMMER);
+        register("mithril_war_hammer", WarHammerItems.MITHRIL_WAR_HAMMER);
+        register("adamantium_war_hammer", WarHammerItems.ADAMANTIUM_WAR_HAMMER);
 
         // 镐子
         register("copper_pickaxe", PickaxeItems.COPPER_PICKAXE);
@@ -73,6 +96,16 @@ public class ModToolRegister {
         register("ancient_metal_hoe", HoeItems.ANCIENT_METAL_HOE);
         register("mithril_hoe", HoeItems.MITHRIL_HOE);
         register("adamantium_hoe", HoeItems.ADAMANTIUM_HOE);
+
+        // 鹤嘴锄（铲+锄混合工具，仅金属）
+        register("copper_mattock", MattockItems.COPPER_MATTOCK);
+        register("silver_mattock", MattockItems.SILVER_MATTOCK);
+        register("gold_mattock", MattockItems.GOLD_MATTOCK);
+        register("rusted_iron_mattock", MattockItems.RUSTED_IRON_MATTOCK);
+        register("iron_mattock", MattockItems.IRON_MATTOCK);
+        register("ancient_metal_mattock", MattockItems.ANCIENT_METAL_MATTOCK);
+        register("mithril_mattock", MattockItems.MITHRIL_MATTOCK);
+        register("adamantium_mattock", MattockItems.ADAMANTIUM_MATTOCK);
 
         // 剪刀
         register("copper_shears", ShearsItems.COPPER_SHEARS);

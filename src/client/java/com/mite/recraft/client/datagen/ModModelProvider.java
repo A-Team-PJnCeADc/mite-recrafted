@@ -6,14 +6,17 @@ import com.mite.recraft.block.ModBlocks;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
 import com.mite.recraft.item.tools.toolItem.AexItems;
 import com.mite.recraft.item.tools.toolItem.ArrowItems;
+import com.mite.recraft.item.tools.toolItem.BattleAxeItems;
 import com.mite.recraft.item.tools.toolItem.DaggerItems;
 import com.mite.recraft.item.tools.toolItem.FishingRodItems;
 import com.mite.recraft.item.tools.toolItem.HatchetItems;
 import com.mite.recraft.item.tools.toolItem.HoeItems;
+import com.mite.recraft.item.tools.toolItem.MattockItems;
 import com.mite.recraft.item.tools.toolItem.PickaxeItems;
 import com.mite.recraft.item.tools.toolItem.ShearsItems;
 import com.mite.recraft.item.tools.toolItem.ShovelItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
+import com.mite.recraft.item.tools.toolItem.WarHammerItems;
 import com.mite.recraft.item.material.ModMaterials;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
@@ -135,7 +138,26 @@ public class ModModelProvider extends FabricModelProvider {
         );
 
         generateToolModels(gen, hatchets, itemDefs);
+
+        // 战斧
+        List<Item> battleAxes = List.of(
+                BattleAxeItems.COPPER_BATTLE_AXE, BattleAxeItems.SILVER_BATTLE_AXE,
+                BattleAxeItems.GOLD_BATTLE_AXE, BattleAxeItems.RUSTED_IRON_BATTLE_AXE,
+                BattleAxeItems.IRON_BATTLE_AXE, BattleAxeItems.ANCIENT_METAL_BATTLE_AXE,
+                BattleAxeItems.MITHRIL_BATTLE_AXE, BattleAxeItems.ADAMANTIUM_BATTLE_AXE
+        );
+        generateToolModels(gen, battleAxes, itemDefs);
+
         generateToolModels(gen, pickaxes, itemDefs);
+
+        // 战锤
+        List<Item> warHammers = List.of(
+                WarHammerItems.COPPER_WAR_HAMMER, WarHammerItems.SILVER_WAR_HAMMER,
+                WarHammerItems.GOLD_WAR_HAMMER, WarHammerItems.RUSTED_IRON_WAR_HAMMER,
+                WarHammerItems.IRON_WAR_HAMMER, WarHammerItems.ANCIENT_METAL_WAR_HAMMER,
+                WarHammerItems.MITHRIL_WAR_HAMMER, WarHammerItems.ADAMANTIUM_WAR_HAMMER
+        );
+        generateToolModels(gen, warHammers, itemDefs);
 
         // 锹
         List<Item> shovels = List.of(
@@ -155,6 +177,15 @@ public class ModModelProvider extends FabricModelProvider {
                 HoeItems.MITHRIL_HOE, HoeItems.ADAMANTIUM_HOE
         );
         generateToolModels(gen, hoes, itemDefs);
+
+        // 鹤嘴锄
+        List<Item> mattocks = List.of(
+                MattockItems.COPPER_MATTOCK, MattockItems.SILVER_MATTOCK,
+                MattockItems.GOLD_MATTOCK, MattockItems.RUSTED_IRON_MATTOCK,
+                MattockItems.IRON_MATTOCK, MattockItems.ANCIENT_METAL_MATTOCK,
+                MattockItems.MITHRIL_MATTOCK, MattockItems.ADAMANTIUM_MATTOCK
+        );
+        generateToolModels(gen, mattocks, itemDefs);
 
         // 剪刀
         List<Item> shears = List.of(

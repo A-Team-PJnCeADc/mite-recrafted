@@ -141,6 +141,19 @@ public enum ModToolMaterial {
     public boolean canArmor() { return canArmor; }
     public ToolMaterial getToolMaterial() { return toolMaterial; }
 
+    /** 全部工具材质（燧石+黑曜石+金属） */
+    public static final ModToolMaterial[] ALL = {
+            FLINT, OBSIDIAN,
+            COPPER, SILVER, GOLD, RUSTED_IRON, IRON,
+            ANCIENT_METAL, MITHRIL, ADAMANTIUM
+    };
+
+    /** 仅金属工具材质 */
+    public static final ModToolMaterial[] METALS = {
+            COPPER, SILVER, GOLD, RUSTED_IRON, IRON,
+            ANCIENT_METAL, MITHRIL, ADAMANTIUM
+    };
+
     /**
      * 根据名称获取枚举（用于反序列化）
      */
