@@ -9,9 +9,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Map;
@@ -133,10 +131,18 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
     }
 
     private String buildBlockName(String id) {
+        // 工作台
         for (WorkbenchMaterial mat : WorkbenchMaterial.values()) {
             String matName = mat.getName();
             String cnName = MATERIAL_NAMES.getOrDefault(matName, matName);
             if (id.equals(matName + "_workbench")) return cnName + "工作台";
+        }
+
+        // 金属门
+        for (var entry : MATERIAL_NAMES.entrySet()) {
+            String mat = entry.getKey();
+            String name = entry.getValue();
+            if (id.equals(mat + "_door")) return name + "门";
         }
         return null;
     }

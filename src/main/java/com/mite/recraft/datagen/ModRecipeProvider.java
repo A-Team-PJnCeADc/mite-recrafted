@@ -1,5 +1,6 @@
 package com.mite.recraft.datagen;
 
+import com.mite.recraft.block.moddoorblock.ModDoorBlocks;
 import com.mite.recraft.item.material.ModMaterials;
 import com.mite.recraft.item.tools.toolItem.*;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
@@ -12,7 +13,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.concurrent.CompletableFuture;
@@ -184,6 +184,14 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 // 金属弓：3木棍+3线+1锭
                 bow(ModMaterials.ANCIENT_METAL_INGOT, BowItems.ANCIENT_METAL_BOW);
                 bow(ModMaterials.MITHRIL_INGOT, BowItems.MITHRIL_BOW);
+
+                // ============ 金属门 (6锭, 2x3) ============
+                door(ModMaterials.COPPER_INGOT, ModDoorBlocks.COPPER_DOOR);
+                door(ModMaterials.SILVER_INGOT, ModDoorBlocks.SILVER_DOOR);
+                door(ModMaterials.GOLD_INGOT, ModDoorBlocks.GOLD_DOOR);
+                door(ModMaterials.ANCIENT_METAL_INGOT, ModDoorBlocks.ANCIENT_METAL_DOOR);
+                door(ModMaterials.MITHRIL_INGOT, ModDoorBlocks.MITHRIL_DOOR);
+                door(ModMaterials.ADAMANTIUM_INGOT, ModDoorBlocks.ADAMANTIUM_DOOR);
             }
 
             void club(TagKey<Item> m, Item result) {
@@ -307,6 +315,13 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
                         .unlockedBy(getHasName(m), has(m))
                         .save(output);
+            }
+
+            void door(ItemLike m, ItemLike result) {
+                shaped(RecipeCategory.REDSTONE, result, 3)
+                        .pattern("MM").pattern("MM").pattern("MM")
+                        .define('M', m)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
             }
         };
     }

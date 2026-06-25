@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.block.ModBlocks;
+import com.mite.recraft.block.moddoorblock.ModDoorBlocks;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
 import com.mite.recraft.item.tools.toolItem.AexItems;
 import com.mite.recraft.item.tools.toolItem.BowItems;
@@ -108,6 +109,9 @@ public class ModModelProvider extends FabricModelProvider {
             gen.blockStateOutput.accept(MultiVariantGenerator.dispatch(workbenchBlock, mv));
             gen.registerSimpleItemModel(workbenchBlock, modelId);
         }
+
+        // 金属门
+        generateDoorModels(gen);
     }
 
     @Override
@@ -448,6 +452,44 @@ public class ModModelProvider extends FabricModelProvider {
             root.add("model", cond);
 
             itemDefs.put(Identifier.fromNamespaceAndPath(modId, itemName), root);
+        }
+    }
+
+
+    private void generateDoorModels(BlockModelGenerators gen) {
+        String[] mats = {"copper", "silver", "gold", "ancient_metal", "mithril", "adamantium"};
+        Block[] doors = {ModDoorBlocks.COPPER_DOOR, ModDoorBlocks.SILVER_DOOR, ModDoorBlocks.GOLD_DOOR,
+                ModDoorBlocks.ANCIENT_METAL_DOOR, ModDoorBlocks.MITHRIL_DOOR, ModDoorBlocks.ADAMANTIUM_DOOR};
+        String modId = MiteRecrafted.MOD_ID;
+
+        for (int i = 0; i < mats.length; i++) {
+            String mat = mats[i];
+            Block door = doors[i];
+            Identifier bottom = Identifier.fromNamespaceAndPath(modId, "block/door/door_" + mat + "_lower");
+            Identifier top = Identifier.fromNamespaceAndPath(modId, "block/door/door_" + mat + "_upper");
+            TextureMapping mapping = new TextureMapping()
+                    .put(TextureSlot.BOTTOM, new Material(bottom))
+                    .put(TextureSlot.TOP, new Material(top));
+
+            // 8 个门模型变体
+            MultiVariant bl = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_BOTTOM_LEFT.create(door, mapping, gen.modelOutput));
+            MultiVariant blOpen = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_BOTTOM_LEFT_OPEN.create(door, mapping, gen.modelOutput));
+            MultiVariant br = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_BOTTOM_RIGHT.create(door, mapping, gen.modelOutput));
+            MultiVariant brOpen = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_BOTTOM_RIGHT_OPEN.create(door, mapping, gen.modelOutput));
+            MultiVariant tl = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_TOP_LEFT.create(door, mapping, gen.modelOutput));
+            MultiVariant tlOpen = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_TOP_LEFT_OPEN.create(door, mapping, gen.modelOutput));
+            MultiVariant tr = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_TOP_RIGHT.create(door, mapping, gen.modelOutput));
+            MultiVariant trOpen = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_TOP_RIGHT_OPEN.create(door, mapping, gen.modelOutput));
+
+            // 物品模型
+            Identifier itemTex = Identifier.fromNamespaceAndPath(modId, "item/doors/" + mat);
+            Identifier itemModelId = Identifier.fromNamespaceAndPath(modId, "block/" + mat + "_door");
+            ModelTemplates.FLAT_ITEM.create(itemModelId,
+                    TextureMapping.layer0(new Material(itemTex)), gen.modelOutput);
+
+            // Blockstate
+            gen.blockStateOutput.accept(BlockModelGenerators.createDoor(
+                    door, bl, blOpen, br, brOpen, tl, tlOpen, tr, trOpen));
         }
     }
 
