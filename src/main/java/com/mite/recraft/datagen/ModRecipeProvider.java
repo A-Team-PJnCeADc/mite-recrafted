@@ -1,5 +1,6 @@
 package com.mite.recraft.datagen;
 
+import com.mite.recraft.block.modbarblock.ModBarBlocks;
 import com.mite.recraft.block.moddoorblock.ModDoorBlocks;
 import com.mite.recraft.item.material.ModMaterials;
 import com.mite.recraft.item.tools.toolItem.*;
@@ -192,6 +193,15 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 door(ModMaterials.ANCIENT_METAL_INGOT, ModDoorBlocks.ANCIENT_METAL_DOOR);
                 door(ModMaterials.MITHRIL_INGOT, ModDoorBlocks.MITHRIL_DOOR);
                 door(ModMaterials.ADAMANTIUM_INGOT, ModDoorBlocks.ADAMANTIUM_DOOR);
+
+                // ============ 金属栅栏 (6锭) ============
+                bars(ModMaterials.COPPER_INGOT, ModBarBlocks.COPPER_BARS);
+                bars(ModMaterials.SILVER_INGOT, ModBarBlocks.SILVER_BARS);
+                bars(ModMaterials.GOLD_INGOT, ModBarBlocks.GOLD_BARS);
+                bars(ModMaterials.IRON_INGOT, ModBarBlocks.IRON_BARS);
+                bars(ModMaterials.ANCIENT_METAL_INGOT, ModBarBlocks.ANCIENT_METAL_BARS);
+                bars(ModMaterials.MITHRIL_INGOT, ModBarBlocks.MITHRIL_BARS);
+                bars(ModMaterials.ADAMANTIUM_INGOT, ModBarBlocks.ADAMANTIUM_BARS);
             }
 
             void club(TagKey<Item> m, Item result) {
@@ -320,6 +330,13 @@ public class ModRecipeProvider extends FabricRecipeProvider {
             void door(ItemLike m, ItemLike result) {
                 shaped(RecipeCategory.REDSTONE, result, 3)
                         .pattern("MM").pattern("MM").pattern("MM")
+                        .define('M', m)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void bars(ItemLike m, ItemLike result) {
+                shaped(RecipeCategory.MISC, result, 16)
+                        .pattern("MMM").pattern("MMM")
                         .define('M', m)
                         .unlockedBy(getHasName(m), has(m)).save(output);
             }

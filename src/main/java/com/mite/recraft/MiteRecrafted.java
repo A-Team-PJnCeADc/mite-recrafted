@@ -26,7 +26,7 @@ public class MiteRecrafted implements ModInitializer {
 	    ModDataComponents.initialize();
 	    ModItems.init();
 	    ModCreativeTabs.init();
-	    ModBlocks.init();
+		ModBlocks.init();
 	    ModEntitys.init();
 
 		// MenuType

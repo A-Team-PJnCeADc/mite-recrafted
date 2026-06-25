@@ -3,7 +3,7 @@ package com.mite.recraft.client.datagen;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mite.recraft.MiteRecrafted;
-import com.mite.recraft.block.ModBlocks;
+import com.mite.recraft.block.modbarblock.ModBarBlocks;
 import com.mite.recraft.block.moddoorblock.ModDoorBlocks;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
 import com.mite.recraft.item.tools.toolItem.AexItems;
@@ -50,6 +50,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.mite.recraft.block.ModBlocks.getBlocks;
+
 public class ModModelProvider extends FabricModelProvider {
 
     private final FabricPackOutput dataOutput;
@@ -63,7 +65,7 @@ public class ModModelProvider extends FabricModelProvider {
     public void generateBlockStateModels(@NonNull BlockModelGenerators gen) {
         for (WorkbenchMaterial material : WorkbenchMaterial.values()) {
             String blockName = material.getName() + "_workbench";
-            Block workbenchBlock = ModBlocks.getBlocks().stream()
+            Block workbenchBlock = getBlocks().stream()
                     .filter(block -> {
                         Identifier id = BuiltInRegistries.BLOCK.getKey(block);
                         return id != null && id.getPath().equals(blockName);
@@ -112,6 +114,9 @@ public class ModModelProvider extends FabricModelProvider {
 
         // 金属门
         generateDoorModels(gen);
+
+        // 金属栅栏
+        generateBarModels(gen);
     }
 
     @Override
@@ -490,6 +495,41 @@ public class ModModelProvider extends FabricModelProvider {
             // Blockstate
             gen.blockStateOutput.accept(BlockModelGenerators.createDoor(
                     door, bl, blOpen, br, brOpen, tl, tlOpen, tr, trOpen));
+        }
+    }
+
+    private void generateBarModels(BlockModelGenerators gen) {
+        String[] mats = {"copper", "silver", "gold", "iron", "ancient_metal", "mithril", "adamantium"};
+        Block[] barsArr = {ModBarBlocks.COPPER_BARS, ModBarBlocks.SILVER_BARS, ModBarBlocks.GOLD_BARS,
+                ModBarBlocks.IRON_BARS, ModBarBlocks.ANCIENT_METAL_BARS, ModBarBlocks.MITHRIL_BARS,
+                ModBarBlocks.ADAMANTIUM_BARS};
+        String modId = MiteRecrafted.MOD_ID;
+
+        for (int i = 0; i < mats.length; i++) {
+            String mat = mats[i];
+            Block bars = barsArr[i];
+            Identifier tex = Identifier.fromNamespaceAndPath(modId, "block/bar/" + mat + "_bars");
+            Material texMat = new Material(tex);
+
+            TextureMapping mapping = new TextureMapping()
+                    .put(TextureSlot.BARS, texMat)
+                    .put(TextureSlot.EDGE, texMat);
+
+            // 6 个栅栏模型变体
+            Identifier postEnds = ModelTemplates.BARS_POST_ENDS.create(bars, mapping, gen.modelOutput);
+            Identifier post = ModelTemplates.BARS_POST.create(bars, mapping, gen.modelOutput);
+            Identifier cap = ModelTemplates.BARS_CAP.create(bars, mapping, gen.modelOutput);
+            Identifier capAlt = ModelTemplates.BARS_CAP_ALT.create(bars, mapping, gen.modelOutput);
+            Identifier side = ModelTemplates.BARS_POST_SIDE.create(bars, mapping, gen.modelOutput);
+            Identifier sideAlt = ModelTemplates.BARS_POST_SIDE_ALT.create(bars, mapping, gen.modelOutput);
+
+            // blockstate (multipart)
+            gen.createBars(bars, postEnds, post, cap, capAlt, side, sideAlt);
+
+            // 物品模型
+            Identifier itemModelId = Identifier.fromNamespaceAndPath(modId, "block/" + mat + "_bars");
+            ModelTemplates.FLAT_ITEM.create(itemModelId,
+                    TextureMapping.layer0(texMat), gen.modelOutput);
         }
     }
 

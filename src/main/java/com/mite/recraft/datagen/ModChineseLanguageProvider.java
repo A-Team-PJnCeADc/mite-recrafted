@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-
 /**
  * 中文语言文件生成
  */
@@ -143,6 +142,7 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             String mat = entry.getKey();
             String name = entry.getValue();
             if (id.equals(mat + "_door")) return name + "门";
+            if (id.equals(mat + "_bars")) return name + "栅栏";
         }
         return null;
     }

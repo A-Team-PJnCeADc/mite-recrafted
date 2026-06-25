@@ -17,7 +17,6 @@ public class ModBlocks {
     public static List<Block> getBlocks() {
         return Collections.unmodifiableList(BLOCKS);
     }
-
     public static void init() {
         ModBlockRegister.init();
     }

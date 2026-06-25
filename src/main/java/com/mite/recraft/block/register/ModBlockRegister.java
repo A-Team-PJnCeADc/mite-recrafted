@@ -1,7 +1,9 @@
 package com.mite.recraft.block.register;
 
 import com.mite.recraft.MiteRecrafted;
+import com.mite.recraft.block.ModBlockType;
 import com.mite.recraft.block.ModBlocks;
+import com.mite.recraft.block.modbarblock.ModBarBlocks;
 import com.mite.recraft.block.moddoorblock.ModDoorBlocks;
 import com.mite.recraft.block.workbench.ModWorkbenchBlock;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
@@ -39,12 +41,28 @@ public class ModBlockRegister {
                 ModDoorBlocks.ANCIENT_METAL_DOOR, ModDoorBlocks.MITHRIL_DOOR, ModDoorBlocks.ADAMANTIUM_DOOR}) {
             ModBlocks.addBlocks(door);
         }
+
+        // 金属栅栏
+        register("copper_bars", ModBarBlocks.COPPER_BARS);
+        register("silver_bars", ModBarBlocks.SILVER_BARS);
+        register("gold_bars", ModBarBlocks.GOLD_BARS);
+        register("iron_bars", ModBarBlocks.IRON_BARS);
+        register("ancient_metal_bars", ModBarBlocks.ANCIENT_METAL_BARS);
+        register("mithril_bars", ModBarBlocks.MITHRIL_BARS);
+        register("adamantium_bars", ModBarBlocks.ADAMANTIUM_BARS);
+        for (Block bars : new Block[]{ModBarBlocks.COPPER_BARS, ModBarBlocks.SILVER_BARS, ModBarBlocks.GOLD_BARS,
+                ModBarBlocks.IRON_BARS, ModBarBlocks.ANCIENT_METAL_BARS, ModBarBlocks.MITHRIL_BARS,
+                ModBarBlocks.ADAMANTIUM_BARS}) {
+            ModBlocks.addBlocks(bars);
+        }
     }
 
     private static void register(String name, Block block) {
+        int maxStackSize = ModBlockType.getMaxStackSize(block);
         Registry.register(BuiltInRegistries.BLOCK, blockKey(name), block);
         Registry.register(BuiltInRegistries.ITEM, itemKey(name),
-                new BlockItem(block, new Item.Properties().setId(itemKey(name)).useBlockDescriptionPrefix()));
+                new BlockItem(block, new Item.Properties().stacksTo(maxStackSize)
+                        .setId(itemKey(name)).useBlockDescriptionPrefix()));
     }
 
     private static ResourceKey<Block> blockKey(String name) {
