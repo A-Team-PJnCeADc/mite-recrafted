@@ -1,6 +1,7 @@
 package com.mite.recraft.client;
 
 import com.mite.recraft.client.datagen.ModModelProvider;
+import com.mite.recraft.datagen.ModBlockTagProvider;
 import com.mite.recraft.datagen.ModChineseLanguageProvider;
 import com.mite.recraft.datagen.ModEnglishLanguageProvider;
 import com.mite.recraft.datagen.ModItemTagProvider;
@@ -17,5 +18,6 @@ public class MiteRecraftedDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ModEnglishLanguageProvider::new);
         pack.addProvider(ModChineseLanguageProvider::new);
         pack.addProvider(ModItemTagProvider::new);
+        pack.addProvider(ModBlockTagProvider::new);
     }
 }
