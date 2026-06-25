@@ -1,6 +1,7 @@
 package com.mite.recraft.mixin;
 
 import com.mite.recraft.component.ModDataComponents;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -21,6 +22,10 @@ public class ArrowRecoveryMixin {
             at = @At("HEAD"), cancellable = true)
     private void filterRecovery(ServerLevel level, ItemStack stack, float f,
                                 CallbackInfoReturnable<ItemEntity> cir) {
+        if (stack.has(DataComponents.INTANGIBLE_PROJECTILE)) {
+            cir.setReturnValue(null);
+            return;
+        }
         Float chance = stack.get(ModDataComponents.RECOVERY_CHANCE);
         if (chance != null && mite_recovery$RANDOM.nextFloat() >= chance) {
             cir.setReturnValue(null);

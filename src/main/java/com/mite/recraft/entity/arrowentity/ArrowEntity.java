@@ -4,6 +4,7 @@ import com.mite.recraft.component.ModDataComponents;
 import com.mite.recraft.entity.ModEntitys;
 import com.mite.recraft.item.tools.toolItem.ArrowItems;
 import com.mite.recraft.util.StuckArrowTracker;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,7 +34,13 @@ public class ArrowEntity extends Arrow {
         super(ModEntitys.MITE_ARROW, level);
         this.setOwner(owner);
         this.setPos(owner.getX(), owner.getEyeY() - 0.1, owner.getZ());
-        this.pickup = AbstractArrow.Pickup.ALLOWED;
+        // 创造性模式：ProjectileWeaponItem.useAmmo 在箭矢物品上设置 INTANGIBLE_PROJECTILE
+        // 创造性箭矢允许捡起实体但不能获得物品（CREATIVE_ONLY 模式下 tryPickup 不调 add）
+        if (pickupItem.has(DataComponents.INTANGIBLE_PROJECTILE)) {
+            this.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+        } else {
+            this.pickup = AbstractArrow.Pickup.ALLOWED;
+        }
         this.setPickupItemStack(pickupItem);
         initFromItem(pickupItem);
     }
@@ -56,12 +63,14 @@ public class ArrowEntity extends Arrow {
     /**
      * 覆盖 onHitEntity：原版箭无穿透时直接 discard()，箭不掉落。
      * 改为将箭物品寄存到目标生物，生物死亡时 dropAllDeathLoot 统一掉落。
+     * 创造性模式箭矢（pickup == CREATIVE_ONLY）不寄存 —— 不应产生物品。
      */
     @Override
     protected void onHitEntity(EntityHitResult result) {
         ItemStack pickup = this.getPickupItem();
         super.onHitEntity(result);
-        if (result.getEntity() instanceof LivingEntity target) {
+        if (this.pickup != AbstractArrow.Pickup.CREATIVE_ONLY
+                && result.getEntity() instanceof LivingEntity target) {
             StuckArrowTracker.add(target, pickup);
         }
     }
