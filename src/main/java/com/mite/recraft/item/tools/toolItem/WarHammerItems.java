@@ -11,20 +11,20 @@ import net.minecraft.world.level.block.state.BlockState;
  * 战锤（War Hammer）—— numComponents=5，高耐久，镐+剑+可挖南瓜
  */
 public class WarHammerItems {
-    public static final Item COPPER_WAR_HAMMER      = create(ModToolMaterial.COPPER, "copper", 8.0F, -3.2F);
-    public static final Item SILVER_WAR_HAMMER      = create(ModToolMaterial.SILVER, "silver", 8.0F, -3.2F);
-    public static final Item GOLD_WAR_HAMMER        = create(ModToolMaterial.GOLD, "gold", 7.0F, -3.2F);
-    public static final Item RUSTED_IRON_WAR_HAMMER = create(ModToolMaterial.RUSTED_IRON, "rusted_iron", 7.0F, -3.2F);
-    public static final Item IRON_WAR_HAMMER        = create(ModToolMaterial.IRON, "iron", 7.0F, -3.2F);
-    public static final Item ANCIENT_METAL_WAR_HAMMER = create(ModToolMaterial.ANCIENT_METAL, "ancient_metal", 9.0F, -3.2F);
-    public static final Item MITHRIL_WAR_HAMMER     = create(ModToolMaterial.MITHRIL, "mithril", 10.0F, -3.2F);
-    public static final Item ADAMANTIUM_WAR_HAMMER  = create(ModToolMaterial.ADAMANTIUM, "adamantium", 11.0F, -3.2F);
+    public static final Item COPPER_WAR_HAMMER      = create(ModToolMaterial.COPPER, 8.0F, -3.2F);
+    public static final Item SILVER_WAR_HAMMER      = create(ModToolMaterial.SILVER, 8.0F, -3.2F);
+    public static final Item GOLD_WAR_HAMMER        = create(ModToolMaterial.GOLD, 7.0F, -3.2F);
+    public static final Item RUSTED_IRON_WAR_HAMMER = create(ModToolMaterial.RUSTED_IRON, 7.0F, -3.2F);
+    public static final Item IRON_WAR_HAMMER        = create(ModToolMaterial.IRON, 7.0F, -3.2F);
+    public static final Item ANCIENT_METAL_WAR_HAMMER = create(ModToolMaterial.ANCIENT_METAL, 9.0F, -3.2F);
+    public static final Item MITHRIL_WAR_HAMMER     = create(ModToolMaterial.MITHRIL, 10.0F, -3.2F);
+    public static final Item ADAMANTIUM_WAR_HAMMER  = create(ModToolMaterial.ADAMANTIUM, 11.0F, -3.2F);
 
-    private static Item create(ModToolMaterial mat, String name, float dmg, float speed) {
+    private static Item create(ModToolMaterial mat, float dmg, float speed) {
         ToolMaterial tm = ToolType.WAR_HAMMER.customToolMaterial(mat);
         return new WarHammerItem(tm, dmg, speed,
                 new Item.Properties()
-                        .setId(ToolType.WAR_HAMMER.itemKey(name))
+                        .setId(ToolType.WAR_HAMMER.itemKey(mat))
                         .pickaxe(tm, dmg, speed));
     }
 

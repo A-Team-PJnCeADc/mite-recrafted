@@ -22,20 +22,20 @@ import net.minecraft.world.level.gameevent.GameEvent;
  * 鹤嘴锄（Mattock）—— numComponents=4，铲+锄混合工具
  */
 public class MattockItems {
-    public static final Item COPPER_MATTOCK       = create(ModToolMaterial.COPPER, "copper", 2.5F, -3.0F);
-    public static final Item SILVER_MATTOCK       = create(ModToolMaterial.SILVER, "silver", 2.5F, -3.0F);
-    public static final Item GOLD_MATTOCK         = create(ModToolMaterial.GOLD, "gold", 1.5F, -3.0F);
-    public static final Item RUSTED_IRON_MATTOCK  = create(ModToolMaterial.RUSTED_IRON, "rusted_iron", 1.5F, -3.0F);
-    public static final Item IRON_MATTOCK         = create(ModToolMaterial.IRON, "iron", 2.5F, -3.0F);
-    public static final Item ANCIENT_METAL_MATTOCK = create(ModToolMaterial.ANCIENT_METAL, "ancient_metal", 3.5F, -3.0F);
-    public static final Item MITHRIL_MATTOCK      = create(ModToolMaterial.MITHRIL, "mithril", 4.5F, -3.0F);
-    public static final Item ADAMANTIUM_MATTOCK   = create(ModToolMaterial.ADAMANTIUM, "adamantium", 5.5F, -3.0F);
+    public static final Item COPPER_MATTOCK       = create(ModToolMaterial.COPPER, 2.5F, -3.0F);
+    public static final Item SILVER_MATTOCK       = create(ModToolMaterial.SILVER, 2.5F, -3.0F);
+    public static final Item GOLD_MATTOCK         = create(ModToolMaterial.GOLD, 1.5F, -3.0F);
+    public static final Item RUSTED_IRON_MATTOCK  = create(ModToolMaterial.RUSTED_IRON, 1.5F, -3.0F);
+    public static final Item IRON_MATTOCK         = create(ModToolMaterial.IRON, 2.5F, -3.0F);
+    public static final Item ANCIENT_METAL_MATTOCK = create(ModToolMaterial.ANCIENT_METAL, 3.5F, -3.0F);
+    public static final Item MITHRIL_MATTOCK      = create(ModToolMaterial.MITHRIL, 4.5F, -3.0F);
+    public static final Item ADAMANTIUM_MATTOCK   = create(ModToolMaterial.ADAMANTIUM, 5.5F, -3.0F);
 
-    private static Item create(ModToolMaterial mat, String name, float dmg, float speed) {
+    private static Item create(ModToolMaterial mat, float dmg, float speed) {
         ToolMaterial tm = ToolType.MATTOCK.customToolMaterial(mat);
         return new MattockItem(
                 new Item.Properties()
-                        .setId(ToolType.MATTOCK.itemKey(name))
+                        .setId(ToolType.MATTOCK.itemKey(mat))
                         .shovel(tm, dmg, speed));
     }
 

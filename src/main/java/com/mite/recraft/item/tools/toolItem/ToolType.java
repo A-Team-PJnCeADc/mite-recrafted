@@ -11,7 +11,7 @@ import net.minecraft.world.item.ToolMaterial;
  * 工具类型枚举 —— 定义每种工具的属性，统一实例化。
  *
  * 使用方式：
- *   ToolType.AXE.create(ModToolMaterial.COPPER, "copper", 5.0F, -3.0F)
+ *   ToolType.AXE.create(ModToolMaterial.COPPER, 5.0F, -3.0F)
  */
 public enum ToolType {
     AXE         ("axe",         3, ModToolMaterial.ALL,      AxeItem::new),
@@ -49,11 +49,10 @@ public enum ToolType {
     public ModToolMaterial[] materialSet() { return materialSet; }
 
     /** 创建一个材质的具体工具实例 */
-    public Item create(ModToolMaterial mat, String materialName, float attackDamage, float attackSpeed) {
+    public Item create(ModToolMaterial mat, float attackDamage, float attackSpeed) {
         ToolMaterial tm = customToolMaterial(mat);
         Item.Properties props = new Item.Properties()
-                .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath("mite-recrafted", materialName + "_" + suffix)))
+                .setId(itemKey(mat))
                 .enchantable(tm.enchantmentValue());
         return factory.create(tm, attackDamage, attackSpeed, props);
     }
@@ -79,9 +78,9 @@ public enum ToolType {
     }
 
     /** 构建 ResourceKey<Item>，公开给自定义实例化 */
-    public ResourceKey<Item> itemKey(String materialName) {
+    public ResourceKey<Item> itemKey(ModToolMaterial mat) {
         return ResourceKey.create(Registries.ITEM,
-                Identifier.fromNamespaceAndPath("mite-recrafted", materialName + "_" + suffix));
+                Identifier.fromNamespaceAndPath("mite-recrafted", mat.getName() + "_" + suffix));
     }
 
     /** 纯 Item 工厂：需要通过 Properties 追加工具属性（pickaxe/sword/shovel 等） */
