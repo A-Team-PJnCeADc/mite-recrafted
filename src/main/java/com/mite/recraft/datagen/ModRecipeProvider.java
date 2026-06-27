@@ -110,7 +110,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 hoe(ModMaterials.MITHRIL_INGOT, HoeItems.MITHRIL_HOE);
                 hoe(ModMaterials.ADAMANTIUM_INGOT, HoeItems.ADAMANTIUM_HOE);
 
-                // ============ 镰刀 (仅金属, 跳过锈铁) ============
+                // ============ 镰刀 (仅金属) ============
                 scythe(ModMaterials.COPPER_INGOT, ScytheItems.COPPER_SCYTHE);
                 scythe(ModMaterials.SILVER_INGOT, ScytheItems.SILVER_SCYTHE);
                 scythe(ModMaterials.GOLD_INGOT, ScytheItems.GOLD_SCYTHE);

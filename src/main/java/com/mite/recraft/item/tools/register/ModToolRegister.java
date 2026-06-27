@@ -18,7 +18,6 @@ import com.mite.recraft.item.tools.toolItem.ScytheItems;
 import com.mite.recraft.item.tools.toolItem.WoodenItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
 import com.mite.recraft.item.tools.toolItem.WarHammerItems;
-import net.fabricmc.fabric.api.registry.FuelValueEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -111,7 +110,7 @@ public class ModToolRegister {
         register("mithril_hoe", HoeItems.MITHRIL_HOE);
         register("adamantium_hoe", HoeItems.ADAMANTIUM_HOE);
 
-        // 镰刀（仅金属；锈铁镰刀无配方，靠僵尸掉落）
+        // 镰刀
         register("copper_scythe", ScytheItems.COPPER_SCYTHE);
         register("silver_scythe", ScytheItems.SILVER_SCYTHE);
         register("gold_scythe", ScytheItems.GOLD_SCYTHE);

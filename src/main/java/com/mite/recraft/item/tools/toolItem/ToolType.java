@@ -14,12 +14,13 @@ import net.minecraft.world.item.ToolMaterial;
  *   ToolType.AXE.create(ModToolMaterial.COPPER, 5.0F, -3.0F)
  */
 public enum ToolType {
-    //配平数值
+    //todo 配平数值
+    //TODO 银质工具对亡灵怪物有伤害加成，且可攻击白色食尸鬼
     AXE         ("axe",         3, ModToolMaterial.ALL,      AxeItem::new),
     PICKAXE     ("pickaxe",     3, ModToolMaterial.METALS,   plainItem(Item.Properties::pickaxe)),
     SHOVEL      ("shovel",      1, ModToolMaterial.ALL,      ShovelItem::new),
     HOE         ("hoe",         2, ModToolMaterial.METALS,   HoeItem::new),
-    SCYTHE      ("scythe",      2, ModToolMaterial.METALS,   plainItem(Item.Properties::hoe)),
+    SCYTHE      ("scythe",      2, ModToolMaterial.METALS,   ScytheItems::new),
     SWORD       ("sword",       2, ModToolMaterial.METALS,   plainItem(Item.Properties::sword)),
     HATCHET     ("hatchet",     1, ModToolMaterial.ALL,      AxeItem::new),
     DAGGER      ("dagger",      1, ModToolMaterial.METALS,   plainItem(Item.Properties::sword)),
