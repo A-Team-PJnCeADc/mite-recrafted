@@ -22,7 +22,7 @@ import java.util.Map;
  *   ModBlockType.METAL_BLOCK.create("copper", 5.0F)
  */
 public enum ModBlockType {
-    // 硬度按材质递进，具体值由各 create(...) 调用方传入（见 ModDoorBlocks/ModBarBlocks/ModMetalBlocks）
+    // 暂定硬度
     DOOR("_door", 1,  DoorBlock::new),
     BARS("_bars", 16, (type, props) -> new IronBarsBlock(props.noOcclusion())),
     METAL_BLOCK("_block", 4, (type, props) -> new Block(props)),
