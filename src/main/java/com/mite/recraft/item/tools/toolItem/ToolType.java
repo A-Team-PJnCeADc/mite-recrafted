@@ -14,6 +14,7 @@ import net.minecraft.world.item.ToolMaterial;
  *   ToolType.AXE.create(ModToolMaterial.COPPER, 5.0F, -3.0F)
  */
 public enum ToolType {
+    //配平数值
     AXE         ("axe",         3, ModToolMaterial.ALL,      AxeItem::new),
     PICKAXE     ("pickaxe",     3, ModToolMaterial.METALS,   plainItem(Item.Properties::pickaxe)),
     SHOVEL      ("shovel",      1, ModToolMaterial.ALL,      ShovelItem::new),
