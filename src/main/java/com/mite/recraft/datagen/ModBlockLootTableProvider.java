@@ -2,6 +2,7 @@ package com.mite.recraft.datagen;
 
 import com.mite.recraft.block.modblock.ModBarBlocks;
 import com.mite.recraft.block.modblock.ModDoorBlocks;
+import com.mite.recraft.block.modblock.ModMetalBlocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.minecraft.core.HolderLookup;
@@ -32,5 +33,14 @@ public class ModBlockLootTableProvider extends FabricBlockLootSubProvider {
         dropSelf(ModBarBlocks.ANCIENT_METAL_BARS);
         dropSelf(ModBarBlocks.MITHRIL_BARS);
         dropSelf(ModBarBlocks.ADAMANTIUM_BARS);
+
+        // 金属块
+        dropSelf(ModMetalBlocks.COPPER_BLOCK);
+        dropSelf(ModMetalBlocks.SILVER_BLOCK);
+        dropSelf(ModMetalBlocks.GOLD_BLOCK);
+        dropSelf(ModMetalBlocks.IRON_BLOCK);
+        dropSelf(ModMetalBlocks.ANCIENT_METAL_BLOCK);
+        dropSelf(ModMetalBlocks.MITHRIL_BLOCK);
+        dropSelf(ModMetalBlocks.ADAMANTIUM_BLOCK);
     }
 }

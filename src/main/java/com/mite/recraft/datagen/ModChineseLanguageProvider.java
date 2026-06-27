@@ -143,6 +143,7 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             String name = entry.getValue();
             if (id.equals(mat + "_door")) return name + "门";
             if (id.equals(mat + "_bars")) return name + "栅栏";
+            if (id.equals(mat + "_block")) return name + "块";
         }
         return null;
     }

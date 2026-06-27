@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.block.modblock.ModBarBlocks;
 import com.mite.recraft.block.modblock.ModDoorBlocks;
+import com.mite.recraft.block.modblock.ModMetalBlocks;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
 import com.mite.recraft.item.tools.toolItem.AexItems;
 import com.mite.recraft.item.tools.toolItem.BowItems;
@@ -117,6 +118,9 @@ public class ModModelProvider extends FabricModelProvider {
 
         // 金属栅栏
         generateBarModels(gen);
+
+        // 金属块
+        generateMetalBlockModels(gen);
     }
 
     @Override
@@ -530,6 +534,30 @@ public class ModModelProvider extends FabricModelProvider {
             Identifier itemModelId = Identifier.fromNamespaceAndPath(modId, "block/" + mat + "_bars");
             ModelTemplates.FLAT_ITEM.create(itemModelId,
                     TextureMapping.layer0(texMat), gen.modelOutput);
+        }
+    }
+
+    private void generateMetalBlockModels(BlockModelGenerators gen) {
+        String[] mats = {"copper", "silver", "gold", "iron", "ancient_metal", "mithril", "adamantium"};
+        Block[] blocks = {ModMetalBlocks.COPPER_BLOCK, ModMetalBlocks.SILVER_BLOCK, ModMetalBlocks.GOLD_BLOCK,
+                ModMetalBlocks.IRON_BLOCK, ModMetalBlocks.ANCIENT_METAL_BLOCK, ModMetalBlocks.MITHRIL_BLOCK,
+                ModMetalBlocks.ADAMANTIUM_BLOCK};
+        String modId = MiteRecrafted.MOD_ID;
+
+        for (int i = 0; i < mats.length; i++) {
+            String mat = mats[i];
+            Block block = blocks[i];
+            Identifier tex = Identifier.fromNamespaceAndPath(modId, "block/metal/" + mat + "_block");
+            Material texMat = new Material(tex);
+
+            // cube_all 方块模型
+            var model = TexturedModel.CUBE.get(block);
+            model.updateTextures(m -> m.put(TextureSlot.ALL, texMat));
+            Identifier modelId = model.create(block, gen.modelOutput);
+
+            // blockstate
+            var mv = new MultiVariant(WeightedList.of(new Variant(modelId)));
+            gen.blockStateOutput.accept(MultiVariantGenerator.dispatch(block, mv));
         }
     }
 

@@ -5,6 +5,7 @@ import com.mite.recraft.block.ModBlockType;
 import com.mite.recraft.block.ModBlocks;
 import com.mite.recraft.block.modblock.ModBarBlocks;
 import com.mite.recraft.block.modblock.ModDoorBlocks;
+import com.mite.recraft.block.modblock.ModMetalBlocks;
 import com.mite.recraft.block.workbench.ModWorkbenchBlock;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
 import net.minecraft.core.Registry;
@@ -54,6 +55,20 @@ public class ModBlockRegister {
                 ModBarBlocks.IRON_BARS, ModBarBlocks.ANCIENT_METAL_BARS, ModBarBlocks.MITHRIL_BARS,
                 ModBarBlocks.ADAMANTIUM_BARS}) {
             ModBlocks.addBlocks(bars);
+        }
+
+        // 金属块
+        register("copper_block", ModMetalBlocks.COPPER_BLOCK);
+        register("silver_block", ModMetalBlocks.SILVER_BLOCK);
+        register("gold_block", ModMetalBlocks.GOLD_BLOCK);
+        register("iron_block", ModMetalBlocks.IRON_BLOCK);
+        register("ancient_metal_block", ModMetalBlocks.ANCIENT_METAL_BLOCK);
+        register("mithril_block", ModMetalBlocks.MITHRIL_BLOCK);
+        register("adamantium_block", ModMetalBlocks.ADAMANTIUM_BLOCK);
+        for (Block block : new Block[]{ModMetalBlocks.COPPER_BLOCK, ModMetalBlocks.SILVER_BLOCK, ModMetalBlocks.GOLD_BLOCK,
+                ModMetalBlocks.IRON_BLOCK, ModMetalBlocks.ANCIENT_METAL_BLOCK, ModMetalBlocks.MITHRIL_BLOCK,
+                ModMetalBlocks.ADAMANTIUM_BLOCK}) {
+            ModBlocks.addBlocks(block);
         }
     }
 

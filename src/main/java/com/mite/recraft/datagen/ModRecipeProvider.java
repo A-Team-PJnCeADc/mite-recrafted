@@ -2,6 +2,7 @@ package com.mite.recraft.datagen;
 
 import com.mite.recraft.block.modblock.ModBarBlocks;
 import com.mite.recraft.block.modblock.ModDoorBlocks;
+import com.mite.recraft.block.modblock.ModMetalBlocks;
 import com.mite.recraft.item.material.ModMaterials;
 import com.mite.recraft.item.tools.toolItem.*;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
@@ -202,6 +203,15 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 bars(ModMaterials.ANCIENT_METAL_INGOT, ModBarBlocks.ANCIENT_METAL_BARS);
                 bars(ModMaterials.MITHRIL_INGOT, ModBarBlocks.MITHRIL_BARS);
                 bars(ModMaterials.ADAMANTIUM_INGOT, ModBarBlocks.ADAMANTIUM_BARS);
+
+                // ============ 金属块 (9锭 → 1块) ============
+                metalBlock(ModMaterials.COPPER_INGOT, ModMetalBlocks.COPPER_BLOCK);
+                metalBlock(ModMaterials.SILVER_INGOT, ModMetalBlocks.SILVER_BLOCK);
+                metalBlock(ModMaterials.GOLD_INGOT, ModMetalBlocks.GOLD_BLOCK);
+                metalBlock(ModMaterials.IRON_INGOT, ModMetalBlocks.IRON_BLOCK);
+                metalBlock(ModMaterials.ANCIENT_METAL_INGOT, ModMetalBlocks.ANCIENT_METAL_BLOCK);
+                metalBlock(ModMaterials.MITHRIL_INGOT, ModMetalBlocks.MITHRIL_BLOCK);
+                metalBlock(ModMaterials.ADAMANTIUM_INGOT, ModMetalBlocks.ADAMANTIUM_BLOCK);
             }
 
             void club(TagKey<Item> m, Item result) {
@@ -339,6 +349,13 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .pattern("MMM").pattern("MMM")
                         .define('M', m)
                         .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void metalBlock(ItemLike ingot, ItemLike block) {
+                shaped(RecipeCategory.BUILDING_BLOCKS, block, 1)
+                        .pattern("MMM").pattern("MMM").pattern("MMM")
+                        .define('M', ingot)
+                        .unlockedBy(getHasName(ingot), has(ingot)).save(output);
             }
         };
     }
