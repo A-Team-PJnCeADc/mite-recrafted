@@ -14,6 +14,7 @@ import com.mite.recraft.item.tools.toolItem.MattockItems;
 import com.mite.recraft.item.tools.toolItem.PickaxeItems;
 import com.mite.recraft.item.tools.toolItem.ShearsItems;
 import com.mite.recraft.item.tools.toolItem.ShovelItems;
+import com.mite.recraft.item.tools.toolItem.ScytheItems;
 import com.mite.recraft.item.tools.toolItem.WoodenItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
 import com.mite.recraft.item.tools.toolItem.WarHammerItems;
@@ -109,6 +110,16 @@ public class ModToolRegister {
         register("ancient_metal_hoe", HoeItems.ANCIENT_METAL_HOE);
         register("mithril_hoe", HoeItems.MITHRIL_HOE);
         register("adamantium_hoe", HoeItems.ADAMANTIUM_HOE);
+
+        // 镰刀（仅金属；锈铁镰刀无配方，靠僵尸掉落）
+        register("copper_scythe", ScytheItems.COPPER_SCYTHE);
+        register("silver_scythe", ScytheItems.SILVER_SCYTHE);
+        register("gold_scythe", ScytheItems.GOLD_SCYTHE);
+        register("rusted_iron_scythe", ScytheItems.RUSTED_IRON_SCYTHE);
+        register("iron_scythe", ScytheItems.IRON_SCYTHE);
+        register("ancient_metal_scythe", ScytheItems.ANCIENT_METAL_SCYTHE);
+        register("mithril_scythe", ScytheItems.MITHRIL_SCYTHE);
+        register("adamantium_scythe", ScytheItems.ADAMANTIUM_SCYTHE);
 
         // 鹤嘴锄（铲+锄混合工具，仅金属）
         register("copper_mattock", MattockItems.COPPER_MATTOCK);

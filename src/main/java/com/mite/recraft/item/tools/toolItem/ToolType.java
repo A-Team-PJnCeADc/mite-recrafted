@@ -14,12 +14,11 @@ import net.minecraft.world.item.ToolMaterial;
  *   ToolType.AXE.create(ModToolMaterial.COPPER, 5.0F, -3.0F)
  */
 public enum ToolType {
-    //todo 镰刀
-    //todo 配平数值
     AXE         ("axe",         3, ModToolMaterial.ALL,      AxeItem::new),
     PICKAXE     ("pickaxe",     3, ModToolMaterial.METALS,   plainItem(Item.Properties::pickaxe)),
     SHOVEL      ("shovel",      1, ModToolMaterial.ALL,      ShovelItem::new),
     HOE         ("hoe",         2, ModToolMaterial.METALS,   HoeItem::new),
+    SCYTHE      ("scythe",      2, ModToolMaterial.METALS,   plainItem(Item.Properties::hoe)),
     SWORD       ("sword",       2, ModToolMaterial.METALS,   plainItem(Item.Properties::sword)),
     HATCHET     ("hatchet",     1, ModToolMaterial.ALL,      AxeItem::new),
     DAGGER      ("dagger",      1, ModToolMaterial.METALS,   plainItem(Item.Properties::sword)),

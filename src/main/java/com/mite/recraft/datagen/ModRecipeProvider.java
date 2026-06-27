@@ -110,6 +110,15 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 hoe(ModMaterials.MITHRIL_INGOT, HoeItems.MITHRIL_HOE);
                 hoe(ModMaterials.ADAMANTIUM_INGOT, HoeItems.ADAMANTIUM_HOE);
 
+                // ============ 镰刀 (仅金属, 跳过锈铁) ============
+                scythe(ModMaterials.COPPER_INGOT, ScytheItems.COPPER_SCYTHE);
+                scythe(ModMaterials.SILVER_INGOT, ScytheItems.SILVER_SCYTHE);
+                scythe(ModMaterials.GOLD_INGOT, ScytheItems.GOLD_SCYTHE);
+                scythe(ModMaterials.IRON_INGOT, ScytheItems.IRON_SCYTHE);
+                scythe(ModMaterials.ANCIENT_METAL_INGOT, ScytheItems.ANCIENT_METAL_SCYTHE);
+                scythe(ModMaterials.MITHRIL_INGOT, ScytheItems.MITHRIL_SCYTHE);
+                scythe(ModMaterials.ADAMANTIUM_INGOT, ScytheItems.ADAMANTIUM_SCYTHE);
+
                 // ============ 鹤嘴锄 (4材料+2棍, 仅金属) ============
                 mattock(ModMaterials.COPPER_INGOT, MattockItems.COPPER_MATTOCK);
                 mattock(ModMaterials.SILVER_INGOT, MattockItems.SILVER_MATTOCK);
@@ -273,6 +282,13 @@ public class ModRecipeProvider extends FabricRecipeProvider {
             void hoe(ItemLike m, Item result) {
                 shaped(RecipeCategory.TOOLS, result)
                         .pattern("MM").pattern(" S").pattern(" S")
+                        .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            void scythe(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("MM ").pattern("M S").pattern("  S")
                         .define('M', m).define('S', Items.STICK)
                         .unlockedBy(getHasName(m), has(m)).save(output);
             }

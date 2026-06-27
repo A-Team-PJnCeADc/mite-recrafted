@@ -20,6 +20,7 @@ import com.mite.recraft.item.tools.toolItem.MattockItems;
 import com.mite.recraft.item.tools.toolItem.PickaxeItems;
 import com.mite.recraft.item.tools.toolItem.ShearsItems;
 import com.mite.recraft.item.tools.toolItem.ShovelItems;
+import com.mite.recraft.item.tools.toolItem.ScytheItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
 import com.mite.recraft.item.tools.toolItem.WoodenItems;
 import com.mite.recraft.item.tools.toolItem.WarHammerItems;
@@ -202,6 +203,15 @@ public class ModModelProvider extends FabricModelProvider {
                 HoeItems.MITHRIL_HOE, HoeItems.ADAMANTIUM_HOE
         );
         generateToolModels(gen, hoes, itemDefs);
+
+        // 镰刀（仅金属，含锈铁）
+        List<Item> scythes = List.of(
+                ScytheItems.COPPER_SCYTHE, ScytheItems.SILVER_SCYTHE,
+                ScytheItems.GOLD_SCYTHE, ScytheItems.RUSTED_IRON_SCYTHE,
+                ScytheItems.IRON_SCYTHE, ScytheItems.ANCIENT_METAL_SCYTHE,
+                ScytheItems.MITHRIL_SCYTHE, ScytheItems.ADAMANTIUM_SCYTHE
+        );
+        generateToolModels(gen, scythes, itemDefs);
 
         // 鹤嘴锄
         List<Item> mattocks = List.of(
