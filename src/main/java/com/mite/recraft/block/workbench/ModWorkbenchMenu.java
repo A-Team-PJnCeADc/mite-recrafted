@@ -94,9 +94,20 @@ public class ModWorkbenchMenu extends CraftingMenu {
         return this.resultSlots.getItem(0);
     }
 
-    /** 关闭 GUI 或切换容器时重置合成状态 */
+    /** 关闭 GUI 时：如果已经完成合成则正常返回产物，否则返回原材料 */
     @Override
     public void removed(Player player) {
+        if (isCraftingComplete()) {
+            ItemStack result = getSlot(0).getItem().copy();
+            if (!result.isEmpty()) {
+                for (int i = 0; i <= 9; i++) {
+                    getSlot(i).set(ItemStack.EMPTY);
+                }
+                if (!player.getInventory().add(result)) {
+                    player.drop(result, false);
+                }
+            }
+        }
         super.removed(player);
         resetCrafting();
         sendProgressToClient();

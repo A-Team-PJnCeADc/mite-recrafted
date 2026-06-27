@@ -127,6 +127,9 @@ public class ModModelProvider extends FabricModelProvider {
     public void generateItemModels(@NonNull ItemModelGenerators gen) {
         Map<Identifier, JsonObject> itemDefs = new LinkedHashMap<>();
 
+        // 门的物品模型（flat item → models/item/，覆盖自动生成的 block/ 路径）
+        generateDoorItemModels(gen, itemDefs);
+
         // 木棒/短木棒
         List<Item> wooden = List.of(WoodenItems.CLUB, WoodenItems.CUDGEL);
         generateToolModels(gen, wooden, itemDefs);
@@ -465,6 +468,7 @@ public class ModModelProvider extends FabricModelProvider {
     }
 
 
+    /** 门方块模型 + blockstate（multipart，8 变体） */
     private void generateDoorModels(BlockModelGenerators gen) {
         String[] mats = {"copper", "silver", "gold", "ancient_metal", "mithril", "adamantium"};
         Block[] doors = {ModDoorBlocks.COPPER_DOOR, ModDoorBlocks.SILVER_DOOR, ModDoorBlocks.GOLD_DOOR,
@@ -474,13 +478,15 @@ public class ModModelProvider extends FabricModelProvider {
         for (int i = 0; i < mats.length; i++) {
             String mat = mats[i];
             Block door = doors[i];
+
+            // 纹理上下两半各一张图
             Identifier bottom = Identifier.fromNamespaceAndPath(modId, "block/door/door_" + mat + "_lower");
             Identifier top = Identifier.fromNamespaceAndPath(modId, "block/door/door_" + mat + "_upper");
             TextureMapping mapping = new TextureMapping()
                     .put(TextureSlot.BOTTOM, new Material(bottom))
                     .put(TextureSlot.TOP, new Material(top));
 
-            // 8 个门模型变体
+            // 8 种门模型变体
             MultiVariant bl = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_BOTTOM_LEFT.create(door, mapping, gen.modelOutput));
             MultiVariant blOpen = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_BOTTOM_LEFT_OPEN.create(door, mapping, gen.modelOutput));
             MultiVariant br = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_BOTTOM_RIGHT.create(door, mapping, gen.modelOutput));
@@ -490,15 +496,31 @@ public class ModModelProvider extends FabricModelProvider {
             MultiVariant tr = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_TOP_RIGHT.create(door, mapping, gen.modelOutput));
             MultiVariant trOpen = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_TOP_RIGHT_OPEN.create(door, mapping, gen.modelOutput));
 
-            // 物品模型
-            Identifier itemTex = Identifier.fromNamespaceAndPath(modId, "item/doors/" + mat);
-            Identifier itemModelId = Identifier.fromNamespaceAndPath(modId, "block/" + mat + "_door");
-            ModelTemplates.FLAT_ITEM.create(itemModelId,
-                    TextureMapping.layer0(new Material(itemTex)), gen.modelOutput);
-
-            // Blockstate
+            // Blockstate multipart
             gen.blockStateOutput.accept(BlockModelGenerators.createDoor(
                     door, bl, blOpen, br, brOpen, tl, tlOpen, tr, trOpen));
+        }
+    }
+
+    /** 门物品模型 — 2D flat item，写到 models/item/，避免被 block 自动生成覆盖 */
+    private void generateDoorItemModels(ItemModelGenerators gen, Map<Identifier, JsonObject> itemDefs) {
+        Block[] doors = {ModDoorBlocks.COPPER_DOOR, ModDoorBlocks.SILVER_DOOR, ModDoorBlocks.GOLD_DOOR,
+                ModDoorBlocks.ANCIENT_METAL_DOOR, ModDoorBlocks.MITHRIL_DOOR, ModDoorBlocks.ADAMANTIUM_DOOR};
+        String[] mats = {"copper", "silver", "gold", "ancient_metal", "mithril", "adamantium"};
+        String modId = MiteRecrafted.MOD_ID;
+
+        for (int i = 0; i < mats.length; i++) {
+            String mat = mats[i];
+            // 纹理在 item/doors/ 下
+            Identifier tex = Identifier.fromNamespaceAndPath(modId, "item/doors/" + mat);
+            // 模型放在 models/item/
+            Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/" + mat + "_door");
+
+            ModelTemplates.FLAT_ITEM.create(modelId,
+                    TextureMapping.layer0(new Material(tex)), gen.modelOutput);
+
+            // 覆盖自动生成的 block/ 物品模型引用
+            gen.itemModelOutput.accept(doors[i].asItem(), ItemModelUtils.plainModel(modelId));
         }
     }
 

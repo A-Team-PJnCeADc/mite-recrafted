@@ -338,7 +338,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
             }
 
             void door(ItemLike m, ItemLike result) {
-                shaped(RecipeCategory.REDSTONE, result, 3)
+                shaped(RecipeCategory.REDSTONE, result, 1)
                         .pattern("MM").pattern("MM").pattern("MM")
                         .define('M', m)
                         .unlockedBy(getHasName(m), has(m)).save(output);
