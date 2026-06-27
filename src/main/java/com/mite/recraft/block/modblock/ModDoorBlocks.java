@@ -1,4 +1,4 @@
-package com.mite.recraft.block.moddoorblock;
+package com.mite.recraft.block.modblock;
 
 import com.mite.recraft.block.ModBlockType;
 import net.minecraft.world.level.block.Block;

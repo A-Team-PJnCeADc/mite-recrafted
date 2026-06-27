@@ -1,7 +1,7 @@
 package com.mite.recraft.datagen;
 
-import com.mite.recraft.block.modbarblock.ModBarBlocks;
-import com.mite.recraft.block.moddoorblock.ModDoorBlocks;
+import com.mite.recraft.block.modblock.ModBarBlocks;
+import com.mite.recraft.block.modblock.ModDoorBlocks;
 import com.mite.recraft.item.material.ModMaterials;
 import com.mite.recraft.item.tools.toolItem.*;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;

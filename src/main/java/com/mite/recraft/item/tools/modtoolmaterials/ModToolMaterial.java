@@ -1,8 +1,8 @@
 package com.mite.recraft.item.tools.modtoolmaterials;
 
+import com.mite.recraft.datagen.ModBlockTags;
 import com.mite.recraft.item.quality.Quality;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -23,58 +23,58 @@ public enum ModToolMaterial {
             repairsTag("repairs_wood")),
 
     FLINT("flint", 1.0f, Quality.FINE, true, false,
-            miteIncorrect("incorrect_for_flint_tool"),
+            ModBlockTags.INCORRECT_FOR_FLINT_TOOL,
             400, 1.25f, 0.0f, 1,
             repairsTag("repairs_flint")),
 
     OBSIDIAN("obsidian", 2.0f, Quality.FINE, true, false,
-            miteIncorrect("incorrect_for_obsidian_tool"),
+            ModBlockTags.INCORRECT_FOR_OBSIDIAN_TOOL,
             800, 1.5f, 0.0f, 8,
             repairsTag("repairs_obsidian")),
 
     // ===== 金属材料 =====
     COPPER("copper", 4.0f, Quality.EXCELLENT, true, true,
-            miteIncorrect("incorrect_for_copper_tool"),
+            ModBlockTags.INCORRECT_FOR_COPPER_TOOL,
             1600, 1.75f, 0.0f, 12,
             repairsTag("repairs_copper")),
 
     SILVER("silver", 4.0f, Quality.EXCELLENT, true, true,
-            miteIncorrect("incorrect_for_silver_tool"),
+            ModBlockTags.INCORRECT_FOR_SILVER_TOOL,
             1600, 1.75f, 0.0f, 10,
             repairsTag("repairs_silver")),
 
     GOLD("gold", 4.0f, Quality.SUPERB, true, true,
-            miteIncorrect("incorrect_for_gold_tool"),
+            ModBlockTags.INCORRECT_FOR_GOLD_TOOL,
             1600, 1.75f, 0.0f, 22,
             repairsTag("repairs_gold")),
 
     RUSTED_IRON("rusted_iron", 4.0f, Quality.POOR, true, true,
-            miteIncorrect("incorrect_for_rusted_iron_tool"),
+            ModBlockTags.INCORRECT_FOR_RUSTED_IRON_TOOL,
             1600, 1.25f, 0.0f, 8,
             repairsTag("repairs_rusted_iron")),
 
     IRON("iron", 8.0f, Quality.MASTERWORK, true, true,
-            miteIncorrect("incorrect_for_iron_tool"),
+            ModBlockTags.INCORRECT_FOR_IRON_TOOL,
             3200, 2.0f, 0.0f, 14,
             repairsTag("repairs_iron")),
 
     DIAMOND("diamond", 16.0f, Quality.SUPERB, true, true,
-            miteIncorrect("incorrect_for_diamond_tool"),
+            ModBlockTags.INCORRECT_FOR_DIAMOND_TOOL,
             6400, 2.5f, 0.0f, 10,
             repairsTag("repairs_diamond")),
 
     ANCIENT_METAL("ancient_metal", 16.0f, Quality.MASTERWORK, true, true,
-            miteIncorrect("incorrect_for_ancient_metal_tool"),
+            ModBlockTags.INCORRECT_FOR_ANCIENT_METAL_TOOL,
             6400, 2.0f, 0.0f, 18,
             repairsTag("repairs_ancient_metal")),
 
     MITHRIL("mithril", 64.0f, Quality.LEGENDARY, true, true,
-            miteIncorrect("incorrect_for_mithril_tool"),
+            ModBlockTags.INCORRECT_FOR_MITHRIL_TOOL,
             25600, 2.5f, 0.0f, 24,
             repairsTag("repairs_mithril")),
 
     ADAMANTIUM("adamantium", 256.0f, Quality.LEGENDARY, true, true,
-            miteIncorrect("incorrect_for_adamantium_tool"),
+            ModBlockTags.INCORRECT_FOR_ADAMANTIUM_TOOL,
             102400, 3.0f, 0.0f, 30,
             repairsTag("repairs_adamantium")),
 
@@ -176,11 +176,5 @@ public enum ModToolMaterial {
                 BuiltInRegistries.ITEM.key(),
                 Identifier.fromNamespaceAndPath("mite-recraft", path)
         );
-    }
-
-    // MITE 工具挖掘限制标签
-    private static TagKey<Block> miteIncorrect(String path) {
-        return TagKey.create(Registries.BLOCK,
-                Identifier.fromNamespaceAndPath("mite-recrafted", path));
     }
 }

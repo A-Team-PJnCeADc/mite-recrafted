@@ -1,11 +1,7 @@
 package com.mite.recraft.client;
 
 import com.mite.recraft.client.datagen.ModModelProvider;
-import com.mite.recraft.datagen.ModBlockTagProvider;
-import com.mite.recraft.datagen.ModChineseLanguageProvider;
-import com.mite.recraft.datagen.ModEnglishLanguageProvider;
-import com.mite.recraft.datagen.ModItemTagProvider;
-import com.mite.recraft.datagen.ModRecipeProvider;
+import com.mite.recraft.datagen.*;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
@@ -19,5 +15,6 @@ public class MiteRecraftedDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ModChineseLanguageProvider::new);
         pack.addProvider(ModItemTagProvider::new);
         pack.addProvider(ModBlockTagProvider::new);
+        pack.addProvider(ModBlockLootTableProvider::new);
     }
 }

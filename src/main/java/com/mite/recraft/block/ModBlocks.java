@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
-//todo 添加挖掘属性
-//todo 添加战利品表
 public class ModBlocks {
     private static final List<Block> BLOCKS = new ArrayList<>();
 
