@@ -84,6 +84,17 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
                 tb.add("quality.mite-recraft." + q.name().toLowerCase(), QUALITY_NAMES[idx]);
             }
         }
+
+        // 物品标签翻译 (repairs_*)
+        String[][] tagMats = {
+                {"copper", "铜"}, {"silver", "银"}, {"gold", "金"},
+                {"iron", "铁"}, {"rusted_iron", "锈铁"},
+                {"ancient_metal", "远古金属"}, {"mithril", "秘银"}, {"adamantium", "艾德曼"},
+                {"flint", "燧石"}, {"obsidian", "黑曜石"}, {"wood", "木"}
+        };
+        for (String[] pair : tagMats) {
+            tb.add("tag.item.mite-recrafted.repairs_" + pair[0], pair[1] + "修理材料");
+        }
     }
 
     private String buildMaterialName(String id) {
@@ -145,6 +156,7 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (id.equals(mat + "_door")) return name + "门";
             if (id.equals(mat + "_bars")) return name + "栅栏";
             if (id.equals(mat + "_block")) return name + "块";
+            if (id.equals(mat + "_anvil")) return name + "砧";
         }
         return null;
     }

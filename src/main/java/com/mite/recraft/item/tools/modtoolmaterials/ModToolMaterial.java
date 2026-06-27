@@ -1,5 +1,6 @@
 package com.mite.recraft.item.tools.modtoolmaterials;
 
+import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.datagen.ModBlockTags;
 import com.mite.recraft.item.quality.Quality;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -137,10 +138,21 @@ public enum ModToolMaterial {
     // ===== Getter 方法 =====
     public String getName() { return name; }
     public float getDurabilityCoefficient() { return durabilityCoefficient; }
+    public String getRepairTagName() {
+        return "repairs_" + name;
+    }
+
+    public static ModToolMaterial fromCoefficient(float coefficient) {
+        for (ModToolMaterial mat : values()) {
+            if (mat.getDurabilityCoefficient() == coefficient) return mat;
+        }
+        return null;
+    }
     public Quality getMaxQuality() { return maxQuality; }
     public boolean canTool() { return canTool; }
     public boolean canArmor() { return canArmor; }
     public ToolMaterial getToolMaterial() { return toolMaterial; }
+    public int getToolDurability() { return toolMaterial != null ? toolMaterial.durability() : 0; }
 
     /** 全部工具材质（燧石+黑曜石+金属） */
     public static final ModToolMaterial[] ALL = {
@@ -174,7 +186,7 @@ public enum ModToolMaterial {
     private static TagKey<Item> repairsTag(String path) {
         return TagKey.create(
                 BuiltInRegistries.ITEM.key(),
-                Identifier.fromNamespaceAndPath("mite-recraft", path)
+                Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, path)
         );
     }
 }

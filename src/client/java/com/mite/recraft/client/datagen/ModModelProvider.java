@@ -122,6 +122,9 @@ public class ModModelProvider extends FabricModelProvider {
 
         // 金属块
         generateMetalBlockModels(gen);
+
+        // 金属砧
+        generateAnvilModels(gen);
     }
 
     @Override
@@ -590,6 +593,110 @@ public class ModModelProvider extends FabricModelProvider {
             // blockstate
             var mv = new MultiVariant(WeightedList.of(new Variant(modelId)));
             gen.blockStateOutput.accept(MultiVariantGenerator.dispatch(block, mv));
+        }
+    }
+
+    private void generateAnvilModels(BlockModelGenerators gen) {
+        String[] mats = {"copper", "silver", "gold", "ancient_metal", "mithril", "adamantium"};
+        String modId = MiteRecrafted.MOD_ID;
+
+        for (String mat : mats) {
+            // 生成 3 个模型（stage 0/1/2）
+            String[] tops = {"top_damaged_0", "top_damaged_1", "top_damaged_2"};
+            Identifier[] modelIds = new Identifier[3];
+
+            for (int stage = 0; stage < 3; stage++) {
+                JsonObject modelJson = new JsonObject();
+                modelJson.addProperty("parent", "minecraft:block/template_anvil");
+                JsonObject tex = new JsonObject();
+                tex.addProperty("body", modId + ":block/anvil/" + mat + "/base");
+                tex.addProperty("top", modId + ":block/anvil/" + mat + "/" + tops[stage]);
+                modelJson.add("textures", tex);
+                JsonObject disp = new JsonObject();
+                JsonObject gui = new JsonObject();
+                JsonArray rot = new JsonArray(); rot.add(30); rot.add(45); rot.add(0);
+                JsonArray trans = new JsonArray(); trans.add(0); trans.add(0); trans.add(0);
+                JsonArray sc = new JsonArray(); sc.add(0.625); sc.add(0.625); sc.add(0.625);
+                gui.add("rotation", rot);
+                gui.add("translation", trans);
+                gui.add("scale", sc);
+                disp.add("gui", gui);
+                modelJson.add("display", disp);
+                modelIds[stage] = Identifier.fromNamespaceAndPath(modId,
+                        "block/" + mat + "_anvil_stage" + stage);
+                gen.modelOutput.accept(modelIds[stage], () -> modelJson);
+            }
+
+            // blockstate: facing × stage
+            JsonObject variants = new JsonObject();
+            String[] facings = {"north", "east", "south", "west"};
+            int[] ys = {0, 90, 180, 270};
+            for (int j = 0; j < 4; j++) {
+                for (int stage = 0; stage < 3; stage++) {
+                    String key = "facing=" + facings[j] + ",stage=" + stage;
+                    JsonObject v = new JsonObject();
+                    v.addProperty("model", modelIds[stage].toString());
+                    if (ys[j] > 0) v.addProperty("y", ys[j]);
+                    variants.add(key, v);
+                }
+            }
+            JsonObject bs = new JsonObject();
+            bs.add("variants", variants);
+
+            java.nio.file.Path out = dataOutput.getOutputFolder()
+                    .resolve("assets").resolve(modId).resolve("blockstates")
+                    .resolve(mat + "_anvil.json");
+            try {
+                java.nio.file.Files.createDirectories(out.getParent());
+                java.nio.file.Files.writeString(out, new com.google.gson.GsonBuilder()
+                        .setPrettyPrinting().create().toJson(bs));
+            } catch (java.io.IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            // items JSON — range_dispatch 根据 damage 切换模型（方块物品同步）
+            JsonObject itemJson = new JsonObject();
+            JsonObject rd = new JsonObject();
+            rd.addProperty("type", "minecraft:range_dispatch");
+            rd.addProperty("property", "minecraft:damage");
+
+            JsonArray entries = new JsonArray();
+            // stage 1: damage >= 0.25 (75% 耐久剩余)
+            JsonObject e1 = new JsonObject();
+            e1.addProperty("threshold", 0.25);
+            JsonObject m1 = new JsonObject();
+            m1.addProperty("type", "minecraft:model");
+            m1.addProperty("model", modelIds[1].toString());
+            e1.add("model", m1);
+            entries.add(e1);
+
+            // stage 2: damage >= 0.75 (25% 耐久剩余)
+            JsonObject e2 = new JsonObject();
+            e2.addProperty("threshold", 0.75);
+            JsonObject m2 = new JsonObject();
+            m2.addProperty("type", "minecraft:model");
+            m2.addProperty("model", modelIds[2].toString());
+            e2.add("model", m2);
+            entries.add(e2);
+
+            rd.add("entries", entries);
+            // fallback: stage 0 (完好)
+            JsonObject fallback = new JsonObject();
+            fallback.addProperty("type", "minecraft:model");
+            fallback.addProperty("model", modelIds[0].toString());
+            rd.add("fallback", fallback);
+
+            itemJson.add("model", rd);
+            java.nio.file.Path itemOut = dataOutput.getOutputFolder()
+                    .resolve("assets").resolve(modId).resolve("items")
+                    .resolve(mat + "_anvil.json");
+            try {
+                java.nio.file.Files.createDirectories(itemOut.getParent());
+                java.nio.file.Files.writeString(itemOut, new com.google.gson.GsonBuilder()
+                        .setPrettyPrinting().create().toJson(itemJson));
+            } catch (java.io.IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

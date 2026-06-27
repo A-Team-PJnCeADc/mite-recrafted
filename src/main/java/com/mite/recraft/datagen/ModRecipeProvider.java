@@ -1,5 +1,7 @@
 package com.mite.recraft.datagen;
 
+import com.mite.recraft.block.anvil.ModAnvilBlock;
+import com.mite.recraft.block.modblock.ModAnvilBlocks;
 import com.mite.recraft.block.modblock.ModBarBlocks;
 import com.mite.recraft.block.modblock.ModDoorBlocks;
 import com.mite.recraft.block.modblock.ModMetalBlocks;
@@ -221,6 +223,14 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 metalBlock(ModMaterials.ANCIENT_METAL_INGOT, ModMetalBlocks.ANCIENT_METAL_BLOCK);
                 metalBlock(ModMaterials.MITHRIL_INGOT, ModMetalBlocks.MITHRIL_BLOCK);
                 metalBlock(ModMaterials.ADAMANTIUM_INGOT, ModMetalBlocks.ADAMANTIUM_BLOCK);
+
+                // ============ 金属砧 (3块 + 4锭) ============
+                anvil(ModMetalBlocks.COPPER_BLOCK, ModMaterials.COPPER_INGOT, ModAnvilBlocks.COPPER_ANVIL);
+                anvil(ModMetalBlocks.SILVER_BLOCK, ModMaterials.SILVER_INGOT, ModAnvilBlocks.SILVER_ANVIL);
+                anvil(ModMetalBlocks.GOLD_BLOCK, ModMaterials.GOLD_INGOT, ModAnvilBlocks.GOLD_ANVIL);
+                anvil(ModMetalBlocks.ANCIENT_METAL_BLOCK, ModMaterials.ANCIENT_METAL_INGOT, ModAnvilBlocks.ANCIENT_METAL_ANVIL);
+                anvil(ModMetalBlocks.MITHRIL_BLOCK, ModMaterials.MITHRIL_INGOT, ModAnvilBlocks.MITHRIL_ANVIL);
+                anvil(ModMetalBlocks.ADAMANTIUM_BLOCK, ModMaterials.ADAMANTIUM_INGOT, ModAnvilBlocks.ADAMANTIUM_ANVIL);
             }
 
             void club(TagKey<Item> m, Item result) {
@@ -372,6 +382,13 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .pattern("MMM").pattern("MMM").pattern("MMM")
                         .define('M', ingot)
                         .unlockedBy(getHasName(ingot), has(ingot)).save(output);
+            }
+
+            void anvil(ItemLike block, ItemLike ingot, ItemLike result) {
+                shaped(RecipeCategory.MISC, result, 1)
+                        .pattern("BBB").pattern(" I ").pattern("III")
+                        .define('B', block).define('I', ingot)
+                        .unlockedBy(getHasName(block), has(block)).save(output);
             }
         };
     }

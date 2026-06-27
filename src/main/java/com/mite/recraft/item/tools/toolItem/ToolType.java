@@ -1,5 +1,6 @@
 package com.mite.recraft.item.tools.toolItem;
 
+import com.mite.recraft.component.ModDataComponents;
 import com.mite.recraft.item.tools.modtoolmaterials.ModToolMaterial;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -57,7 +58,10 @@ public enum ToolType {
         ToolMaterial tm = customToolMaterial(mat);
         Item.Properties props = new Item.Properties()
                 .setId(itemKey(mat))
-                .enchantable(tm.enchantmentValue());
+                .enchantable(tm.enchantmentValue())
+                .component(ModDataComponents.TOOL_COMPONENTS, numComponents)
+                .component(ModDataComponents.TOOL_MATERIAL_TIER, mat.getDurabilityCoefficient())
+                .component(ModDataComponents.TOOL_REPAIR_TAG, mat.getRepairTagName());
         return factory.create(tm, attackDamage, attackSpeed, props);
     }
 

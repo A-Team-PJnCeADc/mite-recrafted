@@ -6,7 +6,8 @@
 	    "FishingHookMixin",
 	    "AbstractArrowInvoker",
 	    "ArrowRecoveryMixin",
-	    "LivingEntityStuckArrowsMixin"
+	    "LivingEntityStuckArrowsMixin",
+	    "AnvilMenuCostAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

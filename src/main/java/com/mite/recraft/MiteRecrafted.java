@@ -1,6 +1,7 @@
 package com.mite.recraft;
 
 import com.mite.recraft.block.ModBlocks;
+import com.mite.recraft.block.anvil.ModAnvilBlock;
 import com.mite.recraft.block.workbench.ModWorkbenchBlock;
 import com.mite.recraft.component.ModDataComponents;
 import com.mite.recraft.entity.ModEntitys;
@@ -23,7 +24,7 @@ public class MiteRecrafted implements ModInitializer {
 	public void onInitialize() {
 	    LOGGER.info("Hello Fabric world!");
 
-	    ModDataComponents.initialize();
+	    ModDataComponents.init();
 	    ModItems.init();
 	    ModCreativeTabs.init();
 		ModBlocks.init();

@@ -78,6 +78,17 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
                 tb.add("quality.mite-recraft." + q.name().toLowerCase(), qualityNames[idx]);
             }
         }
+
+        // Item tag translations (repairs_*)
+        String[][] tagMats = {
+                {"copper", "Copper"}, {"silver", "Silver"}, {"gold", "Gold"},
+                {"iron", "Iron"}, {"rusted_iron", "Rusted Iron"},
+                {"ancient_metal", "Ancient Metal"}, {"mithril", "Mithril"}, {"adamantium", "Adamantium"},
+                {"flint", "Flint"}, {"obsidian", "Obsidian"}, {"wood", "Wood"}
+        };
+        for (String[] pair : tagMats) {
+            tb.add("tag.item.mite-recrafted.repairs_" + pair[0], pair[1] + " Repair Materials");
+        }
     }
 
     private String buildMaterialName(String id) {

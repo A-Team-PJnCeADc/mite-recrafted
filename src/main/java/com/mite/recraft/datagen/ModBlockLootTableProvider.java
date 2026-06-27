@@ -1,8 +1,12 @@
 package com.mite.recraft.datagen;
 
+import com.mite.recraft.block.anvil.ModAnvilBlock;
+import com.mite.recraft.block.modblock.ModAnvilBlocks;
 import com.mite.recraft.block.modblock.ModBarBlocks;
 import com.mite.recraft.block.modblock.ModDoorBlocks;
 import com.mite.recraft.block.modblock.ModMetalBlocks;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.level.block.Block;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.minecraft.core.HolderLookup;
@@ -42,5 +46,16 @@ public class ModBlockLootTableProvider extends FabricBlockLootSubProvider {
         dropSelf(ModMetalBlocks.ANCIENT_METAL_BLOCK);
         dropSelf(ModMetalBlocks.MITHRIL_BLOCK);
         dropSelf(ModMetalBlocks.ADAMANTIUM_BLOCK);
+
+        // 金属砧（保留 damage NBT）
+        Block[] anvils = {ModAnvilBlocks.COPPER_ANVIL, ModAnvilBlocks.SILVER_ANVIL, ModAnvilBlocks.GOLD_ANVIL,
+                ModAnvilBlocks.ANCIENT_METAL_ANVIL, ModAnvilBlocks.MITHRIL_ANVIL, ModAnvilBlocks.ADAMANTIUM_ANVIL};
+        for (Block anvil : anvils) {
+            this.add(anvil, createSingleItemTable(anvil)
+                    .apply(net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction
+                            .copyComponentsFromBlockEntity(net.minecraft.world.level.storage.loot.parameters.LootContextParams.BLOCK_ENTITY)
+                            .include(DataComponents.DAMAGE)
+                            .build()));
+        }
     }
 }

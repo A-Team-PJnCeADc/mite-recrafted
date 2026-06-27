@@ -3,12 +3,16 @@ package com.mite.recraft.block.register;
 import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.block.ModBlockType;
 import com.mite.recraft.block.ModBlocks;
+import com.mite.recraft.block.anvil.ModAnvilBlock;
+import com.mite.recraft.block.modblock.ModAnvilBlocks;
+
 import com.mite.recraft.block.modblock.ModBarBlocks;
 import com.mite.recraft.block.modblock.ModDoorBlocks;
 import com.mite.recraft.block.modblock.ModMetalBlocks;
 import com.mite.recraft.block.workbench.ModWorkbenchBlock;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -22,6 +26,9 @@ import net.minecraft.world.level.block.Blocks;
  */
 public class ModBlockRegister {
     public static void registerAll() {
+        // BlockEntity 注册
+        ModAnvilBlock.registerBlockEntity();
+
         // 工作台
         for (WorkbenchMaterial material : WorkbenchMaterial.values()) {
             String name = material.getName() + "_workbench";
@@ -70,6 +77,18 @@ public class ModBlockRegister {
                 ModMetalBlocks.ADAMANTIUM_BLOCK}) {
             ModBlocks.addBlocks(block);
         }
+
+        // 金属砧（自定义 BlockItem 带耐久）
+        registerAnvil("copper_anvil", ModAnvilBlocks.COPPER_ANVIL);
+        registerAnvil("silver_anvil", ModAnvilBlocks.SILVER_ANVIL);
+        registerAnvil("gold_anvil", ModAnvilBlocks.GOLD_ANVIL);
+        registerAnvil("ancient_metal_anvil", ModAnvilBlocks.ANCIENT_METAL_ANVIL);
+        registerAnvil("mithril_anvil", ModAnvilBlocks.MITHRIL_ANVIL);
+        registerAnvil("adamantium_anvil", ModAnvilBlocks.ADAMANTIUM_ANVIL);
+        for (Block block : new Block[]{ModAnvilBlocks.COPPER_ANVIL, ModAnvilBlocks.SILVER_ANVIL, ModAnvilBlocks.GOLD_ANVIL,
+                ModAnvilBlocks.ANCIENT_METAL_ANVIL, ModAnvilBlocks.MITHRIL_ANVIL, ModAnvilBlocks.ADAMANTIUM_ANVIL}) {
+            ModBlocks.addBlocks(block);
+        }
     }
 
     private static void register(String name, Block block) {
@@ -78,6 +97,18 @@ public class ModBlockRegister {
         Registry.register(BuiltInRegistries.ITEM, itemKey(name),
                 new BlockItem(block, new Item.Properties().stacksTo(maxStackSize)
                         .setId(itemKey(name)).useBlockDescriptionPrefix()));
+    }
+
+    private static void registerAnvil(String name, Block block) {
+        if (!(block instanceof ModAnvilBlock anvil)) return;
+        Registry.register(BuiltInRegistries.BLOCK, blockKey(name), block);
+        int maxStackSize = ModBlockType.getMaxStackSize(block);
+        var props = new Item.Properties()
+                .setId(itemKey(name)).useBlockDescriptionPrefix()
+                .stacksTo(maxStackSize)
+                .component(DataComponents.MAX_DAMAGE, anvil.getDurability());
+        Registry.register(BuiltInRegistries.ITEM, itemKey(name),
+                new BlockItem(block, props));
     }
 
     private static ResourceKey<Block> blockKey(String name) {
