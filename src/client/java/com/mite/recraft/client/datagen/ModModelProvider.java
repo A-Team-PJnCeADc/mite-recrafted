@@ -22,6 +22,7 @@ import com.mite.recraft.item.tools.toolItem.ShearsItems;
 import com.mite.recraft.item.tools.toolItem.ShovelItems;
 import com.mite.recraft.item.tools.toolItem.ScytheItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
+import com.mite.recraft.item.record.RecordItems;
 import com.mite.recraft.item.tools.toolItem.WoodenItems;
 import com.mite.recraft.item.tools.toolItem.WarHammerItems;
 import com.mite.recraft.item.material.ModMaterials;
@@ -307,6 +308,11 @@ public class ModModelProvider extends FabricModelProvider {
                 ModMaterials.FLINT_CHIP, ModMaterials.OBSIDIAN_CHIP,
                 ModMaterials.DIAMOND_CHIP, ModMaterials.EMERALD_CHIP,
                 ModMaterials.GLASS_SHARD, ModMaterials.NETHER_QUARTZ_SHARD);
+
+        // 唱片
+        generateFlatModels(gen, "records", itemDefs,
+                RecordItems.RECORD_DESCENT, RecordItems.RECORD_LEGENDS,
+                RecordItems.RECORD_UNDERWORLD, RecordItems.RECORD_WANDERER);
 
         // 写入 items/*.json
         Path itemsDir = dataOutput.getOutputFolder().resolve("assets").resolve(MiteRecrafted.MOD_ID).resolve("items");

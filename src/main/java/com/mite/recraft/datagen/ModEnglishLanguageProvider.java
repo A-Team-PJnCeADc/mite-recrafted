@@ -61,6 +61,14 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
             tb.add(key, buildToolName(id));
         }
 
+        // Records
+        for (Item item : ModItems.getRecords()) {
+            String key = item.getDescriptionId();
+            if (!key.startsWith("item.mite-recrafted.")) continue;
+            String id = key.substring("item.mite-recrafted.".length());
+            tb.add(key, buildRecordName(id));
+        }
+
         // Blocks
         for (Block block : ModBlocks.getBlocks()) {
             String key = block.getDescriptionId();
@@ -89,6 +97,15 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
         for (String[] pair : tagMats) {
             tb.add("tag.item.mite-recrafted.repairs_" + pair[0], pair[1] + " Repair Materials");
         }
+
+        // Jukebox song descriptions
+        String[][] songs = {
+                {"descent", "Descent"}, {"legends", "Legends"},
+                {"underworld", "Underworld"}, {"wanderer", "Wanderer"}
+        };
+        for (String[] s : songs) {
+            tb.add("jukebox_song.mite-recrafted." + s[0], s[1]);
+        }
     }
 
     private String buildMaterialName(String id) {
@@ -111,6 +128,11 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
         String tool = id.substring(lastUnderscore + 1);
 
         return materialDisplay(material) + " " + capitalize(tool);
+    }
+
+    private String buildRecordName(String id) {
+        // record_descent -> "Record Descent"
+        return "Record " + materialDisplay(id.replace("record_", ""));
     }
 
     private String buildBlockName(String id) {
