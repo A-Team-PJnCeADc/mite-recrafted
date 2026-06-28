@@ -6,8 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AnvilBlock;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -74,6 +77,19 @@ public class ModAnvilBlock extends AnvilBlock implements EntityBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(STAGE);
+    }
+
+    /** 砧顶上有非流体方块时阻止打开 GUI */
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
+                                               Player player, BlockHitResult hit) {
+        BlockPos above = pos.above();
+        BlockState aboveState = level.getBlockState(above);
+        if (!aboveState.isAir() && aboveState.getFluidState().isEmpty()) {
+            // 上方是非流体方块（非空气、非液体），阻止打开
+            return InteractionResult.SUCCESS;
+        }
+        return super.useWithoutItem(state, level, pos, player, hit);
     }
 
     @Override

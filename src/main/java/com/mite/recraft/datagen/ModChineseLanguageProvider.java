@@ -67,6 +67,14 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (name != null) tb.add(key, name);
         }
 
+        // 所有唱片翻译
+        for (Item item : ModItems.getRecords()) {
+            String key = item.getDescriptionId();
+            if (!key.startsWith("item.mite-recrafted.")) continue;
+            String id = key.substring("item.mite-recrafted.".length());
+            tb.add(key, buildRecordName(id));
+        }
+
         // 所有方块翻译
         for (Block block : ModBlocks.getBlocks()) {
             String key = block.getDescriptionId();
@@ -94,6 +102,15 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
         };
         for (String[] pair : tagMats) {
             tb.add("tag.item.mite-recrafted.repairs_" + pair[0], pair[1] + "修理材料");
+        }
+
+        // 唱片说明
+        String[][] songs = {
+                {"descent", "Descent"}, {"legends", "Legends"},
+                {"underworld", "Underworld"}, {"wanderer", "Wanderer"}
+        };
+        for (String[] s : songs) {
+            tb.add("jukebox_song.mite-recrafted." + s[0], s[1]);
         }
     }
 
@@ -139,6 +156,12 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
         if (id.equals("ancient_metal_bow")) return "远古金属弓";
         if (id.equals("mithril_bow")) return "秘银弓";
         return null;
+    }
+
+    private String buildRecordName(String id) {
+        // record_descent -> "唱片 - Descent"
+        String name = id.replace("record_", "");
+        return "唱片 - " + name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
     private String buildBlockName(String id) {

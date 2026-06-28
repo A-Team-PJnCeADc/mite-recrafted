@@ -1,6 +1,7 @@
 package com.mite.recraft.item;
 
 import com.mite.recraft.item.material.ModMaterials;
+import com.mite.recraft.item.record.RecordItems;
 import com.mite.recraft.item.tools.ModTools;
 import net.minecraft.world.item.Item;
 
@@ -11,6 +12,7 @@ import java.util.List;
 public class ModItems {
     private static final List<Item> MATERIALS = new ArrayList<>();
     private static final List<Item> TOOLS = new ArrayList<>();
+    private static final List<Item> RECORDS = new ArrayList<>();
 
     public static void addMaterial(Item item) {
         MATERIALS.add(item);
@@ -18,6 +20,10 @@ public class ModItems {
 
     public static void addTool(Item item) {
         TOOLS.add(item);
+    }
+
+    public static void addRecord(Item item) {
+        RECORDS.add(item);
     }
 
     public static List<Item> getMaterials() {
@@ -28,8 +34,13 @@ public class ModItems {
         return Collections.unmodifiableList(TOOLS);
     }
 
+    public static List<Item> getRecords() {
+        return Collections.unmodifiableList(RECORDS);
+    }
+
     public static void init() {
         ModMaterials.init();
         ModTools.init();
+        RecordItems.init();
     }
 }

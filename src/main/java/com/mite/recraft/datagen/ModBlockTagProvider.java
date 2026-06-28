@@ -1,7 +1,6 @@
 package com.mite.recraft.datagen;
 
 import com.mite.recraft.MiteRecrafted;
-import com.mite.recraft.block.anvil.ModAnvilBlock;
 import com.mite.recraft.block.modblock.ModAnvilBlocks;
 import com.mite.recraft.block.modblock.ModBarBlocks;
 import com.mite.recraft.block.modblock.ModDoorBlocks;

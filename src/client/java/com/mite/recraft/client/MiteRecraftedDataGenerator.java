@@ -16,5 +16,7 @@ public class MiteRecraftedDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ModItemTagProvider::new);
         pack.addProvider(ModBlockTagProvider::new);
         pack.addProvider(ModBlockLootTableProvider::new);
+        pack.addProvider((output, future) -> new ModSoundProvider(output));
+        pack.addProvider(ModJukeboxSongProvider::new);
     }
 }
