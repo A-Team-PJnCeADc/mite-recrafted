@@ -6,7 +6,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.ToolMaterial;
 
 /**
  * 工具类型枚举 —— 定义每种工具的属性，统一实例化。

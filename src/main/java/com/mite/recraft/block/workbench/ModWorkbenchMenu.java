@@ -2,14 +2,16 @@ package com.mite.recraft.block.workbench;
 
 import com.mite.recraft.network.CraftingProgressSyncPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 /**
  * MITE 工作台菜单 — 含等级门槛 + 合成时间系统。
@@ -67,6 +69,7 @@ public class ModWorkbenchMenu extends CraftingMenu {
         ItemStack result = getResultItem();
         if (result.isEmpty() || !canCraftItem(result)) {
             resetCrafting();
+            if (!result.isEmpty()) this.resultSlots.setItem(0, ItemStack.EMPTY);
         } else if (playerInventory.player.level() instanceof net.minecraft.server.level.ServerLevel) {
             this.craftingPeriod = calculateCraftingPeriod(result);
             this.craftingTicks = 0;
@@ -135,7 +138,8 @@ public class ModWorkbenchMenu extends CraftingMenu {
     private void sendProgressToClient() {
         if (playerInventory.player instanceof ServerPlayer serverPlayer) {
             ServerPlayNetworking.send(serverPlayer,
-                    new CraftingProgressSyncPayload(craftingPeriod, craftingTicks));
+                    new CraftingProgressSyncPayload(craftingPeriod, craftingTicks,
+                            material.getToolMaterial().getDurabilityCoefficient()));
         }
     }
 
@@ -187,17 +191,32 @@ public class ModWorkbenchMenu extends CraftingMenu {
                 true
         );
     }
-
     public WorkbenchMaterial getWorkbenchMaterial() { return material; }
 
+    /** 检查工作台等级是否足够合成该物品 */
     public boolean canCraftItem(ItemStack result) {
         if (result.isEmpty()) return true;
         float benchDur = material.getToolMaterial().getDurabilityCoefficient();
         return benchDur >= TieredResultSlot.getItemMaterialDurabilityStatic(result, this.craftSlots);
     }
 
-    /* ========== TieredResultSlot ========== */
+    /**
+     * 配方书放置配方时检查等级门槛。
+     * 等级不足时返回 {@code NOTHING} 阻止放置。
+     */
+    @Override
+    public PostPlaceAction handlePlacement(boolean shift, boolean creative, RecipeHolder<?> recipe,
+                                           ServerLevel level, Inventory inventory) {
+        if (recipe.value() instanceof CraftingRecipe craftingRecipe) {
+            ItemStack result = craftingRecipe.assemble(this.craftSlots.asCraftInput());
+            if (!result.isEmpty() && !canCraftItem(result)) {
+                return PostPlaceAction.NOTHING;
+            }
+        }
+        return super.handlePlacement(shift, creative, recipe, level, inventory);
+    }
 
+    //TieredResultSlot
     @Override
     protected Slot addResultSlot(Player player, int x, int y) {
         var slot = new TieredResultSlot(player, this.craftSlots, this.resultSlots, 0, x, y, this);

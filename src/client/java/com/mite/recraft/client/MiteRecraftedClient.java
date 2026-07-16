@@ -15,6 +15,7 @@ public class MiteRecraftedClient implements ClientModInitializer {
 
     public static volatile int syncedCraftingPeriod;
     public static volatile int syncedCraftingTicks;
+    public static volatile float syncedBenchCoefficient = 1.0f;
 
     @Override
     public void onInitializeClient() {
@@ -25,6 +26,7 @@ public class MiteRecraftedClient implements ClientModInitializer {
                 (payload, context) -> {
                     syncedCraftingPeriod = payload.period();
                     syncedCraftingTicks = payload.ticks();
+                    syncedBenchCoefficient = payload.benchCoefficient();
                 });
 
         // 弓的箭矢材质 Select 属性注册

@@ -37,6 +37,9 @@ public class ModCreativeTabs {
                 for (Item item : ModItems.getRecords()) {
                     entries.accept(item);
                 }
+                for (Item item : ModItems.getBuckets()) {
+                    entries.accept(item);
+                }
             })
             .build();
 

@@ -1,4 +1,4 @@
-package com.mite.recraft.item.record;
+package com.mite.recraft.item.moditems;
 
 import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.datagen.ModJukeboxSongProvider;
@@ -15,7 +15,7 @@ import net.minecraft.world.item.Rarity;
 /**
  * MITE 新唱片：Descent / Legends / Underworld / Wanderer
  */
-public class RecordItems {
+public class ModRecordItems {
     public static final Item RECORD_DESCENT = register("record_descent", ModJukeboxSongProvider.DESCENT);
     public static final Item RECORD_LEGENDS = register("record_legends", ModJukeboxSongProvider.LEGENDS);
     public static final Item RECORD_UNDERWORLD = register("record_underworld", ModJukeboxSongProvider.UNDERWORLD);

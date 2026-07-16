@@ -2,13 +2,15 @@
 	"required": true,
 	"package": "com.mite.recraft.mixin",
 	"compatibilityLevel": "JAVA_25",
-	"mixins": [
-	    "FishingHookMixin",
-	    "AbstractArrowInvoker",
-	    "ArrowRecoveryMixin",
-	    "LivingEntityStuckArrowsMixin",
-	    "AnvilMenuCostAccessor"
-	],
+			"mixins": [
+			    "FishingHookMixin",
+			    "AbstractArrowInvoker",
+			    "ArrowRecoveryMixin",
+			    "LivingEntityStuckArrowsMixin",
+			    "AnvilMenuCostAccessor",
+			    "ItemEntityMixin",
+			    "PlayerLavaBucketMixin"
+			],
 	"injectors": {
 		"defaultRequire": 1
 	},

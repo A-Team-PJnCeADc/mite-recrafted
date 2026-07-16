@@ -5,10 +5,12 @@ import com.mite.recraft.block.modblock.ModBarBlocks;
 import com.mite.recraft.block.modblock.ModDoorBlocks;
 import com.mite.recraft.block.modblock.ModMetalBlocks;
 import com.mite.recraft.item.material.ModMaterials;
+import com.mite.recraft.item.moditems.bucket.ModBucketItems;
 import com.mite.recraft.item.tools.toolItem.*;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -230,6 +232,37 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 anvil(ModMetalBlocks.ANCIENT_METAL_BLOCK, ModMaterials.ANCIENT_METAL_INGOT, ModAnvilBlocks.ANCIENT_METAL_ANVIL);
                 anvil(ModMetalBlocks.MITHRIL_BLOCK, ModMaterials.MITHRIL_INGOT, ModAnvilBlocks.MITHRIL_ANVIL);
                 anvil(ModMetalBlocks.ADAMANTIUM_BLOCK, ModMaterials.ADAMANTIUM_INGOT, ModAnvilBlocks.ADAMANTIUM_ANVIL);
+
+                // ============ 金属空桶 (3锭) ============
+                bucket(ModMaterials.COPPER_INGOT, ModBucketItems.COPPER_BUCKET);
+                bucket(ModMaterials.SILVER_INGOT, ModBucketItems.SILVER_BUCKET);
+                bucket(ModMaterials.GOLD_INGOT, ModBucketItems.GOLD_BUCKET);
+                bucket(ModMaterials.ANCIENT_METAL_INGOT, ModBucketItems.ANCIENT_METAL_BUCKET);
+                bucket(ModMaterials.MITHRIL_INGOT, ModBucketItems.MITHRIL_BUCKET);
+                bucket(ModMaterials.ADAMANTIUM_INGOT, ModBucketItems.ADAMANTIUM_BUCKET);
+
+                // ============ 石头桶还原空桶 ============
+                stoneBucketUncraft(ModBucketItems.COPPER_STONE_BUCKET, ModBucketItems.COPPER_BUCKET);
+                stoneBucketUncraft(ModBucketItems.SILVER_STONE_BUCKET, ModBucketItems.SILVER_BUCKET);
+                stoneBucketUncraft(ModBucketItems.GOLD_STONE_BUCKET, ModBucketItems.GOLD_BUCKET);
+                stoneBucketUncraft(ModBucketItems.ANCIENT_METAL_STONE_BUCKET, ModBucketItems.ANCIENT_METAL_BUCKET);
+                stoneBucketUncraft(ModBucketItems.MITHRIL_STONE_BUCKET, ModBucketItems.MITHRIL_BUCKET);
+                stoneBucketUncraft(ModBucketItems.ADAMANTIUM_STONE_BUCKET, ModBucketItems.ADAMANTIUM_BUCKET);
+            }
+
+            void bucket(ItemLike ingot, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("M M").pattern(" M ")
+                        .define('M', ingot)
+                        .unlockedBy(getHasName(ingot), has(ingot)).save(output);
+            }
+
+            /** 石头桶 → 空桶  */
+            void stoneBucketUncraft(ItemLike stoneBucket, ItemLike emptyBucket) {
+                shapeless(RecipeCategory.MISC, emptyBucket, 1)
+                        .requires(stoneBucket)
+                        .unlockedBy(getHasName(stoneBucket), has(stoneBucket))
+                        .save(output, BuiltInRegistries.ITEM.getKey(stoneBucket.asItem()).getPath() + "_uncraft");
             }
 
             void club(TagKey<Item> m, Item result) {

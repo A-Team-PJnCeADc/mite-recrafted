@@ -11,8 +11,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.JukeboxSong;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -38,21 +39,16 @@ public class ModJukeboxSongProvider implements DataProvider {
 
     @Override
     public CompletableFuture<?> run(CachedOutput cachedOutput) {
-        try {
-            Files.createDirectories(outputDir);
-            var gson = new com.google.gson.GsonBuilder().setPrettyPrinting().create();
-
-            write(gson, "descent",  "music_disc.descent",  119.4f, 1);
-            write(gson, "legends", "music_disc.legends",   62.6f, 2);
-            write(gson, "underworld", "music_disc.underworld", 122.9f, 3);
-            write(gson, "wanderer", "music_disc.wanderer", 123.8f, 4);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to generate jukebox_song", e);
-        }
-        return CompletableFuture.completedFuture(null);
+        List<CompletableFuture<?>> futures = new ArrayList<>();
+        futures.add(write(cachedOutput, "descent",  "music_disc.descent",  119.4f, 1));
+        futures.add(write(cachedOutput, "legends", "music_disc.legends",   62.6f, 2));
+        futures.add(write(cachedOutput, "underworld", "music_disc.underworld", 122.9f, 3));
+        futures.add(write(cachedOutput, "wanderer", "music_disc.wanderer", 123.8f, 4));
+        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
     }
 
-    private void write(com.google.gson.Gson gson, String name, String sound, float sec, int comp) throws Exception {
+    private CompletableFuture<?> write(CachedOutput cachedOutput,
+                                       String name, String sound, float sec, int comp) {
         JsonObject json = new JsonObject();
         json.addProperty("comparator_output", comp);
         JsonObject desc = new JsonObject();
@@ -60,7 +56,7 @@ public class ModJukeboxSongProvider implements DataProvider {
         json.add("description", desc);
         json.addProperty("length_in_seconds", sec);
         json.addProperty("sound_event", MiteRecrafted.MOD_ID + ":" + sound);
-        Files.writeString(outputDir.resolve(name + ".json"), gson.toJson(json));
+        return DataProvider.saveStable(cachedOutput, json, outputDir.resolve(name + ".json"));
     }
 
     @Override

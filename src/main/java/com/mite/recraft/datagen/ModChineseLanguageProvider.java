@@ -85,6 +85,15 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (name != null) tb.add(key, name);
         }
 
+        // 所有桶翻译
+        for (Item item : ModItems.getBuckets()) {
+            String key = item.getDescriptionId();
+            if (!key.startsWith("item.mite-recrafted.")) continue;
+            String id = key.substring("item.mite-recrafted.".length());
+            String name = buildBucketName(id);
+            if (name != null) tb.add(key, name);
+        }
+
         // 品质翻译
         for (Quality q : Quality.values()) {
             int idx = q.ordinal();
@@ -159,20 +168,17 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
     }
 
     private String buildRecordName(String id) {
-        // record_descent -> "唱片 - Descent"
         String name = id.replace("record_", "");
         return "唱片 - " + name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
     private String buildBlockName(String id) {
-        // 工作台
         for (WorkbenchMaterial mat : WorkbenchMaterial.values()) {
             String matName = mat.getName();
             String cnName = MATERIAL_NAMES.getOrDefault(matName, matName);
             if (id.equals(matName + "_workbench")) return cnName + "工作台";
         }
 
-        // 金属门
         for (var entry : MATERIAL_NAMES.entrySet()) {
             String mat = entry.getKey();
             String name = entry.getValue();
@@ -180,6 +186,18 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (id.equals(mat + "_bars")) return name + "栅栏";
             if (id.equals(mat + "_block")) return name + "块";
             if (id.equals(mat + "_anvil")) return name + "砧";
+        }
+        return null;
+    }
+
+    private String buildBucketName(String id) {
+        for (var entry : MATERIAL_NAMES.entrySet()) {
+            String mat = entry.getKey();
+            String name = entry.getValue();
+            if (id.equals(mat + "_bucket")) return name + "桶";
+            if (id.equals(mat + "_water_bucket")) return "装满水的" + name + "桶";
+            if (id.equals(mat + "_lava_bucket")) return "装满岩浆的" + name + "桶";
+            if (id.equals(mat + "_stone_bucket")) return "装满石头的" + name + "桶";
         }
         return null;
     }

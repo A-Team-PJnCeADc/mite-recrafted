@@ -7,6 +7,7 @@ import com.mite.recraft.block.modblock.ModBarBlocks;
 import com.mite.recraft.block.modblock.ModDoorBlocks;
 import com.mite.recraft.block.modblock.ModMetalBlocks;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
+import com.mite.recraft.client.renderer.item.NockedArrowProperty;
 import com.mite.recraft.item.tools.toolItem.AexItems;
 import com.mite.recraft.item.tools.toolItem.BowItems;
 import com.mite.recraft.item.tools.toolItem.ArrowItems;
@@ -22,10 +23,11 @@ import com.mite.recraft.item.tools.toolItem.ShearsItems;
 import com.mite.recraft.item.tools.toolItem.ShovelItems;
 import com.mite.recraft.item.tools.toolItem.ScytheItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
-import com.mite.recraft.item.record.RecordItems;
+import com.mite.recraft.item.moditems.ModRecordItems;
 import com.mite.recraft.item.tools.toolItem.WoodenItems;
 import com.mite.recraft.item.tools.toolItem.WarHammerItems;
 import com.mite.recraft.item.material.ModMaterials;
+import com.mite.recraft.item.moditems.bucket.ModBucketItems;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -38,8 +40,14 @@ import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.data.models.model.TexturedModel;
 import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.properties.conditional.FishingRodCast;
+import net.minecraft.client.renderer.item.properties.numeric.UseDuration;
+import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
 import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataProvider;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.random.WeightedList;
@@ -47,11 +55,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.jspecify.annotations.NonNull;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import static com.mite.recraft.block.ModBlocks.getBlocks;
 
@@ -66,6 +72,7 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(@NonNull BlockModelGenerators gen) {
+        // 工作台：每种材质有不同的顶面/侧面纹理，燧石和黑曜石用 COLUMN_ALT，金属用 ORIENTABLE
         for (WorkbenchMaterial material : WorkbenchMaterial.values()) {
             String blockName = material.getName() + "_workbench";
             Block workbenchBlock = getBlocks().stream()
@@ -110,6 +117,7 @@ public class ModModelProvider extends FabricModelProvider {
                 }
             }
 
+            // 工作台只有一种朝向（无 facing），使用单变体 blockstate
             var mv = new MultiVariant(WeightedList.of(new Variant(modelId)));
             gen.blockStateOutput.accept(MultiVariantGenerator.dispatch(workbenchBlock, mv));
             gen.registerSimpleItemModel(workbenchBlock, modelId);
@@ -130,290 +138,234 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(@NonNull ItemModelGenerators gen) {
-        Map<Identifier, JsonObject> itemDefs = new LinkedHashMap<>();
-
         // 门的物品模型（flat item → models/item/，覆盖自动生成的 block/ 路径）
-        generateDoorItemModels(gen, itemDefs);
+        generateDoorItemModels(gen);
 
-        // 木棒/短木棒
-        List<Item> wooden = List.of(WoodenItems.CLUB, WoodenItems.CUDGEL);
-        generateToolModels(gen, wooden, itemDefs);
+        // 木棒 / 短木棒（木材材质，独立于 ToolType 体系）
+        for (Item item : new Item[]{WoodenItems.CLUB, WoodenItems.CUDGEL}) {
+            generateToolModel(gen, item, "tools");
+        }
 
-        // 弓（拉弓动画由 BowItem 属性驱动）
-        List<Item> bows = List.of(BowItems.WOOD_BOW, BowItems.ANCIENT_METAL_BOW, BowItems.MITHRIL_BOW);
-        generateBowModels(gen, bows, itemDefs);
+        // 弓：conditional(using_item) → range_dispatch(use_duration) → select(nocked_arrow)
+        generateBowModels(gen,
+                BowItems.WOOD_BOW, BowItems.ANCIENT_METAL_BOW, BowItems.MITHRIL_BOW);
 
-        // 斧头
-        List<Item> axes = List.of(
-                AexItems.FLINT_AXE, AexItems.OBSIDIAN_AXE,
-                AexItems.COPPER_AXE, AexItems.SILVER_AXE,
-                AexItems.GOLD_AXE, AexItems.RUSTED_IRON_AXE,
-                AexItems.IRON_AXE, AexItems.ANCIENT_METAL_AXE,
-                AexItems.MITHRIL_AXE, AexItems.ADAMANTIUM_AXE
-        );
-        generateToolModels(gen, axes, itemDefs);
-
-        // 手斧
-        List<Item> hatchets = List.of(
-                HatchetItems.FLINT_HATCHET, HatchetItems.OBSIDIAN_HATCHET,
-                HatchetItems.COPPER_HATCHET, HatchetItems.SILVER_HATCHET,
-                HatchetItems.GOLD_HATCHET, HatchetItems.RUSTED_IRON_HATCHET,
-                HatchetItems.IRON_HATCHET, HatchetItems.ANCIENT_METAL_HATCHET,
-                HatchetItems.MITHRIL_HATCHET, HatchetItems.ADAMANTIUM_HATCHET
-        );
-
-        // 镐子
-        List<Item> pickaxes = List.of(
-                PickaxeItems.COPPER_PICKAXE, PickaxeItems.SILVER_PICKAXE,
-                PickaxeItems.GOLD_PICKAXE, PickaxeItems.RUSTED_IRON_PICKAXE,
-                PickaxeItems.IRON_PICKAXE, PickaxeItems.ANCIENT_METAL_PICKAXE,
-                PickaxeItems.MITHRIL_PICKAXE, PickaxeItems.ADAMANTIUM_PICKAXE
-        );
-
-        generateToolModels(gen, hatchets, itemDefs);
-
-        // 战斧
-        List<Item> battleAxes = List.of(
-                BattleAxeItems.COPPER_BATTLE_AXE, BattleAxeItems.SILVER_BATTLE_AXE,
-                BattleAxeItems.GOLD_BATTLE_AXE, BattleAxeItems.RUSTED_IRON_BATTLE_AXE,
-                BattleAxeItems.IRON_BATTLE_AXE, BattleAxeItems.ANCIENT_METAL_BATTLE_AXE,
-                BattleAxeItems.MITHRIL_BATTLE_AXE, BattleAxeItems.ADAMANTIUM_BATTLE_AXE
-        );
-        generateToolModels(gen, battleAxes, itemDefs);
-
-        generateToolModels(gen, pickaxes, itemDefs);
-
-        // 战锤
-        List<Item> warHammers = List.of(
-                WarHammerItems.COPPER_WAR_HAMMER, WarHammerItems.SILVER_WAR_HAMMER,
-                WarHammerItems.GOLD_WAR_HAMMER, WarHammerItems.RUSTED_IRON_WAR_HAMMER,
-                WarHammerItems.IRON_WAR_HAMMER, WarHammerItems.ANCIENT_METAL_WAR_HAMMER,
-                WarHammerItems.MITHRIL_WAR_HAMMER, WarHammerItems.ADAMANTIUM_WAR_HAMMER
-        );
-        generateToolModels(gen, warHammers, itemDefs);
-
-        // 锹
-        List<Item> shovels = List.of(
-                ShovelItems.FLINT_SHOVEL, ShovelItems.OBSIDIAN_SHOVEL,
-                ShovelItems.COPPER_SHOVEL, ShovelItems.SILVER_SHOVEL,
-                ShovelItems.GOLD_SHOVEL, ShovelItems.RUSTED_IRON_SHOVEL,
-                ShovelItems.IRON_SHOVEL, ShovelItems.ANCIENT_METAL_SHOVEL,
-                ShovelItems.MITHRIL_SHOVEL, ShovelItems.ADAMANTIUM_SHOVEL
-        );
-        generateToolModels(gen, shovels, itemDefs);
-
-        // 锄
-        List<Item> hoes = List.of(
-                HoeItems.COPPER_HOE, HoeItems.SILVER_HOE,
-                HoeItems.GOLD_HOE, HoeItems.RUSTED_IRON_HOE,
-                HoeItems.IRON_HOE, HoeItems.ANCIENT_METAL_HOE,
-                HoeItems.MITHRIL_HOE, HoeItems.ADAMANTIUM_HOE
-        );
-        generateToolModels(gen, hoes, itemDefs);
-
-        // 镰刀（仅金属，含锈铁）
-        List<Item> scythes = List.of(
-                ScytheItems.COPPER_SCYTHE, ScytheItems.SILVER_SCYTHE,
-                ScytheItems.GOLD_SCYTHE, ScytheItems.RUSTED_IRON_SCYTHE,
-                ScytheItems.IRON_SCYTHE, ScytheItems.ANCIENT_METAL_SCYTHE,
-                ScytheItems.MITHRIL_SCYTHE, ScytheItems.ADAMANTIUM_SCYTHE
-        );
-        generateToolModels(gen, scythes, itemDefs);
-
-        // 鹤嘴锄
-        List<Item> mattocks = List.of(
-                MattockItems.COPPER_MATTOCK, MattockItems.SILVER_MATTOCK,
-                MattockItems.GOLD_MATTOCK, MattockItems.RUSTED_IRON_MATTOCK,
-                MattockItems.IRON_MATTOCK, MattockItems.ANCIENT_METAL_MATTOCK,
-                MattockItems.MITHRIL_MATTOCK, MattockItems.ADAMANTIUM_MATTOCK
-        );
-        generateToolModels(gen, mattocks, itemDefs);
-
-        // 剪刀
-        List<Item> shears = List.of(
-                ShearsItems.COPPER_SHEARS, ShearsItems.SILVER_SHEARS,
-                ShearsItems.GOLD_SHEARS, ShearsItems.RUSTED_IRON_SHEARS,
-                ShearsItems.ANCIENT_METAL_SHEARS, ShearsItems.MITHRIL_SHEARS,
-                ShearsItems.ADAMANTIUM_SHEARS
-        );
-        generateToolModels(gen, shears, itemDefs);
-
-        // 钓鱼竿 — 使用 gen.itemModelOutput.accept() 正确注册
+        // 钓鱼竿：conditional(FishingRodCast, cast, uncast)
         generateFishingRodModels(gen,
                 FishingRodItems.FLINT_FISHING_ROD, FishingRodItems.OBSIDIAN_FISHING_ROD,
                 FishingRodItems.COPPER_FISHING_ROD, FishingRodItems.SILVER_FISHING_ROD,
                 FishingRodItems.GOLD_FISHING_ROD, FishingRodItems.IRON_FISHING_ROD,
                 FishingRodItems.ANCIENT_METAL_FISHING_ROD, FishingRodItems.MITHRIL_FISHING_ROD,
-                FishingRodItems.ADAMANTIUM_FISHING_ROD
-        );
+                FishingRodItems.ADAMANTIUM_FISHING_ROD);
 
+        // 斧
+        for (Item item : new Item[]{AexItems.FLINT_AXE, AexItems.OBSIDIAN_AXE,
+                AexItems.COPPER_AXE, AexItems.SILVER_AXE, AexItems.GOLD_AXE,
+                AexItems.RUSTED_IRON_AXE, AexItems.IRON_AXE, AexItems.ANCIENT_METAL_AXE,
+                AexItems.MITHRIL_AXE, AexItems.ADAMANTIUM_AXE}) {
+            generateToolModel(gen, item, "tools");
+        }
+        // 手斧
+        for (Item item : new Item[]{HatchetItems.FLINT_HATCHET, HatchetItems.OBSIDIAN_HATCHET,
+                HatchetItems.COPPER_HATCHET, HatchetItems.SILVER_HATCHET, HatchetItems.GOLD_HATCHET,
+                HatchetItems.RUSTED_IRON_HATCHET, HatchetItems.IRON_HATCHET,
+                HatchetItems.ANCIENT_METAL_HATCHET, HatchetItems.MITHRIL_HATCHET,
+                HatchetItems.ADAMANTIUM_HATCHET}) {
+            generateToolModel(gen, item, "tools");
+        }
+        // 战斧
+        for (Item item : new Item[]{BattleAxeItems.COPPER_BATTLE_AXE, BattleAxeItems.SILVER_BATTLE_AXE,
+                BattleAxeItems.GOLD_BATTLE_AXE, BattleAxeItems.RUSTED_IRON_BATTLE_AXE,
+                BattleAxeItems.IRON_BATTLE_AXE, BattleAxeItems.ANCIENT_METAL_BATTLE_AXE,
+                BattleAxeItems.MITHRIL_BATTLE_AXE, BattleAxeItems.ADAMANTIUM_BATTLE_AXE}) {
+            generateToolModel(gen, item, "tools");
+        }
+        // 镐
+        for (Item item : new Item[]{PickaxeItems.COPPER_PICKAXE, PickaxeItems.SILVER_PICKAXE,
+                PickaxeItems.GOLD_PICKAXE, PickaxeItems.RUSTED_IRON_PICKAXE,
+                PickaxeItems.IRON_PICKAXE, PickaxeItems.ANCIENT_METAL_PICKAXE,
+                PickaxeItems.MITHRIL_PICKAXE, PickaxeItems.ADAMANTIUM_PICKAXE}) {
+            generateToolModel(gen, item, "tools");
+        }
+        // 战锤
+        for (Item item : new Item[]{WarHammerItems.COPPER_WAR_HAMMER, WarHammerItems.SILVER_WAR_HAMMER,
+                WarHammerItems.GOLD_WAR_HAMMER, WarHammerItems.RUSTED_IRON_WAR_HAMMER,
+                WarHammerItems.IRON_WAR_HAMMER, WarHammerItems.ANCIENT_METAL_WAR_HAMMER,
+                WarHammerItems.MITHRIL_WAR_HAMMER, WarHammerItems.ADAMANTIUM_WAR_HAMMER}) {
+            generateToolModel(gen, item, "tools");
+        }
+        // 锹
+        for (Item item : new Item[]{ShovelItems.FLINT_SHOVEL, ShovelItems.OBSIDIAN_SHOVEL,
+                ShovelItems.COPPER_SHOVEL, ShovelItems.SILVER_SHOVEL, ShovelItems.GOLD_SHOVEL,
+                ShovelItems.RUSTED_IRON_SHOVEL, ShovelItems.IRON_SHOVEL,
+                ShovelItems.ANCIENT_METAL_SHOVEL, ShovelItems.MITHRIL_SHOVEL,
+                ShovelItems.ADAMANTIUM_SHOVEL}) {
+            generateToolModel(gen, item, "tools");
+        }
+        // 锄
+        for (Item item : new Item[]{HoeItems.COPPER_HOE, HoeItems.SILVER_HOE,
+                HoeItems.GOLD_HOE, HoeItems.RUSTED_IRON_HOE,
+                HoeItems.IRON_HOE, HoeItems.ANCIENT_METAL_HOE,
+                HoeItems.MITHRIL_HOE, HoeItems.ADAMANTIUM_HOE}) {
+            generateToolModel(gen, item, "tools");
+        }
+        // 镰刀
+        for (Item item : new Item[]{ScytheItems.COPPER_SCYTHE, ScytheItems.SILVER_SCYTHE,
+                ScytheItems.GOLD_SCYTHE, ScytheItems.RUSTED_IRON_SCYTHE,
+                ScytheItems.IRON_SCYTHE, ScytheItems.ANCIENT_METAL_SCYTHE,
+                ScytheItems.MITHRIL_SCYTHE, ScytheItems.ADAMANTIUM_SCYTHE}) {
+            generateToolModel(gen, item, "tools");
+        }
+        // 鹤嘴锄
+        for (Item item : new Item[]{MattockItems.COPPER_MATTOCK, MattockItems.SILVER_MATTOCK,
+                MattockItems.GOLD_MATTOCK, MattockItems.RUSTED_IRON_MATTOCK,
+                MattockItems.IRON_MATTOCK, MattockItems.ANCIENT_METAL_MATTOCK,
+                MattockItems.MITHRIL_MATTOCK, MattockItems.ADAMANTIUM_MATTOCK}) {
+            generateToolModel(gen, item, "tools");
+        }
+        // 剪刀
+        for (Item item : new Item[]{ShearsItems.COPPER_SHEARS, ShearsItems.SILVER_SHEARS,
+                ShearsItems.GOLD_SHEARS, ShearsItems.RUSTED_IRON_SHEARS,
+                ShearsItems.ANCIENT_METAL_SHEARS, ShearsItems.MITHRIL_SHEARS,
+                ShearsItems.ADAMANTIUM_SHEARS}) {
+            generateToolModel(gen, item, "tools");
+        }
         // 剑
-        List<Item> swords = List.of(
-                SwordItems.COPPER_SWORD, SwordItems.GOLD_SWORD,
+        for (Item item : new Item[]{SwordItems.COPPER_SWORD, SwordItems.GOLD_SWORD,
                 SwordItems.IRON_SWORD, SwordItems.SILVER_SWORD,
                 SwordItems.ANCIENT_METAL_SWORD, SwordItems.RUSTED_IRON_SWORD,
-                SwordItems.MITHRIL_SWORD, SwordItems.ADAMANTIUM_SWORD
-        );
-        generateToolModels(gen, swords, itemDefs);
-
+                SwordItems.MITHRIL_SWORD, SwordItems.ADAMANTIUM_SWORD}) {
+            generateToolModel(gen, item, "tools");
+        }
         // 短剑
-        List<Item> daggers = List.of(
-                DaggerItems.COPPER_DAGGER, DaggerItems.SILVER_DAGGER,
+        for (Item item : new Item[]{DaggerItems.COPPER_DAGGER, DaggerItems.SILVER_DAGGER,
                 DaggerItems.GOLD_DAGGER, DaggerItems.RUSTED_IRON_DAGGER,
                 DaggerItems.IRON_DAGGER, DaggerItems.ANCIENT_METAL_DAGGER,
-                DaggerItems.MITHRIL_DAGGER, DaggerItems.ADAMANTIUM_DAGGER
-        );
-        generateToolModels(gen, daggers, itemDefs);
+                DaggerItems.MITHRIL_DAGGER, DaggerItems.ADAMANTIUM_DAGGER}) {
+            generateToolModel(gen, item, "tools");
+        }
+        // 小刀（燧石/黑曜石）
+        for (Item item : new Item[]{KnifeItems.FLINT_KNIFE, KnifeItems.OBSIDIAN_KNIFE}) {
+            generateToolModel(gen, item, "tools");
+        }
+        // 箭（纹理在 item/arrows/ 子目录下）
+        for (Item item : new Item[]{ArrowItems.FLINT_ARROW, ArrowItems.OBSIDIAN_ARROW,
+                ArrowItems.COPPER_ARROW, ArrowItems.SILVER_ARROW, ArrowItems.GOLD_ARROW,
+                ArrowItems.RUSTED_IRON_ARROW, ArrowItems.IRON_ARROW,
+                ArrowItems.ANCIENT_METAL_ARROW, ArrowItems.MITHRIL_ARROW,
+                ArrowItems.ADAMANTIUM_ARROW}) {
+            generateToolModel(gen, item, "arrows");
+        }
 
-        // 小刀
-        List<Item> knives = List.of(
-                KnifeItems.FLINT_KNIFE, KnifeItems.OBSIDIAN_KNIFE
-        );
-        generateToolModels(gen, knives, itemDefs);
-
-        // 箭
-        List<Item> arrows = List.of(
-                ArrowItems.FLINT_ARROW, ArrowItems.OBSIDIAN_ARROW,
-                ArrowItems.COPPER_ARROW, ArrowItems.SILVER_ARROW,
-                ArrowItems.GOLD_ARROW, ArrowItems.RUSTED_IRON_ARROW,
-                ArrowItems.IRON_ARROW, ArrowItems.ANCIENT_METAL_ARROW,
-                ArrowItems.MITHRIL_ARROW, ArrowItems.ADAMANTIUM_ARROW
-        );
-        generateToolModels(gen, arrows, "arrows", itemDefs);
-
-        // ====== 材料物品 (FLAT_ITEM, 不同的纹理目录) ======
-        generateFlatModels(gen, "ingots", itemDefs,
+        // 材料物品（FLAT_ITEM，按 category 分目录存放模型和纹理）
+        generateFlatModels(gen, "ingots",
                 ModMaterials.COPPER_INGOT, ModMaterials.GOLD_INGOT,
                 ModMaterials.IRON_INGOT, ModMaterials.SILVER_INGOT,
                 ModMaterials.ANCIENT_METAL_INGOT, ModMaterials.MITHRIL_INGOT,
                 ModMaterials.ADAMANTIUM_INGOT);
-
-        generateFlatModels(gen, "nuggets", itemDefs,
+        generateFlatModels(gen, "nuggets",
                 ModMaterials.COPPER_NUGGET, ModMaterials.SILVER_NUGGET,
                 ModMaterials.IRON_NUGGET, ModMaterials.ANCIENT_METAL_NUGGET,
                 ModMaterials.MITHRIL_NUGGET, ModMaterials.ADAMANTIUM_NUGGET);
-
-        generateFlatModels(gen, "chains", itemDefs,
+        generateFlatModels(gen, "chains",
                 ModMaterials.COPPER_CHAIN, ModMaterials.SILVER_CHAIN,
                 ModMaterials.GOLDEN_CHAIN, ModMaterials.RUSTED_IRON_CHAIN,
                 ModMaterials.IRON_CHAIN, ModMaterials.ANCIENT_METAL_CHAIN,
                 ModMaterials.MITHRIL_CHAIN, ModMaterials.ADAMANTIUM_CHAIN);
-
-        generateFlatModels(gen, "coins", itemDefs,
+        generateFlatModels(gen, "coins",
                 ModMaterials.COPPER_COIN, ModMaterials.SILVER_COIN,
                 ModMaterials.GOLDEN_COIN, ModMaterials.ANCIENT_METAL_COIN,
                 ModMaterials.MITHRIL_COIN, ModMaterials.ADAMANTIUM_COIN);
-
-        generateFlatModels(gen, "shards", itemDefs,
+        generateFlatModels(gen, "shards",
                 ModMaterials.FLINT_CHIP, ModMaterials.OBSIDIAN_CHIP,
                 ModMaterials.DIAMOND_CHIP, ModMaterials.EMERALD_CHIP,
                 ModMaterials.GLASS_SHARD, ModMaterials.NETHER_QUARTZ_SHARD);
+        // 唱片（纹理在 item/records/ 下）
+        generateFlatModels(gen, "records",
+                ModRecordItems.RECORD_DESCENT, ModRecordItems.RECORD_LEGENDS,
+                ModRecordItems.RECORD_UNDERWORLD, ModRecordItems.RECORD_WANDERER);
 
-        // 唱片
-        generateFlatModels(gen, "records", itemDefs,
-                RecordItems.RECORD_DESCENT, RecordItems.RECORD_LEGENDS,
-                RecordItems.RECORD_UNDERWORLD, RecordItems.RECORD_WANDERER);
-
-        // 写入 items/*.json
-        Path itemsDir = dataOutput.getOutputFolder().resolve("assets").resolve(MiteRecrafted.MOD_ID).resolve("items");
-        try {
-            Files.createDirectories(itemsDir);
-            var gson = new com.google.gson.GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-            for (var e : itemDefs.entrySet()) {
-                Files.writeString(itemsDir.resolve(e.getKey().getPath() + ".json"), gson.toJson(e.getValue()));
-            }
-        } catch (java.io.IOException e) {
-            throw new RuntimeException("Failed to write item definitions", e);
-        }
-    }
-
-    private void generateToolModels(ItemModelGenerators gen, List<Item> tools, Map<Identifier, JsonObject> itemDefs) {
-        generateToolModels(gen, tools, "tools", itemDefs);
-    }
-
-    private void generateToolModels(ItemModelGenerators gen, List<Item> tools, String texDir,
-                                     Map<Identifier, JsonObject> itemDefs) {
-        for (Item tool : tools) {
-            String itemName = BuiltInRegistries.ITEM.getKey(tool).getPath();
-            Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/tools/" + itemName);
-            Identifier textureId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/" + texDir + "/" + itemName);
-
-            ModelTemplates.FLAT_HANDHELD_ITEM.create(
-                    modelId,
-                    TextureMapping.layer0(new Material(textureId)),
-                    gen.modelOutput
-            );
-
-            JsonObject json = new JsonObject();
-            JsonObject model = new JsonObject();
-            model.addProperty("type", "minecraft:model");
-            model.addProperty("model", modelId.toString());
-            json.add("model", model);
-            itemDefs.put(Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, itemName), json);
-        }
+        // 桶：空桶 / 水桶 / 岩浆桶 / 石桶，纹理在 item/buckets/<材质>/<内容>.png
+        generateBucketModels(gen);
     }
 
     /**
-     * 生成普通材料物品模型（父模板 item/generated）
-     * 模型和纹理都在 item/<category>/ 子目录下
+     * 为单个工具生成 FLAT_HANDHELD_ITEM 模型并注册物品模型引用。
+     *
+     * @param gen     ItemModelGenerators
+     * @param tool    工具 Item 实例
+     * @param texDir  纹理子目录（"tools" 或 "arrows"）
      */
-    private void generateFlatModels(ItemModelGenerators gen, String category,
-                                     Map<Identifier, JsonObject> itemDefs, Item... items) {
+    private void generateToolModel(ItemModelGenerators gen, Item tool, String texDir) {
+        String itemName = BuiltInRegistries.ITEM.getKey(tool).getPath();
+        String modId = MiteRecrafted.MOD_ID;
+        Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/tools/" + itemName);
+        Identifier texId = Identifier.fromNamespaceAndPath(modId, "item/" + texDir + "/" + itemName);
+        ModelTemplates.FLAT_HANDHELD_ITEM.create(modelId,
+                TextureMapping.layer0(new Material(texId)), gen.modelOutput);
+        gen.itemModelOutput.accept(tool, ItemModelUtils.plainModel(modelId));
+    }
+
+    /**
+     * 为材料物品生成 FLAT_ITEM 模型（parent: item/generated）。
+     * 模型和纹理都在 item/<category>/ 子目录下。
+     *
+     * @param gen      ItemModelGenerators
+     * @param category 物品分类子目录（ingots / nuggets / chains / coins / shards / records）
+     * @param items    材料 Item 实例
+     */
+    private void generateFlatModels(ItemModelGenerators gen, String category, Item... items) {
         for (Item item : items) {
             String itemName = BuiltInRegistries.ITEM.getKey(item).getPath();
-            Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/" + category + "/" + itemName);
-            Identifier textureId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/" + category + "/" + itemName);
-
-            ModelTemplates.FLAT_ITEM.create(
-                    modelId,
-                    TextureMapping.layer0(new Material(textureId)),
-                    gen.modelOutput
-            );
-
-            JsonObject json = new JsonObject();
-            JsonObject model = new JsonObject();
-            model.addProperty("type", "minecraft:model");
-            model.addProperty("model", modelId.toString());
-            json.add("model", model);
-            itemDefs.put(Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, itemName), json);
+            String modId = MiteRecrafted.MOD_ID;
+            Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/" + category + "/" + itemName);
+            Identifier texId = Identifier.fromNamespaceAndPath(modId, "item/" + category + "/" + itemName);
+            ModelTemplates.FLAT_ITEM.create(modelId,
+                    TextureMapping.layer0(new Material(texId)), gen.modelOutput);
+            gen.itemModelOutput.accept(item, ItemModelUtils.plainModel(modelId));
         }
     }
 
     /**
-     * 鱼竿使用 gen.itemModelOutput.accept() 注册
-     * 纹理路径在 item/fishing_rods/ 下。
+     * 鱼竿使用 conditional dispatch：未抛竿时显示材质特有纹理，
+     * 抛竿时显示共享的 fishing_rod_cast.png（所有材质共用）。
+     * 纹理在 item/fishing_rods/ 下。
      */
     private void generateFishingRodModels(ItemModelGenerators gen, Item... rods) {
+        // 所有材质共用的抛竿纹理
         Identifier sharedCastTex = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/fishing_rods/fishing_rod_cast");
-
         for (Item rod : rods) {
             String itemName = BuiltInRegistries.ITEM.getKey(rod).getPath();
-            Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/tools/" + itemName);
-            Identifier texId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/fishing_rods/" + itemName);
+            String modId = MiteRecrafted.MOD_ID;
 
-            // 未抛竿模型（杆+线，材质特有）
-            ModelTemplates.FLAT_HANDHELD_ROD_ITEM.create(
-                    modelId,
-                    TextureMapping.layer0(new Material(texId)),
-                    gen.modelOutput
-            );
+            // 未抛竿模型（杆+线，材质特有纹理）
+            Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/tools/" + itemName);
+            Identifier texId = Identifier.fromNamespaceAndPath(modId, "item/fishing_rods/" + itemName);
+            ModelTemplates.FLAT_HANDHELD_ROD_ITEM.create(modelId,
+                    TextureMapping.layer0(new Material(texId)), gen.modelOutput);
 
-            // 抛竿模型（纯杆，所有材质共用 fishing_rod_cast.png）
-            Identifier castModelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/tools/" + itemName + "_cast");
-            ModelTemplates.FLAT_HANDHELD_ROD_ITEM.create(
-                    castModelId,
-                    TextureMapping.layer0(new Material(sharedCastTex)),
-                    gen.modelOutput
-            );
+            // 抛竿模型（纯杆，所有材质共用）
+            Identifier castModelId = Identifier.fromNamespaceAndPath(modId, "item/tools/" + itemName + "_cast");
+            ModelTemplates.FLAT_HANDHELD_ROD_ITEM.create(castModelId,
+                    TextureMapping.layer0(new Material(sharedCastTex)), gen.modelOutput);
 
-            var uncast = ItemModelUtils.plainModel(modelId);
-            var cast = ItemModelUtils.plainModel(castModelId);
+            // conditional: 抛竿 → cast 模型，未抛 → uncast 模型
             gen.itemModelOutput.accept(rod,
-                    ItemModelUtils.conditional(new FishingRodCast(), cast, uncast));
+                    ItemModelUtils.conditional(new FishingRodCast(),
+                            ItemModelUtils.plainModel(castModelId),
+                            ItemModelUtils.plainModel(modelId)));
         }
     }
-    
-    private void generateBowModels(ItemModelGenerators gen, List<Item> bows, Map<Identifier, JsonObject> itemDefs) {
+
+    /**
+     * 弓的模型使用三层 dispatch 结构（MC 26.2 SelectItemModelProperty 体系）：
+     * <ol>
+     *   <li>{@code conditional(using_item)} — 未使用 → standby 待机纹理</li>
+     *   <li>{@code range_dispatch(use_duration, scale=0.05)} — 拉弓进度分 3 阶段（阈值 0/0.65/0.9）</li>
+     *   <li>{@code select(nocked_arrow)} — 每阶段内按箭袋中的箭种选择材质（10 种箭×3 阶段=30 模型）</li>
+     * </ol>
+     */
+    private void generateBowModels(ItemModelGenerators gen, Item... bows) {
         String modId = MiteRecrafted.MOD_ID;
         String[] arrowMaterials = {"flint","obsidian","copper","silver","gold",
                 "rusted_iron","iron","ancient_metal","mithril","adamantium"};
@@ -422,14 +374,14 @@ public class ModModelProvider extends FabricModelProvider {
             String itemName = BuiltInRegistries.ITEM.getKey(bow).getPath();
             String bowMat = itemName.replace("_bow", "");
 
-            // standby
+            // standby 模型：弓未使用时显示
             Identifier standbyId = Identifier.fromNamespaceAndPath(modId, "item/tools/" + itemName + "_standby");
             ModelTemplates.FLAT_ITEM.create(standbyId,
                     TextureMapping.layer0(new Material(Identifier.fromNamespaceAndPath(modId,
                             "item/bows/" + bowMat + "/standby"))), gen.modelOutput);
 
-            // 10箭种 × 3拉弓阶段
-            String[][][] pullIds = new String[3][10][1];
+            // 10 箭种 × 3 拉弓阶段 = 30 个模型 ID
+            Identifier[][] pullModelIds = new Identifier[3][10];
             for (int pull = 0; pull < 3; pull++)
                 for (int ai = 0; ai < 10; ai++) {
                     String fn = itemName + "_" + arrowMaterials[ai] + "_" + pull;
@@ -438,56 +390,121 @@ public class ModModelProvider extends FabricModelProvider {
                             TextureMapping.layer0(new Material(Identifier.fromNamespaceAndPath(modId,
                                     "item/bows/" + bowMat + "/" + arrowMaterials[ai] + "_arrow_" + pull))),
                             gen.modelOutput);
-                    pullIds[pull][ai][0] = mid.toString();
+                    pullModelIds[pull][ai] = mid;
                 }
 
-            // select 节点（按 nocked_arrow 分发）
-            java.util.function.Function<String[], JsonObject> makeSelect = (models) -> {
-                JsonObject sel = new JsonObject();
-                sel.addProperty("type", "minecraft:select");
-                sel.addProperty("property", "mite-recrafted:nocked_arrow");
-                JsonArray cases = new JsonArray();
-                for (int i = 0; i < models.length; i++) {
-                    JsonObject c = new JsonObject();
-                    JsonArray when = new JsonArray(); when.add(i);
-                    c.add("when", when);
-                    JsonObject m = new JsonObject(); m.addProperty("type", "minecraft:model"); m.addProperty("model", models[i]);
-                    c.add("model", m); cases.add(c);
+            // 自定义 select property：根据箭袋中箭的材质索引（0-9）选择纹理
+            SelectItemModelProperty<Integer> nockedArrow = new NockedArrowProperty();
+
+            // 为每个拉弓阶段构建 select 模型
+            ItemModel.Unbaked[] selectStages = new ItemModel.Unbaked[3];
+            for (int pull = 0; pull < 3; pull++) {
+                List<SelectItemModel.SwitchCase<Integer>> cases = new ArrayList<>();
+                for (int ai = 0; ai < 10; ai++) {
+                    cases.add(ItemModelUtils.when(ai, ItemModelUtils.plainModel(pullModelIds[pull][ai])));
                 }
-                sel.add("cases", cases);
-                return sel;
-            };
+                selectStages[pull] = ItemModelUtils.select(nockedArrow, cases);
+            }
 
-            // items JSON
-            JsonObject root = new JsonObject();
-            JsonObject cond = new JsonObject();
-            cond.addProperty("type", "minecraft:condition");
-            cond.addProperty("property", "minecraft:using_item");
-            JsonObject off = new JsonObject(); off.addProperty("type", "minecraft:model"); off.addProperty("model", standbyId.toString());
-            cond.add("on_false", off);
+            // range_dispatch：拉弓持续时间 → 3 阶段（阈值 0.65 / 0.9，scale=0.05 换算为 0-20 tick）
+            // UseDuration(false): 已过时间从 0 到 max，UseDuration(true) 是剩余时间 max→0
+            ItemModel.Unbaked onTrue = ItemModelUtils.rangeSelect(
+                    new UseDuration(false), 0.05f,
+                    selectStages[0],  // fallback: stage 0
+                    ItemModelUtils.override(selectStages[1], 0.65f),
+                    ItemModelUtils.override(selectStages[2], 0.9f));
 
-            JsonObject rd = new JsonObject();
-            rd.addProperty("type", "minecraft:range_dispatch");
-            rd.addProperty("property", "minecraft:use_duration");
-            rd.addProperty("scale", 0.05);
+            // conditional：正在使用物品 → range_dispatch，否则 → standby
+            ItemModel.Unbaked bowModel = ItemModelUtils.conditional(
+                    ItemModelUtils.isUsingItem(),
+                    onTrue,
+                    ItemModelUtils.plainModel(standbyId));
 
-            JsonArray entries = new JsonArray();
-            String[] stage1 = new String[10]; for (int i = 0; i < 10; i++) stage1[i] = pullIds[1][i][0];
-            JsonObject e1 = new JsonObject(); e1.addProperty("threshold", 0.65); e1.add("model", makeSelect.apply(stage1)); entries.add(e1);
-            String[] stage2 = new String[10]; for (int i = 0; i < 10; i++) stage2[i] = pullIds[2][i][0];
-            JsonObject e2 = new JsonObject(); e2.addProperty("threshold", 0.9); e2.add("model", makeSelect.apply(stage2)); entries.add(e2);
-            rd.add("entries", entries);
-            String[] stage0 = new String[10]; for (int i = 0; i < 10; i++) stage0[i] = pullIds[0][i][0];
-            rd.add("fallback", makeSelect.apply(stage0));
-            cond.add("on_true", rd);
-            root.add("model", cond);
-
-            itemDefs.put(Identifier.fromNamespaceAndPath(modId, itemName), root);
+            gen.itemModelOutput.accept(bow, bowModel);
         }
     }
 
+    /**
+     * 生成所有金属桶的物品模型。
+     * 命名规则：{@code {材质}_{内容}_bucket}，其中内容为 water / lava / stone / (empty)。
+     * 纹理路径：{@code item/buckets/<材质>/<内容>.png}
+     */
+    private void generateBucketModels(ItemModelGenerators gen) {
+        String modId = MiteRecrafted.MOD_ID;
+        // 四组桶：空桶、水桶、岩浆桶、石桶
+        Item[][] allBucketGroups = {
+                {ModBucketItems.COPPER_BUCKET, ModBucketItems.SILVER_BUCKET, ModBucketItems.GOLD_BUCKET,
+                        ModBucketItems.ANCIENT_METAL_BUCKET, ModBucketItems.MITHRIL_BUCKET, ModBucketItems.ADAMANTIUM_BUCKET},
+                {ModBucketItems.COPPER_WATER_BUCKET, ModBucketItems.SILVER_WATER_BUCKET,
+                        ModBucketItems.GOLD_WATER_BUCKET, ModBucketItems.ANCIENT_METAL_WATER_BUCKET,
+                        ModBucketItems.MITHRIL_WATER_BUCKET, ModBucketItems.ADAMANTIUM_WATER_BUCKET},
+                {ModBucketItems.COPPER_LAVA_BUCKET, ModBucketItems.SILVER_LAVA_BUCKET,
+                        ModBucketItems.GOLD_LAVA_BUCKET, ModBucketItems.ANCIENT_METAL_LAVA_BUCKET,
+                        ModBucketItems.MITHRIL_LAVA_BUCKET, ModBucketItems.ADAMANTIUM_LAVA_BUCKET},
+                {ModBucketItems.COPPER_STONE_BUCKET, ModBucketItems.SILVER_STONE_BUCKET,
+                        ModBucketItems.GOLD_STONE_BUCKET, ModBucketItems.IRON_STONE_BUCKET,
+                        ModBucketItems.ANCIENT_METAL_STONE_BUCKET, ModBucketItems.MITHRIL_STONE_BUCKET,
+                        ModBucketItems.ADAMANTIUM_STONE_BUCKET},
+        };
 
-    /** 门方块模型 + blockstate（multipart，8 变体） */
+        for (Item[] buckets : allBucketGroups) {
+            for (Item bucket : buckets) {
+                String itemName = BuiltInRegistries.ITEM.getKey(bucket).getPath();
+                // 解析材质名和内容类型：{mat}_{type}_bucket 或 {mat}_bucket
+                String matName;
+                String texSuffix;
+                if (itemName.endsWith("_water_bucket")) {
+                    matName = itemName.substring(0, itemName.length() - "_water_bucket".length());
+                    texSuffix = "water";
+                } else if (itemName.endsWith("_lava_bucket")) {
+                    matName = itemName.substring(0, itemName.length() - "_lava_bucket".length());
+                    texSuffix = "lava";
+                } else if (itemName.endsWith("_stone_bucket")) {
+                    matName = itemName.substring(0, itemName.length() - "_stone_bucket".length());
+                    texSuffix = "stone";
+                } else {
+                    matName = itemName.substring(0, itemName.length() - "_bucket".length());
+                    texSuffix = "empty";
+                }
+
+                Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/buckets/" + itemName);
+                Identifier texId = Identifier.fromNamespaceAndPath(modId, "item/buckets/" + matName + "/" + texSuffix);
+                ModelTemplates.FLAT_ITEM.create(modelId,
+                        TextureMapping.layer0(new Material(texId)), gen.modelOutput);
+                gen.itemModelOutput.accept(bucket, ItemModelUtils.plainModel(modelId));
+            }
+        }
+    }
+
+    /**
+     * MC 26.2 的 BlockModelGenerators 会为每个方块自动生成 items/{name}.json 指向 block/ 模型。
+     * 门需要 2D flat item 以正确渲染，因此通过 {@code gen.itemModelOutput.accept()} 显式注册覆盖。
+     */
+    private void generateDoorItemModels(ItemModelGenerators gen) {
+        Block[] doors = {ModDoorBlocks.COPPER_DOOR, ModDoorBlocks.SILVER_DOOR, ModDoorBlocks.GOLD_DOOR,
+                ModDoorBlocks.ANCIENT_METAL_DOOR, ModDoorBlocks.MITHRIL_DOOR, ModDoorBlocks.ADAMANTIUM_DOOR};
+        String[] mats = {"copper", "silver", "gold", "ancient_metal", "mithril", "adamantium"};
+        String modId = MiteRecrafted.MOD_ID;
+
+        for (int i = 0; i < mats.length; i++) {
+            String mat = mats[i];
+            // 纹理在 item/doors/ 下
+            Identifier tex = Identifier.fromNamespaceAndPath(modId, "item/doors/" + mat);
+            // 扁平模型放在 models/item/（非 block/），对齐原版 iron_door
+            Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/" + mat + "_door");
+
+            ModelTemplates.FLAT_ITEM.create(modelId,
+                    TextureMapping.layer0(new Material(tex)), gen.modelOutput);
+
+            // itemModelOutput.accept() 优先级高于 BlockModelGenerators 自动生成
+            gen.itemModelOutput.accept(doors[i].asItem(), ItemModelUtils.plainModel(modelId));
+        }
+    }
+
+    /**
+     * 金属门使用原版门 multipart 系统（8 变体：上下×左右×开闭）。
+     * 纹理上下两半各一张图（door_{mat}_lower / door_{mat}_upper）。
+     */
     private void generateDoorModels(BlockModelGenerators gen) {
         String[] mats = {"copper", "silver", "gold", "ancient_metal", "mithril", "adamantium"};
         Block[] doors = {ModDoorBlocks.COPPER_DOOR, ModDoorBlocks.SILVER_DOOR, ModDoorBlocks.GOLD_DOOR,
@@ -505,7 +522,7 @@ public class ModModelProvider extends FabricModelProvider {
                     .put(TextureSlot.BOTTOM, new Material(bottom))
                     .put(TextureSlot.TOP, new Material(top));
 
-            // 8 种门模型变体
+            // 8 种门的模型变体
             MultiVariant bl = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_BOTTOM_LEFT.create(door, mapping, gen.modelOutput));
             MultiVariant blOpen = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_BOTTOM_LEFT_OPEN.create(door, mapping, gen.modelOutput));
             MultiVariant br = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_BOTTOM_RIGHT.create(door, mapping, gen.modelOutput));
@@ -515,34 +532,17 @@ public class ModModelProvider extends FabricModelProvider {
             MultiVariant tr = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_TOP_RIGHT.create(door, mapping, gen.modelOutput));
             MultiVariant trOpen = BlockModelGenerators.plainVariant(ModelTemplates.DOOR_TOP_RIGHT_OPEN.create(door, mapping, gen.modelOutput));
 
-            // Blockstate multipart
+            // multipart blockstate
             gen.blockStateOutput.accept(BlockModelGenerators.createDoor(
                     door, bl, blOpen, br, brOpen, tl, tlOpen, tr, trOpen));
         }
     }
 
-    /** 门物品模型 — 2D flat item，写到 models/item/，避免被 block 自动生成覆盖 */
-    private void generateDoorItemModels(ItemModelGenerators gen, Map<Identifier, JsonObject> itemDefs) {
-        Block[] doors = {ModDoorBlocks.COPPER_DOOR, ModDoorBlocks.SILVER_DOOR, ModDoorBlocks.GOLD_DOOR,
-                ModDoorBlocks.ANCIENT_METAL_DOOR, ModDoorBlocks.MITHRIL_DOOR, ModDoorBlocks.ADAMANTIUM_DOOR};
-        String[] mats = {"copper", "silver", "gold", "ancient_metal", "mithril", "adamantium"};
-        String modId = MiteRecrafted.MOD_ID;
-
-        for (int i = 0; i < mats.length; i++) {
-            String mat = mats[i];
-            // 纹理在 item/doors/ 下
-            Identifier tex = Identifier.fromNamespaceAndPath(modId, "item/doors/" + mat);
-            // 模型放在 models/item/
-            Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/" + mat + "_door");
-
-            ModelTemplates.FLAT_ITEM.create(modelId,
-                    TextureMapping.layer0(new Material(tex)), gen.modelOutput);
-
-            // 覆盖自动生成的 block/ 物品模型引用
-            gen.itemModelOutput.accept(doors[i].asItem(), ItemModelUtils.plainModel(modelId));
-        }
-    }
-
+    /**
+     * 金属栅栏使用 6 个 BARS 模型变体（post_ends / post / cap / cap_alt / side / side_alt），
+     * 纹理在 block/bar/<材质>_bars.png。
+     * 物品模型使用 FLAT_ITEM 到 block/<材质>_bars。
+     */
     private void generateBarModels(BlockModelGenerators gen) {
         String[] mats = {"copper", "silver", "gold", "iron", "ancient_metal", "mithril", "adamantium"};
         Block[] barsArr = {ModBarBlocks.COPPER_BARS, ModBarBlocks.SILVER_BARS, ModBarBlocks.GOLD_BARS,
@@ -555,7 +555,7 @@ public class ModModelProvider extends FabricModelProvider {
             Block bars = barsArr[i];
             Identifier tex = Identifier.fromNamespaceAndPath(modId, "block/bar/" + mat + "_bars");
             Material texMat = new Material(tex);
-
+            // BARS 模板需要 BARS 和 EDGE 两个纹理槽
             TextureMapping mapping = new TextureMapping()
                     .put(TextureSlot.BARS, texMat)
                     .put(TextureSlot.EDGE, texMat);
@@ -568,16 +568,20 @@ public class ModModelProvider extends FabricModelProvider {
             Identifier side = ModelTemplates.BARS_POST_SIDE.create(bars, mapping, gen.modelOutput);
             Identifier sideAlt = ModelTemplates.BARS_POST_SIDE_ALT.create(bars, mapping, gen.modelOutput);
 
-            // blockstate (multipart)
+            // multipart blockstate（Fabric AW 暴露此方法）
             gen.createBars(bars, postEnds, post, cap, capAlt, side, sideAlt);
 
-            // 物品模型
+            // 物品模型：2D flat item
             Identifier itemModelId = Identifier.fromNamespaceAndPath(modId, "block/" + mat + "_bars");
             ModelTemplates.FLAT_ITEM.create(itemModelId,
                     TextureMapping.layer0(texMat), gen.modelOutput);
         }
     }
 
+    /**
+     * 金属储存块使用 cube_all 模型，纹理在 block/metal/<材质>_block.png。
+     * 方块模型引用 textures/block/ 下的纹理（方块图集）。
+     */
     private void generateMetalBlockModels(BlockModelGenerators gen) {
         String[] mats = {"copper", "silver", "gold", "iron", "ancient_metal", "mithril", "adamantium"};
         Block[] blocks = {ModMetalBlocks.COPPER_BLOCK, ModMetalBlocks.SILVER_BLOCK, ModMetalBlocks.GOLD_BLOCK,
@@ -602,15 +606,35 @@ public class ModModelProvider extends FabricModelProvider {
         }
     }
 
+    /** 在 super.run() 执行期间注入的 CachedOutput，供 generateAnvilModels 直接写入 */
+    private CachedOutput cachedOutput;
+
+    /**
+     * 砧模型系统。
+     *
+     * <p>方块模型使用 {@code minecraft:block/template_anvil} 父模板，
+     * 含 body / top 纹理 + gui display 变换。
+     * 裂纹分 3 级（stage 0/1/2），对应 top_damaged_0/1/2 纹理。</p>
+     *
+     * <p>由于 template_anvil 非标准 Multipart/Variant 模板
+     * 且 MC 26.2 的 TextureSlot 没有 BODY 槽，
+     * blockstate 和物品 JSON 必须手动构造。</p>
+     *
+     * <p>通过覆写 {@link #run(CachedOutput)} 在调用父类前注入
+     * {@code cachedOutput} 引用，使 {@link #generateAnvilModels}
+     * 在 {@code super.run()} 执行期间直接通过
+     * {@link DataProvider#saveStable(CachedOutput, com.google.gson.JsonElement, java.nio.file.Path)}
+     * 写入，确保被 CachedOutput 跟踪。</p>
+     */
     private void generateAnvilModels(BlockModelGenerators gen) {
         String[] mats = {"copper", "silver", "gold", "ancient_metal", "mithril", "adamantium"};
         String modId = MiteRecrafted.MOD_ID;
 
         for (String mat : mats) {
-            // 生成 3 个模型（stage 0/1/2）
             String[] tops = {"top_damaged_0", "top_damaged_1", "top_damaged_2"};
             Identifier[] modelIds = new Identifier[3];
 
+            // 生成 3 个方块模型（stage 0/1/2），通过 gen.modelOutput.accept 注册
             for (int stage = 0; stage < 3; stage++) {
                 JsonObject modelJson = new JsonObject();
                 modelJson.addProperty("parent", "minecraft:block/template_anvil");
@@ -618,6 +642,7 @@ public class ModModelProvider extends FabricModelProvider {
                 tex.addProperty("body", modId + ":block/anvil/" + mat + "/base");
                 tex.addProperty("top", modId + ":block/anvil/" + mat + "/" + tops[stage]);
                 modelJson.add("textures", tex);
+                // gui display：物品栏渲染时的旋转/缩放变换
                 JsonObject disp = new JsonObject();
                 JsonObject gui = new JsonObject();
                 JsonArray rot = new JsonArray(); rot.add(30); rot.add(45); rot.add(0);
@@ -633,7 +658,7 @@ public class ModModelProvider extends FabricModelProvider {
                 gen.modelOutput.accept(modelIds[stage], () -> modelJson);
             }
 
-            // blockstate: facing × stage
+            // blockstate JSON：4 方向 × 3 裂纹等级 = 12 变体
             JsonObject variants = new JsonObject();
             String[] facings = {"north", "east", "south", "west"};
             int[] ys = {0, 90, 180, 270};
@@ -649,60 +674,49 @@ public class ModModelProvider extends FabricModelProvider {
             JsonObject bs = new JsonObject();
             bs.add("variants", variants);
 
-            java.nio.file.Path out = dataOutput.getOutputFolder()
-                    .resolve("assets").resolve(modId).resolve("blockstates")
-                    .resolve(mat + "_anvil.json");
-            try {
-                java.nio.file.Files.createDirectories(out.getParent());
-                java.nio.file.Files.writeString(out, new com.google.gson.GsonBuilder()
-                        .setPrettyPrinting().create().toJson(bs));
-            } catch (java.io.IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            // items JSON — range_dispatch 根据 damage 切换模型（方块物品同步）
+            // 物品 JSON：range_dispatch(minecraft:damage) 按损伤比例切换模型
+            // 裂纹阈值：stage 1 → damage >= 0.25，stage 2 → damage >= 0.75
             JsonObject itemJson = new JsonObject();
             JsonObject rd = new JsonObject();
             rd.addProperty("type", "minecraft:range_dispatch");
             rd.addProperty("property", "minecraft:damage");
-
             JsonArray entries = new JsonArray();
-            // stage 1: damage >= 0.25 (75% 耐久剩余)
-            JsonObject e1 = new JsonObject();
-            e1.addProperty("threshold", 0.25);
-            JsonObject m1 = new JsonObject();
-            m1.addProperty("type", "minecraft:model");
-            m1.addProperty("model", modelIds[1].toString());
-            e1.add("model", m1);
-            entries.add(e1);
-
-            // stage 2: damage >= 0.75 (25% 耐久剩余)
-            JsonObject e2 = new JsonObject();
-            e2.addProperty("threshold", 0.75);
-            JsonObject m2 = new JsonObject();
-            m2.addProperty("type", "minecraft:model");
-            m2.addProperty("model", modelIds[2].toString());
-            e2.add("model", m2);
-            entries.add(e2);
-
+            JsonObject e1 = new JsonObject(); e1.addProperty("threshold", 0.25);
+            JsonObject m1 = new JsonObject(); m1.addProperty("type", "minecraft:model"); m1.addProperty("model", modelIds[1].toString());
+            e1.add("model", m1); entries.add(e1);
+            JsonObject e2 = new JsonObject(); e2.addProperty("threshold", 0.75);
+            JsonObject m2 = new JsonObject(); m2.addProperty("type", "minecraft:model"); m2.addProperty("model", modelIds[2].toString());
+            e2.add("model", m2); entries.add(e2);
             rd.add("entries", entries);
-            // fallback: stage 0 (完好)
-            JsonObject fallback = new JsonObject();
-            fallback.addProperty("type", "minecraft:model");
-            fallback.addProperty("model", modelIds[0].toString());
+            JsonObject fallback = new JsonObject(); fallback.addProperty("type", "minecraft:model"); fallback.addProperty("model", modelIds[0].toString());
             rd.add("fallback", fallback);
-
             itemJson.add("model", rd);
-            java.nio.file.Path itemOut = dataOutput.getOutputFolder()
+
+            // 直接通过 CachedOutput 写入（在 super.run() 内部执行，保证被跟踪）
+            java.nio.file.Path bsPath = dataOutput.getOutputFolder()
+                    .resolve("assets").resolve(modId).resolve("blockstates")
+                    .resolve(mat + "_anvil.json");
+            java.nio.file.Path itemPath = dataOutput.getOutputFolder()
                     .resolve("assets").resolve(modId).resolve("items")
                     .resolve(mat + "_anvil.json");
             try {
-                java.nio.file.Files.createDirectories(itemOut.getParent());
-                java.nio.file.Files.writeString(itemOut, new com.google.gson.GsonBuilder()
-                        .setPrettyPrinting().create().toJson(itemJson));
+                java.nio.file.Files.createDirectories(bsPath.getParent());
+                java.nio.file.Files.createDirectories(itemPath.getParent());
+                DataProvider.saveStable(cachedOutput, bs, bsPath);
+                DataProvider.saveStable(cachedOutput, itemJson, itemPath);
             } catch (java.io.IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Failed to write anvil data for " + mat, e);
             }
+        }
+    }
+
+    @Override
+    public CompletableFuture<?> run(CachedOutput cachedOutput) {
+        this.cachedOutput = cachedOutput;
+        try {
+            return super.run(cachedOutput);
+        } finally {
+            this.cachedOutput = null;
         }
     }
 

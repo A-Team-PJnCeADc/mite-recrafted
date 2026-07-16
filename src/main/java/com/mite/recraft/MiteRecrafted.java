@@ -6,6 +6,7 @@ import com.mite.recraft.component.ModDataComponents;
 import com.mite.recraft.entity.ModEntitys;
 import com.mite.recraft.item.ModCreativeTabs;
 import com.mite.recraft.item.ModItems;
+import com.mite.recraft.item.moditems.bucket.ModBucketItems;
 import com.mite.recraft.item.tools.toolItem.WoodenItems;
 import com.mite.recraft.network.CraftingProgressSyncPayload;
 import net.fabricmc.api.ModInitializer;
@@ -45,6 +46,14 @@ public class MiteRecrafted implements ModInitializer {
         FuelValueEvents.BUILD.register((builder, ctx) -> {
             builder.add(WoodenItems.CLUB, 200);
             builder.add(WoodenItems.CUDGEL, 200);
+
+            // MITE 岩浆桶：可烧制 16 个物品（3200 tick）
+            builder.add(ModBucketItems.COPPER_LAVA_BUCKET, 3200);
+            builder.add(ModBucketItems.SILVER_LAVA_BUCKET, 3200);
+            builder.add(ModBucketItems.GOLD_LAVA_BUCKET, 3200);
+            builder.add(ModBucketItems.ANCIENT_METAL_LAVA_BUCKET, 3200);
+            builder.add(ModBucketItems.MITHRIL_LAVA_BUCKET, 3200);
+            builder.add(ModBucketItems.ADAMANTIUM_LAVA_BUCKET, 3200);
         });
     }
 

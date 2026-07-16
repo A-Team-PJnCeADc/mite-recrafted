@@ -2,12 +2,14 @@ package com.mite.recraft.datagen;
 
 import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.item.material.ModMaterials;
+import com.mite.recraft.item.tools.toolItem.ArrowItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -25,6 +27,7 @@ public class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider wrapper) {
+        // 修理材料标签
         tag(repairs("repairs_copper")).add(key(ModMaterials.COPPER_NUGGET));
         tag(repairs("repairs_silver")).add(key(ModMaterials.SILVER_NUGGET));
         tag(repairs("repairs_iron")).add(key(ModMaterials.IRON_NUGGET));
@@ -38,6 +41,19 @@ public class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
         tag(repairs("repairs_obsidian")).add(key(Items.OBSIDIAN));
 
         tag(repairs("repairs_wood")).add(key(Items.OAK_PLANKS));
+
+        // 箭矢标签 — 弓通过 minecraft:arrows 标签识别
+        var arrowsTag = builder(ItemTags.ARROWS);
+        arrowsTag.add(key(ArrowItems.FLINT_ARROW));
+        arrowsTag.add(key(ArrowItems.OBSIDIAN_ARROW));
+        arrowsTag.add(key(ArrowItems.COPPER_ARROW));
+        arrowsTag.add(key(ArrowItems.SILVER_ARROW));
+        arrowsTag.add(key(ArrowItems.GOLD_ARROW));
+        arrowsTag.add(key(ArrowItems.RUSTED_IRON_ARROW));
+        arrowsTag.add(key(ArrowItems.IRON_ARROW));
+        arrowsTag.add(key(ArrowItems.ANCIENT_METAL_ARROW));
+        arrowsTag.add(key(ArrowItems.MITHRIL_ARROW));
+        arrowsTag.add(key(ArrowItems.ADAMANTIUM_ARROW));
     }
 
     private static TagKey<Item> repairs(String path) {

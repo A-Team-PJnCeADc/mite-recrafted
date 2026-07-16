@@ -2,8 +2,9 @@
 	"required": true,
 	"package": "com.mite.recraft.client.mixin",
 	"compatibilityLevel": "JAVA_25",
-	"client": [
-	],
+		"client": [
+			"RecipeCollectionMixin"
+		],
 	"injectors": {
 		"defaultRequire": 1
 	},

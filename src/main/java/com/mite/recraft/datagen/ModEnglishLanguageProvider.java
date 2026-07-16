@@ -78,6 +78,14 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
             tb.add(key, buildBlockName(id));
         }
 
+        // Buckets
+        for (Item item : ModItems.getBuckets()) {
+            String key = item.getDescriptionId();
+            if (!key.startsWith("item.mite-recrafted.")) continue;
+            String id = key.substring("item.mite-recrafted.".length());
+            tb.add(key, buildBucketName(id));
+        }
+
         // Quality
         String[] qualityNames = {"Wretched", "Poor", "Average", "Fine", "Excellent", "Superb", "Masterwork", "Legendary"};
         for (Quality q : Quality.values()) {
@@ -109,29 +117,22 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
     }
 
     private String buildMaterialName(String id) {
-        // Format: material_type, e.g. flint_chip → Flint Chips, copper_ingot → Copper Ingot
         int lastUnderscore = id.lastIndexOf('_');
         if (lastUnderscore < 0) return materialDisplay(id);
-
         String material = id.substring(0, lastUnderscore);
         String type = id.substring(lastUnderscore + 1);
-
         return materialDisplay(material) + " " + capitalize(type);
     }
 
     private String buildToolName(String id) {
-        // Format: material_tool, e.g. flint_axe → Flint Axe, flint_hatchet → Flint Hatchet
         int lastUnderscore = id.lastIndexOf('_');
         if (lastUnderscore < 0) return materialDisplay(id);
-
         String material = id.substring(0, lastUnderscore);
         String tool = id.substring(lastUnderscore + 1);
-
         return materialDisplay(material) + " " + capitalize(tool);
     }
 
     private String buildRecordName(String id) {
-        // record_descent -> "Record Descent"
         return "Record " + materialDisplay(id.replace("record_", ""));
     }
 
@@ -140,6 +141,26 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
             if (id.equals(mat.getName() + "_workbench")) {
                 return materialDisplay(mat.getName()) + " Workbench";
             }
+        }
+        return materialDisplay(id);
+    }
+
+    private String buildBucketName(String id) {
+        if (id.endsWith("_water_bucket")) {
+            String mat = id.substring(0, id.length() - "_water_bucket".length());
+            return materialDisplay(mat) + " Water Bucket";
+        }
+        if (id.endsWith("_lava_bucket")) {
+            String mat = id.substring(0, id.length() - "_lava_bucket".length());
+            return materialDisplay(mat) + " Lava Bucket";
+        }
+        if (id.endsWith("_stone_bucket")) {
+            String mat = id.substring(0, id.length() - "_stone_bucket".length());
+            return materialDisplay(mat) + " Stone Bucket";
+        }
+        if (id.endsWith("_bucket")) {
+            String mat = id.substring(0, id.length() - "_bucket".length());
+            return materialDisplay(mat) + " Bucket";
         }
         return materialDisplay(id);
     }
