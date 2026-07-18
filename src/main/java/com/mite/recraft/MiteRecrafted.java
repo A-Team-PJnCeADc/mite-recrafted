@@ -6,11 +6,14 @@ import com.mite.recraft.component.ModDataComponents;
 import com.mite.recraft.entity.ModEntitys;
 import com.mite.recraft.item.ModCreativeTabs;
 import com.mite.recraft.item.ModItems;
+import com.mite.recraft.item.moditems.food.NutritionSystem;
 import com.mite.recraft.item.moditems.bucket.ModBucketItems;
 import com.mite.recraft.item.tools.toolItem.WoodenItems;
 import com.mite.recraft.network.CraftingProgressSyncPayload;
+import com.mite.recraft.network.NutritionSyncPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.registry.FuelValueEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -34,13 +37,18 @@ public class MiteRecrafted implements ModInitializer {
         ModBlocks.init();
         ModEntitys.init();
 
+        //注册 AttachmentType
+        NutritionSystem.ensureLoaded();
+
         // MenuType
         Registry.register(
                 BuiltInRegistries.MENU,
                 Identifier.fromNamespaceAndPath(MOD_ID, "workbench"),
                 ModWorkbenchBlock.MENU_TYPE
         );
+
         PayloadTypeRegistry.clientboundPlay().register(CraftingProgressSyncPayload.TYPE, CraftingProgressSyncPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(NutritionSyncPayload.TYPE, NutritionSyncPayload.CODEC);
 
         // 燃料
         FuelValueEvents.BUILD.register((builder, ctx) -> {
@@ -55,6 +63,10 @@ public class MiteRecrafted implements ModInitializer {
             builder.add(ModBucketItems.MITHRIL_LAVA_BUCKET, 3200);
             builder.add(ModBucketItems.ADAMANTIUM_LAVA_BUCKET, 3200);
         });
+
+        // 玩家登录时发送初始营养数据
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
+                NutritionSystem.sendSyncPacket(handler.getPlayer()));
     }
 
     private static void registerSoundEvents() {

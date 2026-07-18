@@ -121,6 +121,17 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
         for (String[] s : songs) {
             tb.add("jukebox_song.mite-recrafted." + s[0], s[1]);
         }
+
+        // 营养命令
+        tb.add("command.mite-recrafted.cnutrition.title", "§6=== 客户端营养数据 ===");
+        tb.add("command.mite-recrafted.cnutrition.satiation", "饱腹度: §6%d§r / %d");
+        tb.add("command.mite-recrafted.cnutrition.nutrition", "营养值: §a%d§r / %d");
+        tb.add("command.mite-recrafted.cnutrition.protein", "蛋白质: §b%d");
+        tb.add("command.mite-recrafted.cnutrition.phytonutrients", "植物营养素: §2%d");
+        tb.add("command.mite-recrafted.cnutrition.fats", "脂肪: §e%d");
+        tb.add("command.mite-recrafted.cnutrition.sugar", "糖分: §c%d");
+        tb.add("command.mite-recrafted.cnutrition.insulin", "胰岛素抵抗: §4%d / 192000");
+        tb.add("command.mite-recrafted.cnutrition.no_player", "玩家不存在");
     }
 
     private String buildMaterialName(String id) {
@@ -159,12 +170,14 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (id.equals(mat + "_battle_axe")) return name + "战斧";
             if (id.equals(mat + "_war_hammer")) return name + "战锤";
         }
-        if (id.equals("wood_club")) return "木棒";
-        if (id.equals("wood_cudgel")) return "短木棒";
-        if (id.equals("wood_bow")) return "木弓";
-        if (id.equals("ancient_metal_bow")) return "远古金属弓";
-        if (id.equals("mithril_bow")) return "秘银弓";
-        return null;
+        return switch (id) {
+            case "wood_club" -> "木棒";
+            case "wood_cudgel" -> "短木棒";
+            case "wood_bow" -> "木弓";
+            case "ancient_metal_bow" -> "远古金属弓";
+            case "mithril_bow" -> "秘银弓";
+            default -> null;
+        };
     }
 
     private String buildRecordName(String id) {

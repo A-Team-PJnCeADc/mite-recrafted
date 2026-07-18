@@ -9,7 +9,8 @@
 			    "LivingEntityStuckArrowsMixin",
 			    "AnvilMenuCostAccessor",
 			    "ItemEntityMixin",
-			    "PlayerLavaBucketMixin"
+			    "PlayerLavaBucketMixin",
+			    "PlayerNutritionMixin"
 			],
 	"injectors": {
 		"defaultRequire": 1

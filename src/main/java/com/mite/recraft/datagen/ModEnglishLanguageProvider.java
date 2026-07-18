@@ -114,6 +114,17 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
         for (String[] s : songs) {
             tb.add("jukebox_song.mite-recrafted." + s[0], s[1]);
         }
+
+        // Nutrition command
+        tb.add("command.mite-recrafted.cnutrition.title", "§6=== Client Nutrition Data ===");
+        tb.add("command.mite-recrafted.cnutrition.satiation", "Satiation: §6%d§r / %d");
+        tb.add("command.mite-recrafted.cnutrition.nutrition", "Nutrition: §a%d§r / %d");
+        tb.add("command.mite-recrafted.cnutrition.protein", "Protein: §b%d");
+        tb.add("command.mite-recrafted.cnutrition.phytonutrients", "Phytonutrients: §2%d");
+        tb.add("command.mite-recrafted.cnutrition.fats", "Fats: §e%d");
+        tb.add("command.mite-recrafted.cnutrition.sugar", "Sugar: §c%d");
+        tb.add("command.mite-recrafted.cnutrition.insulin", "Insulin Resistance: §4%d / 192000");
+        tb.add("command.mite-recrafted.cnutrition.no_player", "Player not found");
     }
 
     private String buildMaterialName(String id) {
