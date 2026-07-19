@@ -43,5 +43,4 @@ replay_*.log
 *.jfr
 
 
-/zh-6.7.20.jar
-
+/zh-*.jar
