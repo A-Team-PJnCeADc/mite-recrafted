@@ -102,6 +102,28 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             }
         }
 
+        // 所有食物翻译
+        for (Item item : ModItems.getFoods()) {
+            String key = item.getDescriptionId();
+            if (!key.startsWith("item.mite-recrafted.")) continue;
+            String id = key.substring("item.mite-recrafted.".length());
+            // 对已知食物的中文名称
+            String cnName = switch (id) {
+                case "vegetable_soup" -> "蔬菜汤";
+                case "onion" -> "洋葱";
+                case "water_bowl" -> "水碗";
+                case "milk_bowl" -> "牛奶碗";
+                case "copper_milk_bucket" -> "装满牛奶的铜桶";
+                case "silver_milk_bucket" -> "装满牛奶的银桶";
+                case "gold_milk_bucket" -> "装满牛奶的金桶";
+                case "ancient_metal_milk_bucket" -> "装满牛奶的远古金属桶";
+                case "mithril_milk_bucket" -> "装满牛奶的秘银桶";
+                case "adamantium_milk_bucket" -> "装满牛奶的艾德曼桶";
+                default -> null;
+            };
+            if (cnName != null) tb.add(key, cnName);
+        }
+
         // 物品标签翻译 (repairs_*)
         String[][] tagMats = {
                 {"copper", "铜"}, {"silver", "银"}, {"gold", "金"},
@@ -124,14 +146,15 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
 
         // 营养命令
         tb.add("command.mite-recrafted.cnutrition.title", "§6=== 客户端营养数据 ===");
-        tb.add("command.mite-recrafted.cnutrition.satiation", "饱腹度: §6%d§r / %d");
-        tb.add("command.mite-recrafted.cnutrition.nutrition", "营养值: §a%d§r / %d");
         tb.add("command.mite-recrafted.cnutrition.protein", "蛋白质: §b%d");
         tb.add("command.mite-recrafted.cnutrition.phytonutrients", "植物营养素: §2%d");
         tb.add("command.mite-recrafted.cnutrition.fats", "脂肪: §e%d");
         tb.add("command.mite-recrafted.cnutrition.sugar", "糖分: §c%d");
         tb.add("command.mite-recrafted.cnutrition.insulin", "胰岛素抵抗: §4%d / 192000");
         tb.add("command.mite-recrafted.cnutrition.no_player", "玩家不存在");
+
+        // 挤奶提示
+        tb.add("message.mite-recrafted.cow_already_milked", "这头牛今天已经挤过奶了");
     }
 
     private String buildMaterialName(String id) {

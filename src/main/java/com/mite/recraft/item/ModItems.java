@@ -1,8 +1,9 @@
 package com.mite.recraft.item;
 
 import com.mite.recraft.item.material.ModMaterials;
-import com.mite.recraft.item.moditems.bucket.ModBucketItems;
 import com.mite.recraft.item.moditems.ModRecordItems;
+import com.mite.recraft.item.moditems.bucket.ModBucketItems;
+import com.mite.recraft.item.moditems.food.ModFoodItems;
 import com.mite.recraft.item.tools.ModTools;
 import net.minecraft.world.item.Item;
 
@@ -15,6 +16,7 @@ public class ModItems {
     private static final List<Item> TOOLS = new ArrayList<>();
     private static final List<Item> RECORDS = new ArrayList<>();
     private static final List<Item> BUCKETS = new ArrayList<>();
+    private static final List<Item> FOODS = new ArrayList<>();
 
     public static void addMaterial(Item item) {
         MATERIALS.add(item);
@@ -30,6 +32,10 @@ public class ModItems {
 
     public static void addBucket(Item item) {
         BUCKETS.add(item);
+    }
+
+    public static void addFood(Item item) {
+        FOODS.add(item);
     }
 
     public static List<Item> getMaterials() {
@@ -48,10 +54,15 @@ public class ModItems {
         return Collections.unmodifiableList(BUCKETS);
     }
 
+    public static List<Item> getFoods() {
+        return Collections.unmodifiableList(FOODS);
+    }
+
     public static void init() {
         ModMaterials.init();
         ModTools.init();
         ModRecordItems.init();
         ModBucketItems.init();
+        ModFoodItems.init();
     }
 }

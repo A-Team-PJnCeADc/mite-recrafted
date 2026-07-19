@@ -23,18 +23,13 @@ public class ClientNutritionCommand {
                                     return 0;
                                 }
 
-                                int satiation = NutritionSystem.getSatiation(player);
-                                int nutrition = NutritionSystem.getNutrition(player);
                                 int protein = NutritionSystem.getProtein(player);
                                 int phytonutrients = NutritionSystem.getPhytonutrients(player);
                                 int essentialFats = NutritionSystem.getEssentialFats(player);
                                 int sugarContent = NutritionSystem.getSugarContent(player);
                                 int insulinResistance = NutritionSystem.getInsulinResistance(player);
-                                int limit = NutritionSystem.getNutrientLimit(player.experienceLevel);
 
                                 source.sendFeedback(Component.translatable("command.mite-recrafted.cnutrition.title"));
-                                source.sendFeedback(Component.translatable("command.mite-recrafted.cnutrition.satiation", satiation, limit));
-                                source.sendFeedback(Component.translatable("command.mite-recrafted.cnutrition.nutrition", nutrition, limit));
                                 source.sendFeedback(Component.translatable("command.mite-recrafted.cnutrition.protein", protein));
                                 source.sendFeedback(Component.translatable("command.mite-recrafted.cnutrition.phytonutrients", phytonutrients));
                                 source.sendFeedback(Component.translatable("command.mite-recrafted.cnutrition.fats", essentialFats));

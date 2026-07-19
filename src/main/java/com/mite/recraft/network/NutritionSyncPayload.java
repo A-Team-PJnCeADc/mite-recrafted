@@ -8,10 +8,9 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 /**
- * S→C: 同步营养数据（含糖分与胰岛素抵抗）。
+ * S→C: 同步营养数据（蛋白/植营/脂肪/糖/胰岛素）。
  */
 public record NutritionSyncPayload(
-        int satiation,
         int nutrition,
         int protein,
         int phytonutrients,
@@ -28,7 +27,6 @@ public record NutritionSyncPayload(
 
     public static final StreamCodec<RegistryFriendlyByteBuf, NutritionSyncPayload> CODEC =
             StreamCodec.composite(
-                    ByteBufCodecs.VAR_INT, NutritionSyncPayload::satiation,
                     ByteBufCodecs.VAR_INT, NutritionSyncPayload::nutrition,
                     ByteBufCodecs.VAR_INT, NutritionSyncPayload::protein,
                     ByteBufCodecs.VAR_INT, NutritionSyncPayload::phytonutrients,

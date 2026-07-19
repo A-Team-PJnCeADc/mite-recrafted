@@ -37,13 +37,12 @@ public class MiteRecraftedClient implements ClientModInitializer {
                 (payload, context) -> context.client().execute(() -> {
                     var player = context.client().player;
                     if (player == null) return;
-                    player.setAttached(NutritionSystem.SATIATION, payload.satiation());
-                    player.setAttached(NutritionSystem.NUTRITION, payload.nutrition());
                     player.setAttached(NutritionSystem.PROTEIN, payload.protein());
                     player.setAttached(NutritionSystem.PHYTONUTRIENTS, payload.phytonutrients());
                     player.setAttached(NutritionSystem.ESSENTIAL_FATS, payload.essentialFats());
                     player.setAttached(NutritionSystem.SUGAR_CONTENT, payload.sugarContent());
                     player.setAttached(NutritionSystem.INSULIN_RESISTANCE, payload.insulinResistance());
+                    player.setAttached(NutritionSystem.NUTRITION, payload.nutrition());
                 }));
 
         // 客户端营养调试命令

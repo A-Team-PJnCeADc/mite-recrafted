@@ -9,8 +9,12 @@
 			    "LivingEntityStuckArrowsMixin",
 			    "AnvilMenuCostAccessor",
 			    "ItemEntityMixin",
-			    "PlayerLavaBucketMixin",
-			    "PlayerNutritionMixin"
+			    "SubmergedConversionMixin",
+			    "PlayerNutritionMixin",
+			    "CowMilkingMixin",
+			    "FoodDataMixin",
+			    "VanillaFoodOverrideMixin",
+			    "ItemMaxStackMixin"
 			],
 	"injectors": {
 		"defaultRequire": 1

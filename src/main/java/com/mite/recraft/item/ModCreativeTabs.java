@@ -40,6 +40,9 @@ public class ModCreativeTabs {
                 for (Item item : ModItems.getBuckets()) {
                     entries.accept(item);
                 }
+                for (Item item : ModItems.getFoods()) {
+                    entries.accept(item);
+                }
             })
             .build();
 

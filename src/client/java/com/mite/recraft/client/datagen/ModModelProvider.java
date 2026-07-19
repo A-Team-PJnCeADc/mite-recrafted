@@ -24,10 +24,13 @@ import com.mite.recraft.item.tools.toolItem.ShovelItems;
 import com.mite.recraft.item.tools.toolItem.ScytheItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
 import com.mite.recraft.item.moditems.ModRecordItems;
+import com.mite.recraft.item.moditems.food.ModFoodItem;
+import com.mite.recraft.item.moditems.food.ContainerType;
 import com.mite.recraft.item.tools.toolItem.WoodenItems;
 import com.mite.recraft.item.tools.toolItem.WarHammerItems;
 import com.mite.recraft.item.material.ModMaterials;
 import com.mite.recraft.item.moditems.bucket.ModBucketItems;
+import com.mite.recraft.item.ModItems;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -287,6 +290,44 @@ public class ModModelProvider extends FabricModelProvider {
 
         // 桶：空桶 / 水桶 / 岩浆桶 / 石桶，纹理在 item/buckets/<材质>/<内容>.png
         generateBucketModels(gen);
+
+        // 食物：碗装食物纹理在 item/bowls/ 下，普通食物在 item/foods/ 下
+        generateFoodModels(gen);
+    }
+
+    /**
+     * 为所有食物物品生成 FLAT_ITEM 模型。
+     * 纹理路径：碗装食物 → {@code item/bowls/<id>.png}，普通食物 → {@code item/foods/<id>.png}。
+     */
+    private void generateFoodModels(ItemModelGenerators gen) {
+        String modId = MiteRecrafted.MOD_ID;
+        for (Item item : ModItems.getFoods()) {
+            String itemName = BuiltInRegistries.ITEM.getKey(item).getPath();
+
+            // 桶装食物（奶桶）：纹理在 item/buckets/<材质>/milk.png
+            if (item instanceof ModFoodItem mfi && mfi.getFoodType().containerType() == ContainerType.BUCKET) {
+                String mat = mfi.getFoodType().bucketMaterial();
+                Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/buckets/" + itemName);
+                Identifier texId = Identifier.fromNamespaceAndPath(modId, "item/buckets/" + mat + "/milk");
+                ModelTemplates.FLAT_ITEM.create(modelId,
+                        TextureMapping.layer0(new Material(texId)), gen.modelOutput);
+                gen.itemModelOutput.accept(item, ItemModelUtils.plainModel(modelId));
+                continue;
+            }
+
+            String texDir = "food"; // 默认（纹理在 textures/item/food/ 下）
+            // 检测纹理是否在 bowls/ 子目录下
+            if (itemName.endsWith("_soup") || itemName.contains("_porridge")
+                    || itemName.endsWith("_bowl")
+                    || itemName.contains("milk_bowl") || itemName.equals("cereal_porridge")) {
+                texDir = "bowls";
+            }
+            Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/" + texDir + "/" + itemName);
+            Identifier texId = Identifier.fromNamespaceAndPath(modId, "item/" + texDir + "/" + itemName);
+            ModelTemplates.FLAT_ITEM.create(modelId,
+                    TextureMapping.layer0(new Material(texId)), gen.modelOutput);
+            gen.itemModelOutput.accept(item, ItemModelUtils.plainModel(modelId));
+        }
     }
 
     /**

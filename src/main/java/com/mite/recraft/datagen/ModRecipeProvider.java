@@ -6,6 +6,7 @@ import com.mite.recraft.block.modblock.ModDoorBlocks;
 import com.mite.recraft.block.modblock.ModMetalBlocks;
 import com.mite.recraft.item.material.ModMaterials;
 import com.mite.recraft.item.moditems.bucket.ModBucketItems;
+import com.mite.recraft.item.moditems.food.ModFoodItems;
 import com.mite.recraft.item.tools.toolItem.*;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -248,6 +249,31 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 stoneBucketUncraft(ModBucketItems.ANCIENT_METAL_STONE_BUCKET, ModBucketItems.ANCIENT_METAL_BUCKET);
                 stoneBucketUncraft(ModBucketItems.MITHRIL_STONE_BUCKET, ModBucketItems.MITHRIL_BUCKET);
                 stoneBucketUncraft(ModBucketItems.ADAMANTIUM_STONE_BUCKET, ModBucketItems.ADAMANTIUM_BUCKET);
+
+                // ============ 蔬菜汤（洋葱 + 胡萝卜 + 马铃薯 + 水碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.VEGETABLE_SOUP, 1)
+                        .requires(ModFoodItems.ONION)
+                        .requires(Items.CARROT)
+                        .requires(Items.POTATO)
+                        .requires(ModFoodItems.WATER_BOWL)
+                        .unlockedBy(getHasName(Items.CARROT), has(Items.CARROT))
+                        .save(output);
+
+                // 奶桶（4 牛奶碗 + 空桶 → 1 奶桶）
+                milkBucket(ModBucketItems.COPPER_BUCKET,       ModFoodItems.COPPER_MILK_BUCKET);
+                milkBucket(ModBucketItems.SILVER_BUCKET,       ModFoodItems.SILVER_MILK_BUCKET);
+                milkBucket(ModBucketItems.GOLD_BUCKET,         ModFoodItems.GOLD_MILK_BUCKET);
+                milkBucket(ModBucketItems.ANCIENT_METAL_BUCKET, ModFoodItems.ANCIENT_METAL_MILK_BUCKET);
+                milkBucket(ModBucketItems.MITHRIL_BUCKET,       ModFoodItems.MITHRIL_MILK_BUCKET);
+                milkBucket(ModBucketItems.ADAMANTIUM_BUCKET,    ModFoodItems.ADAMANTIUM_MILK_BUCKET);
+
+                // 1 奶桶 + 4 空碗 → 4 牛奶碗
+                milkBucketUncraft(ModFoodItems.COPPER_MILK_BUCKET);
+                milkBucketUncraft(ModFoodItems.SILVER_MILK_BUCKET);
+                milkBucketUncraft(ModFoodItems.GOLD_MILK_BUCKET);
+                milkBucketUncraft(ModFoodItems.ANCIENT_METAL_MILK_BUCKET);
+                milkBucketUncraft(ModFoodItems.MITHRIL_MILK_BUCKET);
+                milkBucketUncraft(ModFoodItems.ADAMANTIUM_MILK_BUCKET);
             }
 
             void bucket(ItemLike ingot, Item result) {
@@ -421,6 +447,29 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .pattern("BBB").pattern(" I ").pattern("III")
                         .define('B', block).define('I', ingot)
                         .unlockedBy(getHasName(block), has(block)).save(output);
+            }
+
+            /** 4 牛奶碗（上下左右）+ 空桶（中间）→ 1 奶桶 */
+            void milkBucket(ItemLike emptyBucket, ItemLike result) {
+                shaped(RecipeCategory.FOOD, result, 1)
+                        .pattern(" B ")
+                        .pattern("BAB")
+                        .pattern(" B ")
+                        .define('A', emptyBucket)
+                        .define('B', ModFoodItems.MILK_BOWL)
+                        .unlockedBy(getHasName(ModFoodItems.MILK_BOWL), has(ModFoodItems.MILK_BOWL))
+                        .save(output);
+            }
+
+            /** 1 奶桶 + 4 空碗 → 4 牛奶碗 */
+            void milkBucketUncraft(ItemLike milkBucket) {
+                shaped(RecipeCategory.FOOD, ModFoodItems.MILK_BOWL, 4)
+                        .pattern("ABB")
+                        .pattern("BB ")
+                        .define('A', milkBucket)
+                        .define('B', Items.BOWL)
+                        .unlockedBy(getHasName(milkBucket), has(milkBucket))
+                        .save(output, BuiltInRegistries.ITEM.getKey(milkBucket.asItem()).getPath() + "_uncraft");
             }
         };
     }

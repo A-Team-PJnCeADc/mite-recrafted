@@ -95,6 +95,27 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
             }
         }
 
+        // Foods
+        for (Item item : ModItems.getFoods()) {
+            String key = item.getDescriptionId();
+            if (!key.startsWith("item.mite-recrafted.")) continue;
+            String id = key.substring("item.mite-recrafted.".length());
+            String enName = switch (id) {
+                case "vegetable_soup" -> "Vegetable Soup";
+                case "onion" -> "Onion";
+                case "water_bowl" -> "Water Bowl";
+                case "milk_bowl" -> "Milk Bowl";
+                case "copper_milk_bucket" -> "Copper Bucket of Milk";
+                case "silver_milk_bucket" -> "Silver Bucket of Milk";
+                case "gold_milk_bucket" -> "Golden Bucket of Milk";
+                case "ancient_metal_milk_bucket" -> "Ancient Metal Bucket of Milk";
+                case "mithril_milk_bucket" -> "Mithril Bucket of Milk";
+                case "adamantium_milk_bucket" -> "Adamantium Bucket of Milk";
+                default -> null;
+            };
+            if (enName != null) tb.add(key, enName);
+        }
+
         // Item tag translations (repairs_*)
         String[][] tagMats = {
                 {"copper", "Copper"}, {"silver", "Silver"}, {"gold", "Gold"},
@@ -117,14 +138,15 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
 
         // Nutrition command
         tb.add("command.mite-recrafted.cnutrition.title", "§6=== Client Nutrition Data ===");
-        tb.add("command.mite-recrafted.cnutrition.satiation", "Satiation: §6%d§r / %d");
-        tb.add("command.mite-recrafted.cnutrition.nutrition", "Nutrition: §a%d§r / %d");
         tb.add("command.mite-recrafted.cnutrition.protein", "Protein: §b%d");
         tb.add("command.mite-recrafted.cnutrition.phytonutrients", "Phytonutrients: §2%d");
         tb.add("command.mite-recrafted.cnutrition.fats", "Fats: §e%d");
         tb.add("command.mite-recrafted.cnutrition.sugar", "Sugar: §c%d");
         tb.add("command.mite-recrafted.cnutrition.insulin", "Insulin Resistance: §4%d / 192000");
         tb.add("command.mite-recrafted.cnutrition.no_player", "Player not found");
+
+        // Milking message
+        tb.add("message.mite-recrafted.cow_already_milked", "This cow has already been milked today");
     }
 
     private String buildMaterialName(String id) {
