@@ -4,7 +4,6 @@ import com.mite.recraft.item.moditems.food.CommonFood;
 import com.mite.recraft.item.moditems.food.FoodType;
 import com.mite.recraft.item.moditems.food.ModFoodItem;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Items;
 import squeek.appleskin.api.AppleSkinApi;
 import squeek.appleskin.api.event.FoodValuesEvent;
 
@@ -28,9 +27,7 @@ public class AppleSkinEventHandler implements AppleSkinApi {
             }
 
             // 原版食物 MITE 重制（定义在 CommonFood 中）
-            FoodType miteFood = null;
-            if (stack.is(Items.POTATO)) miteFood = CommonFood.POTATO;
-            else if (stack.is(Items.CARROT)) miteFood = CommonFood.CARROT;
+            FoodType miteFood = CommonFood.fromItem(stack.getItem());
 
             if (miteFood != null) {
                 var fp = buildFoodComponent(miteFood);

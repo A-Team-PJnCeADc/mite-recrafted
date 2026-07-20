@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,9 +27,7 @@ public class VanillaFoodOverrideMixin {
         if (!(entity instanceof Player player)) return;
         if (!(player instanceof ServerPlayer sp)) return;
 
-        FoodType miteFood = null;
-        if (stack.is(Items.POTATO)) miteFood = CommonFood.POTATO;
-        else if (stack.is(Items.CARROT)) miteFood = CommonFood.CARROT;
+        FoodType miteFood = CommonFood.fromItem(stack.getItem());
 
         if (miteFood == null) return;
 
