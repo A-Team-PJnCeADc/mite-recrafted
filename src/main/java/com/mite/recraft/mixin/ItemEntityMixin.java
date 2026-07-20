@@ -31,7 +31,7 @@ public class ItemEntityMixin {
         ItemStack stack = self.getItem();
         if (stack.isEmpty()) return;
 
-        if (stack.getItem() instanceof ModEmptyBucketItem empty) {
+        if (stack.getItem() instanceof ModEmptyBucketItem empty && empty.waterPeer != null) {
             self.setItem(new ItemStack(empty.waterPeer, stack.getCount()));
         }
     }

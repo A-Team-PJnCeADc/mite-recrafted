@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -17,9 +18,11 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * MITE 砧 — numComponents×2 粒修理 + 砧耐久扣除
  */
+//todo 砧惩罚机制
 public class ModAnvilMenu extends AnvilMenu {
     private boolean canRepair;
     private int lastUsed;  // createResult 计算的消耗粒数
+    private ItemStack lastResult = ItemStack.EMPTY;  // createResult 的结果，用于 shift-click 时取回
 
     public ModAnvilMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
         super(containerId, playerInventory, access);
@@ -39,6 +42,30 @@ public class ModAnvilMenu extends AnvilMenu {
         Integer numComponents = tool.get(ModDataComponents.TOOL_COMPONENTS);
         if (numComponents == null || numComponents <= 0) {
             super.createResult();
+            return;
+        }
+
+        // 相同 MITE 工具修复（简单耐久叠加，无增益）
+        if (tool.getItem() == material.getItem()) {
+            int maxDamage = tool.getMaxDamage();
+            int toolDamage = tool.getDamageValue();
+            if (toolDamage <= 0) {
+                resultSlots.setItem(0, ItemStack.EMPTY);
+                return;
+            }
+            int matRemaining = maxDamage - material.getDamageValue();
+            if (matRemaining <= 0) {
+                resultSlots.setItem(0, ItemStack.EMPTY);
+                return;
+            }
+            int newDamage = Math.max(0, toolDamage - matRemaining);
+            ItemStack result = tool.copyWithCount(1);
+            result.setDamageValue(newDamage);
+            resultSlots.setItem(0, result);
+            canRepair = true;
+            lastResult = result.copy();
+            lastUsed = 1;
+            ((AnvilMenuCostAccessor) this).getCost().set(1);
             return;
         }
 
@@ -89,6 +116,7 @@ public class ModAnvilMenu extends AnvilMenu {
         result.setDamageValue(newDamage);
         resultSlots.setItem(0, result);
         canRepair = true;
+        lastResult = result.copy();  // 保存用于 shift-click 时 fallback
         lastUsed = used;  // 传递给 onTake
 
         // 设置 cost（用于 GUI 和经验消耗）
@@ -119,6 +147,29 @@ public class ModAnvilMenu extends AnvilMenu {
         if (used > 0) {
             access.execute((level, pos) -> {
                 if (level.getBlockEntity(pos) instanceof ModAnvilBlockEntity be) {
+                    boolean willBreak = be.wouldBreak(used);
+
+                    if (willBreak && !level.isClientSide()) {
+                        // shift-click: stack 已被 moveItemStackTo 清空，用 lastResult 取回
+                        // 普通点击: stack 还在，setCount(0) 让光标变空
+                        ItemStack dropStack = stack.isEmpty() ? lastResult : stack.copy();
+                        if (!stack.isEmpty()) {
+                            stack.setCount(0);  // 普通点击 → 清空光标
+                        } else if (!lastResult.isEmpty()) {
+                            // shift-click → 从背包移除已移入的物品
+                            player.getInventory().removeItem(lastResult);
+                        }
+                        lastResult = ItemStack.EMPTY;
+                        // 修理物掉落在地面
+                        if (!dropStack.isEmpty()) {
+                            level.addFreshEntity(new ItemEntity(level,
+                                    pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+                                    dropStack));
+                        }
+                        // 砧碎裂音效+销毁（与原版 AnvilBlock.damage 返回 null 时同逻辑）
+                        level.levelEvent(1029, pos, 0);
+                        level.removeBlock(pos, false);
+                    }
                     be.addDamage(used, level);
                 }
             });

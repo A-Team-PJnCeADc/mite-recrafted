@@ -58,7 +58,7 @@ public enum ModBlockType {
         String name = material + suffix;
         Block block = factory.create(BlockSetType.IRON, properties(name, hardness));
         if (block instanceof ModAnvilBlock anvil) {
-            anvil.setMaterialData(toolMat.getDurabilityCoefficient(), toolMat.getToolDurability());
+            anvil.setMaterialData(toolMat.getDurabilityCoefficient(), toolMat.getToolDurability(), toolMat);
         }
         STACK_SIZES.put(block, maxStackSize);
         return block;

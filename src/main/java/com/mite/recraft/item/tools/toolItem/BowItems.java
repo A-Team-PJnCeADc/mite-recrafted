@@ -1,5 +1,7 @@
 package com.mite.recraft.item.tools.toolItem;
 
+import com.mite.recraft.component.ModDataComponents;
+import com.mite.recraft.item.tools.modtoolmaterials.ModToolMaterial;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -17,11 +19,17 @@ public class BowItems {
 
     public static final Item ANCIENT_METAL_BOW = new BowItem(new Item.Properties()
             .setId(id("ancient_metal_bow"))
-            .durability(64));
+            .durability(64)
+            .component(ModDataComponents.TOOL_COMPONENTS, 2)
+            .component(ModDataComponents.TOOL_MATERIAL_TIER, ModToolMaterial.ANCIENT_METAL.getDurabilityCoefficient())
+            .component(ModDataComponents.TOOL_REPAIR_TAG, ModToolMaterial.ANCIENT_METAL.getRepairTagName()));
 
     public static final Item MITHRIL_BOW = new BowItem(new Item.Properties()
             .setId(id("mithril_bow"))
-            .durability(128));
+            .durability(128)
+            .component(ModDataComponents.TOOL_COMPONENTS, 2)
+            .component(ModDataComponents.TOOL_MATERIAL_TIER, ModToolMaterial.MITHRIL.getDurabilityCoefficient())
+            .component(ModDataComponents.TOOL_REPAIR_TAG, ModToolMaterial.MITHRIL.getRepairTagName()));
 
     private static ResourceKey<Item> id(String name) {
         return ResourceKey.create(Registries.ITEM,

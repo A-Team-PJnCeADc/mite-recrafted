@@ -11,6 +11,8 @@ import com.mite.recraft.block.modblock.ModDoorBlocks;
 import com.mite.recraft.block.modblock.ModMetalBlocks;
 import com.mite.recraft.block.workbench.ModWorkbenchBlock;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
+import com.mite.recraft.component.ModDataComponents;
+import com.mite.recraft.item.tools.modtoolmaterials.ModToolMaterial;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -107,6 +109,13 @@ public class ModBlockRegister {
                 .setId(itemKey(name)).useBlockDescriptionPrefix()
                 .stacksTo(maxStackSize)
                 .component(DataComponents.MAX_DAMAGE, anvil.getDurability());
+        // MITE 修理组件 — 使砧物品可在砧中用对应粒修复
+        ModToolMaterial mat = anvil.getModToolMaterial();
+        if (mat != null) {
+            props.component(ModDataComponents.TOOL_COMPONENTS, 31)
+                 .component(ModDataComponents.TOOL_MATERIAL_TIER, mat.getDurabilityCoefficient())
+                 .component(ModDataComponents.TOOL_REPAIR_TAG, mat.getRepairTagName());
+        }
         Registry.register(BuiltInRegistries.ITEM, itemKey(name),
                 new BlockItem(block, props));
     }

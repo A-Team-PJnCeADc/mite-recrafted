@@ -2,6 +2,7 @@ package com.mite.recraft.block.anvil;
 
 import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.block.modblock.ModAnvilBlocks;
+import com.mite.recraft.item.tools.modtoolmaterials.ModToolMaterial;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -31,6 +32,7 @@ public class ModAnvilBlock extends AnvilBlock implements EntityBlock {
     private static final int NUM_COMPONENTS = 31;
     private float durabilityCoefficient;
     private int perIngotDurability;
+    private ModToolMaterial modToolMaterial;
 
     private static BlockEntityType<ModAnvilBlockEntity> anvilBlockEntity;
 
@@ -55,19 +57,23 @@ public class ModAnvilBlock extends AnvilBlock implements EntityBlock {
         registerDefaultState(defaultBlockState().setValue(STAGE, 0));
     }
 
-    public void setMaterialData(float coefficient, int perIngot) {
+    public void setMaterialData(float coefficient, int perIngot, ModToolMaterial toolMat) {
         this.durabilityCoefficient = coefficient;
         this.perIngotDurability = perIngot;
+        this.modToolMaterial = toolMat;
     }
 
     public float getMaterialTier() { return durabilityCoefficient; }
+    public ModToolMaterial getModToolMaterial() { return modToolMaterial; }
 
     public int getDurability() {
         return perIngotDurability * NUM_COMPONENTS * (int) durabilityCoefficient;
     }
 
+    /** 返回裂纹阶段：0=完好 1=裂纹 2=严重裂纹 3=完全损坏(销毁) */
     public int getDamageStage(int damage) {
         float factor = (float) damage / (float) getDurability();
+        if (factor >= 1.0F) return 3;  // 完全损坏 → 销毁
         if (factor >= 0.75F) return 2;  // 25% 耐久剩余
         if (factor >= 0.25F) return 1;  // 75% 耐久剩余
         return 0;

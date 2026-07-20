@@ -50,28 +50,34 @@ public class ModAnvilBlockEntity extends BlockEntity {
         builder.set(DataComponents.DAMAGE, this.damage);
     }
 
-    /** 增加 damage，同步到客户端 */
+    /** 增加 damage，同步方块 STAGE（不销毁，由调用方处理） */
     public void addDamage(int amount, Level world) {
         Block block = getBlockState().getBlock();
         if (block instanceof ModAnvilBlock anvil) {
-            int oldStage = anvil.getDamageStage(this.damage);
             this.damage += amount;
             int newStage = anvil.getDamageStage(this.damage);
-
-            if (newStage >= 3) {
-                world.destroyBlock(worldPosition, false);
-            } else if (newStage != oldStage) {
-                BlockState currentState = getBlockState();
-                if (currentState.hasProperty(ModAnvilBlock.STAGE)) {
-                    BlockState newState = currentState.setValue(ModAnvilBlock.STAGE, newStage);
-                    world.setBlock(worldPosition, newState, Block.UPDATE_ALL);
-                }
+            int displayStage = Math.min(newStage, 2);
+            BlockState currentState = getBlockState();
+            if (currentState.hasProperty(ModAnvilBlock.STAGE)
+                    && currentState.getValue(ModAnvilBlock.STAGE) != displayStage) {
+                BlockState newState = currentState.setValue(ModAnvilBlock.STAGE, displayStage);
+                world.setBlock(worldPosition, newState, Block.UPDATE_ALL);
             }
-            // 确保 setChanged 在 setBlock 之后生效
             setChanged();
             world.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
     }
+
+    /** 检查再增加 amount 后砧是否碎裂 */
+    public boolean wouldBreak(int additionalDamage) {
+        Block block = getBlockState().getBlock();
+        if (block instanceof ModAnvilBlock anvil) {
+            return anvil.getDamageStage(this.damage + additionalDamage) >= 3;
+        }
+        return false;
+    }
+
+    public int getDamage() { return damage; }
 
     @Override
     protected void loadAdditional(ValueInput input) {
@@ -96,6 +102,8 @@ public class ModAnvilBlockEntity extends BlockEntity {
             Block block = getBlockState().getBlock();
             if (block instanceof ModAnvilBlock anvil) {
                 int stage = anvil.getDamageStage(this.damage);
+                // 阶段 3+ 表示完全损坏 → 只用于 addDamage() 触发销毁，不作为有效方块状态
+                if (stage >= 3) stage = 2;
                 BlockState state = getBlockState();
                 if (state.hasProperty(ModAnvilBlock.STAGE)
                         && state.getValue(ModAnvilBlock.STAGE) != stage) {
