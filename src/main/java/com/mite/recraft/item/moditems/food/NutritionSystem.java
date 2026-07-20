@@ -156,6 +156,7 @@ public class NutritionSystem {
 
     // ==================== Tick（服务端） ====================
 
+    /** 每 tick 调用一次，递减营养素并同步到客户端（每秒同步一次） */
     public static void tick(ServerPlayer player) {
         if (player.isCreative()) return;
 

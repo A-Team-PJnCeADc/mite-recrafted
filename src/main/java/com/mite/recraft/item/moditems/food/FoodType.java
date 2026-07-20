@@ -16,7 +16,8 @@ public interface FoodType {
     /** MITE 营养值 — 次级储备（对应 MITE setFoodValue 第二参数） */
     default int nutrition() { return 0; }
 
-    /** 饱和度修饰符（浮点数，乘到饥饿上得到实际饱和度） */
+    /** 饱和度修饰符 — 传入 FoodProperties.Builder 用。
+     * MC 26.2 公式: 实际饱和度 = hunger × satMod × 2 */
     float saturationModifier();
 
     /** 蛋白质（MITE 营养系统） */
