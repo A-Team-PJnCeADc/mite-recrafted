@@ -6,6 +6,8 @@ import com.mite.recraft.component.ModDataComponents;
 import com.mite.recraft.entity.ModEntitys;
 import com.mite.recraft.item.ModCreativeTabs;
 import com.mite.recraft.item.ModItems;
+import com.mite.recraft.item.moditems.food.CommonFood;
+import com.mite.recraft.item.moditems.food.EdibleOverride;
 import com.mite.recraft.item.moditems.food.NutritionSystem;
 import com.mite.recraft.item.moditems.bucket.ModBucketItems;
 import com.mite.recraft.item.tools.toolItem.WoodenItems;
@@ -36,6 +38,9 @@ public class MiteRecrafted implements ModInitializer {
         ModCreativeTabs.init();
         ModBlocks.init();
         ModEntitys.init();
+
+        // 为非食物物品添加食用组件
+        EdibleOverride.init();
 
         //注册 AttachmentType
         NutritionSystem.ensureLoaded();

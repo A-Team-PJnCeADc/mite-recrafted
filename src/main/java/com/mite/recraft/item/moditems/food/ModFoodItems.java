@@ -31,6 +31,40 @@ public class ModFoodItems {
     public static final Item MILK_BOWL = register(BowlFood.MILK_BOWL);
     //洋葱
     public static final Item ONION = register(CommonFood.ONION);
+    //香蕉
+    public static final Item BANANA = register(CommonFood.BANANA);
+    //橘子
+    public static final Item ORANGE = register(CommonFood.ORANGE);
+    //奶酪
+    public static final Item CHEESE = register(CommonFood.CHEESE);
+    //面团
+    public static final Item DOUGH = register(CommonFood.DOUGH);
+    //蓝莓
+    public static final Item BLUEBERRIES = register(CommonFood.BLUEBERRIES);
+    //巧克力
+    public static final Item CHOCOLATE = register(CommonFood.CHOCOLATE);
+    //沙拉
+    public static final Item SALAD = register(BowlFood.SALAD);
+    //蓝莓粥
+    public static final Item BLUEBERRY_PORRIDGE = register(BowlFood.BLUEBERRY_PORRIDGE);
+    //南瓜汤
+    public static final Item PUMPKIN_SOUP = register(BowlFood.PUMPKIN_SOUP);
+    //奶油蘑菇汤
+    public static final Item CREAM_OF_MUSHROOM_SOUP = register(BowlFood.CREAM_OF_MUSHROOM_SOUP);
+    //奶油蔬菜汤
+    public static final Item CREAM_OF_VEGETABLE_SOUP = register(BowlFood.CREAM_OF_VEGETABLE_SOUP);
+    //鸡汤
+    public static final Item CHICKEN_SOUP = register(BowlFood.CHICKEN_SOUP);
+    //麦片粥
+    public static final Item CEREAL = register(BowlFood.CEREAL);
+    //牛肉羹
+    public static final Item BEEF_STEW = register(BowlFood.BEEF_STEW);
+    //果汁雪糕
+    public static final Item SORBET = register(BowlFood.SORBET);
+    //土豆泥
+    public static final Item MASHED_POTATO = register(BowlFood.MASHED_POTATO);
+    //冰淇淋
+    public static final Item ICE_CREAM = register(BowlFood.ICE_CREAM);
 
     //奶桶
     public static final Item COPPER_MILK_BUCKET       = register(BucketFood.COPPER_MILK_BUCKET);

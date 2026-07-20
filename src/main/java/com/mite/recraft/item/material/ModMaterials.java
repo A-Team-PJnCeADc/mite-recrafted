@@ -10,19 +10,19 @@ import net.minecraft.world.item.Item;
 
 
 public class ModMaterials {
-    public static final Item FLINT_CHIP = registerMaterials("flint_chip", 64);
-    public static final Item OBSIDIAN_CHIP = registerMaterials("obsidian_chip", 64);
-    public static final Item EMERALD_CHIP = registerMaterials("emerald_chip", 64);
-    public static final Item DIAMOND_CHIP = registerMaterials("diamond_chip", 64);
-    public static final Item NETHER_QUARTZ_SHARD = registerMaterials("nether_quartz_shard", 64);
-    public static final Item GLASS_SHARD = registerMaterials("glass_shard", 64);
+    public static final Item FLINT_CHIP = registerMaterials("flint_chip", 16);
+    public static final Item OBSIDIAN_CHIP = registerMaterials("obsidian_chip", 16);
+    public static final Item EMERALD_CHIP = registerMaterials("emerald_chip", 16);
+    public static final Item DIAMOND_CHIP = registerMaterials("diamond_chip", 16);
+    public static final Item NETHER_QUARTZ_SHARD = registerMaterials("nether_quartz_shard", 16);
+    public static final Item GLASS_SHARD = registerMaterials("glass_shard", 16);
 
-    public static final Item COPPER_NUGGET = registerMaterials("copper_nugget", 64);
-    public static final Item SILVER_NUGGET = registerMaterials("silver_nugget", 64);
-    public static final Item IRON_NUGGET = registerMaterials("iron_nugget", 64);
-    public static final Item ANCIENT_METAL_NUGGET = registerMaterials("ancient_metal_nugget", 64);
-    public static final Item MITHRIL_NUGGET = registerMaterials("mithril_nugget", 64);
-    public static final Item ADAMANTIUM_NUGGET = registerMaterials("adamantium_nugget", 64);
+    public static final Item COPPER_NUGGET = registerMaterials("copper_nugget", 16);
+    public static final Item SILVER_NUGGET = registerMaterials("silver_nugget", 16);
+    public static final Item IRON_NUGGET = registerMaterials("iron_nugget", 16);
+    public static final Item ANCIENT_METAL_NUGGET = registerMaterials("ancient_metal_nugget", 16);
+    public static final Item MITHRIL_NUGGET = registerMaterials("mithril_nugget", 16);
+    public static final Item ADAMANTIUM_NUGGET = registerMaterials("adamantium_nugget", 16);
 
     public static final Item COPPER_INGOT = registerMaterials("copper_ingot", 8);
     public static final Item GOLD_INGOT = registerMaterials("gold_ingot", 8);
@@ -41,12 +41,15 @@ public class ModMaterials {
     public static final Item MITHRIL_CHAIN = registerMaterials("mithril_chain", 8);
     public static final Item ADAMANTIUM_CHAIN = registerMaterials("adamantium_chain", 8);
 
-    public static final Item COPPER_COIN = registerMaterials("copper_coin", 64);
-    public static final Item GOLDEN_COIN = registerMaterials("golden_coin", 64);
-    public static final Item SILVER_COIN = registerMaterials("silver_coin", 64);
-    public static final Item ANCIENT_METAL_COIN = registerMaterials("ancient_metal_coin", 64);
-    public static final Item MITHRIL_COIN = registerMaterials("mithril_coin", 64);
-    public static final Item ADAMANTIUM_COIN = registerMaterials("adamantium_coin", 64);
+    public static final Item COPPER_COIN = registerMaterials("copper_coin", 16);
+    public static final Item GOLDEN_COIN = registerMaterials("golden_coin", 16);
+    public static final Item SILVER_COIN = registerMaterials("silver_coin", 16);
+    public static final Item ANCIENT_METAL_COIN = registerMaterials("ancient_metal_coin", 16);
+    public static final Item MITHRIL_COIN = registerMaterials("mithril_coin", 16);
+    public static final Item ADAMANTIUM_COIN = registerMaterials("adamantium_coin", 16);
+
+    // 面粉
+    public static final Item FLOUR = registerMaterials("flour", 16);
 
     // 注册物品
     private static Item registerMaterials(String path, int maxStack) {

@@ -111,6 +111,23 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             String cnName = switch (id) {
                 case "vegetable_soup" -> "蔬菜汤";
                 case "onion" -> "洋葱";
+                case "orange" -> "橘子";
+                case "banana" -> "香蕉";
+                case "cheese" -> "奶酪";
+                case "dough" -> "面团";
+                case "blueberries" -> "蓝莓";
+                case "chocolate" -> "巧克力";
+                case "salad" -> "沙拉";
+                case "blueberry_porridge" -> "蓝莓粥";
+                case "pumpkin_soup" -> "南瓜汤";
+                case "cream_of_mushroom_soup" -> "奶油蘑菇汤";
+                case "cream_of_vegetable_soup" -> "奶油蔬菜汤";
+                case "chicken_soup" -> "鸡汤";
+                case "beef_stew" -> "牛肉羹";
+                case "sorbet" -> "果汁雪糕";
+                case "mashed_potato" -> "土豆泥";
+                case "ice_cream" -> "冰淇淋";
+                case "cereal" -> "麦片粥";
                 case "water_bowl" -> "水碗";
                 case "milk_bowl" -> "牛奶碗";
                 case "copper_milk_bucket" -> "装满牛奶的铜桶";
@@ -169,6 +186,7 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (id.equals(mat + "_shard")) return name + "碎片";
             if (id.equals("golden_chain")) return "金锁链";
             if (id.equals("golden_coin")) return "金币";
+            if (id.equals("flour")) return "面粉";
         }
         return null;
     }

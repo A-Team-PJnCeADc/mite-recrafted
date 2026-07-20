@@ -1,5 +1,6 @@
 package com.mite.recraft.datagen;
 
+import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.block.modblock.ModAnvilBlocks;
 import com.mite.recraft.block.modblock.ModBarBlocks;
 import com.mite.recraft.block.modblock.ModDoorBlocks;
@@ -15,6 +16,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -274,6 +276,126 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 milkBucketUncraft(ModFoodItems.ANCIENT_METAL_MILK_BUCKET);
                 milkBucketUncraft(ModFoodItems.MITHRIL_MILK_BUCKET);
                 milkBucketUncraft(ModFoodItems.ADAMANTIUM_MILK_BUCKET);
+
+                // ============ 牛肉羹（马铃薯 + 棕色蘑菇 + 牛排 + 水碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.BEEF_STEW, 1)
+                        .requires(Items.POTATO)
+                        .requires(Items.BROWN_MUSHROOM)
+                        .requires(Items.COOKED_BEEF)
+                        .requires(ModFoodItems.WATER_BOWL)
+                        .unlockedBy(getHasName(Items.COOKED_BEEF), has(Items.COOKED_BEEF))
+                        .save(output);
+
+                // ============ 果汁雪糕（雪球 + 橘子 + 糖 + 碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.SORBET, 1)
+                        .requires(Items.SNOWBALL)
+                        .requires(ModFoodItems.ORANGE)
+                        .requires(Items.SUGAR)
+                        .requires(Items.BOWL)
+                        .unlockedBy(getHasName(Items.SNOWBALL), has(Items.SNOWBALL))
+                        .save(output);
+
+                // ============ 土豆泥（烤马铃薯 + 奶酪 + 牛奶碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.MASHED_POTATO, 1)
+                        .requires(Items.BAKED_POTATO)
+                        .requires(ModFoodItems.CHEESE)
+                        .requires(ModFoodItems.MILK_BOWL)
+                        .unlockedBy(getHasName(Items.BAKED_POTATO), has(Items.BAKED_POTATO))
+                        .save(output);
+
+                // ============ 冰淇淋（雪球 + 可可豆 + 糖 + 牛奶碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.ICE_CREAM, 1)
+                        .requires(Items.SNOWBALL)
+                        .requires(Items.COCOA_BEANS)
+                        .requires(Items.SUGAR)
+                        .requires(ModFoodItems.MILK_BOWL)
+                        .unlockedBy(getHasName(Items.COCOA_BEANS), has(Items.COCOA_BEANS))
+                        .save(output);
+
+                // ============ 面粉（三小麦横排） ============
+                shaped(RecipeCategory.MISC, ModMaterials.FLOUR, 1)
+                        .pattern("WWW")
+                        .define('W', Items.WHEAT)
+                        .unlockedBy(getHasName(Items.WHEAT), has(Items.WHEAT))
+                        .save(output);
+
+                // ============ 面团（面粉 + 水碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.DOUGH, 1)
+                        .requires(ModMaterials.FLOUR)
+                        .requires(ModFoodItems.WATER_BOWL)
+                        .unlockedBy(getHasName(ModMaterials.FLOUR), has(ModMaterials.FLOUR))
+                        .save(output);
+
+                // ============ 面团（4 面粉 + 水桶） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.DOUGH, 4)
+                        .requires(ModMaterials.FLOUR, 4)
+                        .requires(TagKey.create(BuiltInRegistries.ITEM.key(),
+                                Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "water_buckets")))
+                        .unlockedBy(getHasName(ModMaterials.FLOUR), has(ModMaterials.FLOUR))
+                        .save(output, "mite-recrafted:dough_batch");
+
+                // ============ 沙拉（3 蒲公英 + 1 木碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.SALAD, 1)
+                        .requires(Items.DANDELION, 3)
+                        .requires(Items.BOWL)
+                        .unlockedBy(getHasName(Items.DANDELION), has(Items.DANDELION))
+                        .save(output);
+
+                // ============ 蓝莓粥（蓝莓 + 小麦种子 + 糖 + 水碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.BLUEBERRY_PORRIDGE, 1)
+                        .requires(ModFoodItems.BLUEBERRIES)
+                        .requires(Items.WHEAT_SEEDS)
+                        .requires(Items.SUGAR)
+                        .requires(ModFoodItems.WATER_BOWL)
+                        .unlockedBy(getHasName(ModFoodItems.BLUEBERRIES), has(ModFoodItems.BLUEBERRIES))
+                        .save(output);
+
+                // ============ 麦片粥（糖 + 小麦 + 牛奶碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.CEREAL, 1)
+                        .requires(Items.SUGAR)
+                        .requires(Items.WHEAT)
+                        .requires(ModFoodItems.MILK_BOWL)
+                        .unlockedBy(getHasName(ModFoodItems.MILK_BOWL), has(ModFoodItems.MILK_BOWL))
+                        .save(output);
+
+                // ============ 巧克力（糖 + 可可豆） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.CHOCOLATE, 1)
+                        .requires(Items.SUGAR)
+                        .requires(Items.COCOA_BEANS)
+                        .unlockedBy(getHasName(Items.COCOA_BEANS), has(Items.COCOA_BEANS))
+                        .save(output);
+
+                // ============ 南瓜汤（南瓜 + 水碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.PUMPKIN_SOUP, 1)
+                        .requires(Items.PUMPKIN)
+                        .requires(ModFoodItems.WATER_BOWL)
+                        .unlockedBy(getHasName(Items.PUMPKIN), has(Items.PUMPKIN))
+                        .save(output);
+
+                // ============ 奶油蘑菇汤（2 棕色蘑菇 + 牛奶碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.CREAM_OF_MUSHROOM_SOUP, 1)
+                        .requires(Items.BROWN_MUSHROOM, 2)
+                        .requires(ModFoodItems.MILK_BOWL)
+                        .unlockedBy(getHasName(Items.BROWN_MUSHROOM), has(Items.BROWN_MUSHROOM))
+                        .save(output);
+
+                // ============ 奶油蔬菜汤（洋葱 + 马铃薯 + 胡萝卜 + 牛奶碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.CREAM_OF_VEGETABLE_SOUP, 1)
+                        .requires(ModFoodItems.ONION)
+                        .requires(Items.POTATO)
+                        .requires(Items.CARROT)
+                        .requires(ModFoodItems.MILK_BOWL)
+                        .unlockedBy(getHasName(ModFoodItems.ONION), has(ModFoodItems.ONION))
+                        .save(output);
+
+                // ============ 鸡汤（洋葱 + 胡萝卜 + 熟鸡肉 + 水碗） ============
+                shapeless(RecipeCategory.FOOD, ModFoodItems.CHICKEN_SOUP, 1)
+                        .requires(ModFoodItems.ONION)
+                        .requires(Items.CARROT)
+                        .requires(Items.COOKED_CHICKEN)
+                        .requires(ModFoodItems.WATER_BOWL)
+                        .unlockedBy(getHasName(Items.COOKED_CHICKEN), has(Items.COOKED_CHICKEN))
+                        .save(output);
             }
 
             void bucket(ItemLike ingot, Item result) {

@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
  * 此系统只管理 MITE 特有的蛋白质/植物营养素/必需脂肪酸/糖分/胰岛素抵抗。</p>
  */
 //todo 初始饱食度3个
+//todo debuff
 public class NutritionSystem {
 
     // ==================== Attachment Types ====================

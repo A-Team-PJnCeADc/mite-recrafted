@@ -2,7 +2,6 @@ package com.mite.recraft.mixin;
 
 import com.mite.recraft.item.moditems.food.CommonFood;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

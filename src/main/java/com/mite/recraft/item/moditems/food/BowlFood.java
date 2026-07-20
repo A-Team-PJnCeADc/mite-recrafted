@@ -7,9 +7,34 @@ package com.mite.recraft.item.moditems.food;
  */
 public enum BowlFood implements FoodType {
 
+    // 蔬菜汤
     VEGETABLE_SOUP("vegetable_soup", 6, 6, 0, 48000, 0, 0, 1),
+    // 水碗
     WATER_BOWL("water_bowl", 0, 0, 0, 0, 0, 0, 16),
-    MILK_BOWL("milk_bowl", 1, 0, 8000, 0, 0, 0, 16)
+    // 牛奶碗
+    MILK_BOWL("milk_bowl", 1, 0, 8000, 0, 0, 0, 16),
+    // 沙拉
+    SALAD("salad", 1, 1, 0, 8000, 0, 0, 4),
+    // 蓝莓粥
+    BLUEBERRY_PORRIDGE("blueberry_porridge", 2, 4, 0, 16000, 0, 9600, 4),
+    // 南瓜汤
+    PUMPKIN_SOUP("pumpkin_soup", 1, 2, 0, 16000, 0, 0, 4),
+    // 奶油蘑菇汤
+    CREAM_OF_MUSHROOM_SOUP("cream_of_mushroom_soup", 5, 3, 40000, 0, 0, 0, 4),
+    // 奶油蔬菜汤
+    CREAM_OF_VEGETABLE_SOUP("cream_of_vegetable_soup", 7, 7, 56000, 56000, 0, 0, 4),
+    // 鸡汤
+    CHICKEN_SOUP("chicken_soup", 10, 10, 80000, 80000, 0, 0, 4),
+    // 麦片粥
+    CEREAL("cereal", 4, 2, 16000, 0, 0, 4800, 4),
+    // 牛肉羹
+    BEEF_STEW("beef_stew", 16, 16, 128000, 128000, 0, 0, 4),
+    // 果汁雪糕
+    SORBET("sorbet", 4, 2, 0, 16000, 0, 9600, 4),
+    // 土豆泥（烤马铃薯 + 奶酪 + 牛奶碗）
+    MASHED_POTATO("mashed_potato", 12, 8, 64000, 0, 0, 0, 4),
+    // 冰淇淋（雪球 + 可可豆 + 糖 + 牛奶碗）
+    ICE_CREAM("ice_cream", 5, 4, 32000, 0, 0, 4800, 4)
     ;
 
     private final String itemId;
@@ -19,6 +44,7 @@ public enum BowlFood implements FoodType {
     private final int phytonutrients;
     private final int essentialFats;
     private final int sugar;
+    private final int nutrition;
     private final ContainerType containerType;
     private final int maxStackSize;
 
@@ -34,6 +60,7 @@ public enum BowlFood implements FoodType {
         this.phytonutrients = phytonutrients;
         this.essentialFats = essentialFats;
         this.sugar = sugar;
+        this.nutrition = hunger;
         this.containerType = ContainerType.BOWL;
         this.maxStackSize = maxStackSize;
     }
@@ -41,9 +68,7 @@ public enum BowlFood implements FoodType {
     @Override public String itemId() { return itemId; }
     @Override public int hunger() { return hunger; }
     @Override public float saturationModifier() { return saturationModifier; }
-    @Override public int nutrition() {
-        return this == VEGETABLE_SOUP ? 6 : this == MILK_BOWL ? 1 : 0;
-    }
+    @Override public int nutrition() { return nutrition; }
     @Override public int protein() { return protein; }
     @Override public int essentialFats() { return essentialFats; }
     @Override public int phytonutrients() { return phytonutrients; }

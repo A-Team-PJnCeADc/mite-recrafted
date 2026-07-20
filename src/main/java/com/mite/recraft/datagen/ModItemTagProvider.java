@@ -1,6 +1,7 @@
 package com.mite.recraft.datagen;
 
 import com.mite.recraft.MiteRecrafted;
+import com.mite.recraft.item.moditems.bucket.ModBucketItems;
 import com.mite.recraft.item.material.ModMaterials;
 import com.mite.recraft.item.tools.toolItem.ArrowItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
@@ -41,6 +42,17 @@ public class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
         tag(repairs("repairs_obsidian")).add(key(Items.OBSIDIAN));
 
         tag(repairs("repairs_wood")).add(key(Items.OAK_PLANKS));
+
+        // 水桶标签 — 面团批量配方需要任意模组水桶
+        var waterBuckets = TagKey.create(BuiltInRegistries.ITEM.key(),
+                Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "water_buckets"));
+        tag(waterBuckets)
+                .add(key(ModBucketItems.COPPER_WATER_BUCKET))
+                .add(key(ModBucketItems.SILVER_WATER_BUCKET))
+                .add(key(ModBucketItems.GOLD_WATER_BUCKET))
+                .add(key(ModBucketItems.ANCIENT_METAL_WATER_BUCKET))
+                .add(key(ModBucketItems.MITHRIL_WATER_BUCKET))
+                .add(key(ModBucketItems.ADAMANTIUM_WATER_BUCKET));
 
         // 箭矢标签 — 弓通过 minecraft:arrows 标签识别
         var arrowsTag = builder(ItemTags.ARROWS);

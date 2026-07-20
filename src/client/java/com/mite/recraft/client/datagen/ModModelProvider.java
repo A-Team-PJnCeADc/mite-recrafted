@@ -283,10 +283,13 @@ public class ModModelProvider extends FabricModelProvider {
                 ModMaterials.FLINT_CHIP, ModMaterials.OBSIDIAN_CHIP,
                 ModMaterials.DIAMOND_CHIP, ModMaterials.EMERALD_CHIP,
                 ModMaterials.GLASS_SHARD, ModMaterials.NETHER_QUARTZ_SHARD);
+        // 食物材料（纹理在 item/food/ 下）
+        generateFlatModels(gen, "food",
+                ModMaterials.FLOUR);
         // 唱片（纹理在 item/records/ 下）
         generateFlatModels(gen, "records",
-                ModRecordItems.RECORD_DESCENT, ModRecordItems.RECORD_LEGENDS,
-                ModRecordItems.RECORD_UNDERWORLD, ModRecordItems.RECORD_WANDERER);
+                        ModRecordItems.RECORD_DESCENT, ModRecordItems.RECORD_LEGENDS,
+                        ModRecordItems.RECORD_UNDERWORLD, ModRecordItems.RECORD_WANDERER);
 
         // 桶：空桶 / 水桶 / 岩浆桶 / 石桶，纹理在 item/buckets/<材质>/<内容>.png
         generateBucketModels(gen);
@@ -316,10 +319,8 @@ public class ModModelProvider extends FabricModelProvider {
             }
 
             String texDir = "food"; // 默认（纹理在 textures/item/food/ 下）
-            // 检测纹理是否在 bowls/ 子目录下
-            if (itemName.endsWith("_soup") || itemName.contains("_porridge")
-                    || itemName.endsWith("_bowl")
-                    || itemName.contains("milk_bowl") || itemName.equals("cereal_porridge")) {
+            // 碗装食物用 bowls/ 子目录
+            if (item instanceof ModFoodItem mfi && mfi.getFoodType().containerType() == ContainerType.BOWL) {
                 texDir = "bowls";
             }
             Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/" + texDir + "/" + itemName);

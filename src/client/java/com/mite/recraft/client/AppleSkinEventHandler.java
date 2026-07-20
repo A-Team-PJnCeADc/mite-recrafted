@@ -1,6 +1,7 @@
 package com.mite.recraft.client;
 
 import com.mite.recraft.item.moditems.food.CommonFood;
+import com.mite.recraft.item.moditems.food.EdibleOverride;
 import com.mite.recraft.item.moditems.food.FoodType;
 import com.mite.recraft.item.moditems.food.ModFoodItem;
 import net.minecraft.world.food.FoodProperties;
@@ -31,6 +32,15 @@ public class AppleSkinEventHandler implements AppleSkinApi {
 
             if (miteFood != null) {
                 var fp = buildFoodComponent(miteFood);
+                event.defaultFoodComponent = fp;
+                event.modifiedFoodComponent = fp;
+                return;
+            }
+
+            // 原版不可食物品 EdibleOverride
+            FoodType edibleOverride = EdibleOverride.fromItem(stack.getItem());
+            if (edibleOverride != null) {
+                var fp = buildFoodComponent(edibleOverride);
                 event.defaultFoodComponent = fp;
                 event.modifiedFoodComponent = fp;
             }

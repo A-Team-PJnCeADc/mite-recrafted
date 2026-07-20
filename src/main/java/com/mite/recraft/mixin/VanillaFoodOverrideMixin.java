@@ -1,6 +1,7 @@
 package com.mite.recraft.mixin;
 
 import com.mite.recraft.item.moditems.food.CommonFood;
+import com.mite.recraft.item.moditems.food.EdibleOverride;
 import com.mite.recraft.item.moditems.food.FoodType;
 import com.mite.recraft.item.moditems.food.NutritionSystem;
 import net.minecraft.core.component.DataComponents;
@@ -28,6 +29,10 @@ public class VanillaFoodOverrideMixin {
         if (!(player instanceof ServerPlayer sp)) return;
 
         FoodType miteFood = CommonFood.fromItem(stack.getItem());
+
+        if (miteFood == null) {
+            miteFood = EdibleOverride.fromItem(stack.getItem());
+        }
 
         if (miteFood == null) return;
 

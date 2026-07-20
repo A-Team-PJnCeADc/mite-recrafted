@@ -103,6 +103,21 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
             String enName = switch (id) {
                 case "vegetable_soup" -> "Vegetable Soup";
                 case "onion" -> "Onion";
+                case "orange" -> "Orange";
+                case "cheese" -> "Cheese";
+                case "blueberries" -> "Blueberries";
+                case "chocolate" -> "Chocolate";
+                case "salad" -> "Salad";
+                case "blueberry_porridge" -> "Blueberry Porridge";
+                case "pumpkin_soup" -> "Pumpkin Soup";
+                case "cream_of_mushroom_soup" -> "Cream of Mushroom Soup";
+                case "cream_of_vegetable_soup" -> "Cream of Vegetable Soup";
+                case "chicken_soup" -> "Chicken Soup";
+                case "beef_stew" -> "Beef Stew";
+                case "sorbet" -> "Sorbet";
+                case "mashed_potato" -> "Mashed Potato";
+                case "ice_cream" -> "Ice Cream";
+                case "cereal" -> "Cereal";
                 case "water_bowl" -> "Water Bowl";
                 case "milk_bowl" -> "Milk Bowl";
                 case "copper_milk_bucket" -> "Copper Bucket of Milk";
