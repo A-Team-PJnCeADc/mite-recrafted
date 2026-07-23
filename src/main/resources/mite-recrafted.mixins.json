@@ -18,7 +18,8 @@
 			    "GrassWormMixin",
 			    "ChestWormMixin",
 			    "ChestCompostMixin",
-			    "EdibleOverrideUseMixin"
+			    "EdibleOverrideUseMixin",
+			    "RecipeManagerMixin"
 			],
 	"injectors": {
 		"defaultRequire": 1

@@ -6,9 +6,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
 /**
- * 原版不可食物品可食用覆盖 — 让不能吃的原版物品变得可吃。
+ * 原版不可食物品可食用
  */
-//todo 面包、曲奇、南瓜派和蛋糕
 public enum EdibleOverride implements FoodType {
 
     // 草种子 //todo AppleSkin
@@ -16,7 +15,7 @@ public enum EdibleOverride implements FoodType {
     // 南瓜种子
     PUMPKIN_SEEDS(Items.PUMPKIN_SEEDS, 1, 2, 0, 0, 0, 0,1.6f, 16),
     // 棕色蘑菇
-    BROWN_MUSHROOM(Items.BROWN_MUSHROOM, 1, 1, 0, 0, 0, 0, 1.6f,16)
+    BROWN_MUSHROOM(Items.BROWN_MUSHROOM, 1, 1, 0, 0, 0, 0, 1.6f,16),
     ;
 
     private final Item vanillaItem;

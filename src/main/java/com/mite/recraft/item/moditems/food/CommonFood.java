@@ -53,6 +53,12 @@ public enum CommonFood implements FoodType {
     COOKED_MUTTON(Items.COOKED_MUTTON, 6, 6, 48000, 0, 0, 0, 16),
     // 烤马铃薯
     BAKED_POTATO(Items.BAKED_POTATO, 6, 2, 0, 0, 0, 0, 16),
+    // 面包
+    BREAD(Items.BREAD, 2, 4, 0, 8000, 0, 0, 16),
+    // 曲奇
+    COOKIE(Items.COOKIE, 1, 2, 0, 0, 0, 4800, 8),
+    // 南瓜派
+    PUMPKIN_PIE(Items.PUMPKIN_PIE, 6, 5, 0, 8000, 0, 8000, 8)
     ;
 
     private final String itemId;

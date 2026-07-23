@@ -22,8 +22,8 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.CookingBookCategory;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.concurrent.CompletableFuture;
@@ -336,6 +336,37 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                                 Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "water_buckets")))
                         .unlockedBy(getHasName(ModMaterials.FLOUR), has(ModMaterials.FLOUR))
                         .save(output, "mite-recrafted:dough_batch");
+
+                // ============ 面包（熔炉烤面团，唯一获取方式）覆盖原版 3 小麦配方 ============
+                SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModFoodItems.DOUGH),
+                                RecipeCategory.FOOD, CookingBookCategory.MISC, Items.BREAD, 0.35F, 200)
+                        .unlockedBy(getHasName(ModFoodItems.DOUGH), has(ModFoodItems.DOUGH))
+                        .save(output, "mite-recrafted:bread"); // 覆盖原版 minecraft:bread
+
+                // ============ 曲奇（面团 + 巧克力）覆盖原版配方 ============
+                shapeless(RecipeCategory.FOOD, Items.COOKIE, 4)
+                        .requires(ModFoodItems.DOUGH)
+                        .requires(ModFoodItems.CHOCOLATE)
+                        .unlockedBy(getHasName(ModFoodItems.DOUGH), has(ModFoodItems.DOUGH))
+                        .save(output, "mite-recrafted:cookie");
+
+                // ============ 南瓜派覆盖原版配方 ============
+                shapeless(RecipeCategory.FOOD, Items.PUMPKIN_PIE, 1)
+                        .requires(Items.PUMPKIN)
+                        .requires(Items.SUGAR)
+                        .requires(Items.EGG)
+                        .requires(ModMaterials.FLOUR)
+                        .unlockedBy(getHasName(Items.PUMPKIN), has(Items.PUMPKIN))
+                        .save(output, "mite-recrafted:pumpkin_pie");
+
+                // ============ 蛋糕覆盖原版配方 ============
+                shapeless(RecipeCategory.FOOD, Items.CAKE, 1)
+                        .requires(ModMaterials.FLOUR)
+                        .requires(Items.SUGAR)
+                        .requires(Items.EGG)
+                        .requires(ModFoodItems.MILK_BOWL)
+                        .unlockedBy(getHasName(Items.EGG), has(Items.EGG))
+                        .save(output, "mite-recrafted:cake");
 
                 // ============ 沙拉（3 蒲公英 + 1 木碗） ============
                 shapeless(RecipeCategory.FOOD, ModFoodItems.SALAD, 1)
