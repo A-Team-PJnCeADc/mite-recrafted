@@ -1,0 +1,3 @@
+[submodule "submodules/IronChests"]
+	path = submodules/IronChests
+	url = https://github.com/A-Team-PJnCeADc/IronChests

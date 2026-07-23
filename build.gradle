@@ -38,6 +38,9 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
+	// IronChests
+	implementation project(':ironchests')
+
 	// AppleSkin API
 	compileOnly("squeek.appleskin:appleskin-fabric:mc26.2-3.0.10:api") {
 		transitive = false
