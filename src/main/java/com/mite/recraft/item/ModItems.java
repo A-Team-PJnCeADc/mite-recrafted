@@ -5,6 +5,7 @@ import com.mite.recraft.item.moditems.ModRecordItems;
 import com.mite.recraft.item.moditems.ManureItems;
 import com.mite.recraft.item.moditems.bucket.ModBucketItems;
 import com.mite.recraft.item.moditems.food.ModFoodItems;
+import com.mite.recraft.item.moditems.strongbox.StrongboxRegistry;
 import com.mite.recraft.item.tools.ModTools;
 import net.minecraft.world.item.Item;
 
@@ -66,5 +67,7 @@ public class ModItems {
         ModBucketItems.init();
         ManureItems.init();
         ModFoodItems.init();
+        // Strongboxes
+        StrongboxRegistry.register();
     }
 }

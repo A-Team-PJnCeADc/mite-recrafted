@@ -8,6 +8,7 @@ import com.mite.recraft.block.modblock.ModDoorBlocks;
 import com.mite.recraft.block.modblock.ModMetalBlocks;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
 import com.mite.recraft.client.renderer.item.NockedArrowProperty;
+import com.mite.recraft.item.moditems.strongbox.StrongboxType;
 import com.mite.recraft.item.tools.toolItem.AexItems;
 import com.mite.recraft.item.tools.toolItem.BowItems;
 import com.mite.recraft.item.tools.toolItem.ArrowItems;
@@ -138,6 +139,9 @@ public class ModModelProvider extends FabricModelProvider {
 
         // 金属砧
         generateAnvilModels(gen);
+
+        // 保险箱
+        generateStrongboxModels(gen);
     }
 
     @Override
@@ -749,6 +753,77 @@ public class ModModelProvider extends FabricModelProvider {
                 DataProvider.saveStable(cachedOutput, itemJson, itemPath);
             } catch (java.io.IOException e) {
                 throw new RuntimeException("Failed to write anvil data for " + mat, e);
+            }
+        }
+    }
+
+    /** Generate strongbox blockstate, block model via datagen */
+    private void generateStrongboxModels(BlockModelGenerators gen) {
+        String modId = MiteRecrafted.MOD_ID;
+
+        // Chest template (parent)
+        JsonObject templateJson = new JsonObject();
+        templateJson.addProperty("parent", "minecraft:block/chest");
+        Identifier templateId = Identifier.fromNamespaceAndPath(modId, "block/chest_template");
+        gen.modelOutput.accept(templateId, () -> templateJson);
+
+        for (StrongboxType type : StrongboxType.VALUES) {
+            Identifier blockModelId = Identifier.fromNamespaceAndPath(modId, "block/" + type.registryId);
+            Identifier textureId = Identifier.fromNamespaceAndPath(modId, "block/" + type.registryId);
+
+            // Block model JSON
+            JsonObject modelJson = new JsonObject();
+            modelJson.addProperty("parent", modId + ":block/chest_template");
+            JsonObject textures = new JsonObject();
+            textures.addProperty("0", textureId.toString());
+            textures.addProperty("particle", "minecraft:block/stone");
+            modelJson.add("textures", textures);
+            gen.modelOutput.accept(blockModelId, () -> modelJson);
+
+            // Blockstate JSON: 4 facing variants (write via saveStable)
+            JsonObject blockstate = new JsonObject();
+            JsonObject variants = new JsonObject();
+            String[] facings = {"north", "east", "south", "west"};
+            int[] rotations = {0, 90, 180, 270};
+            for (int i = 0; i < 4; i++) {
+                JsonObject v = new JsonObject();
+                v.addProperty("model", blockModelId.toString());
+                if (rotations[i] > 0) v.addProperty("y", rotations[i]);
+                variants.add("facing=" + facings[i], v);
+            }
+            blockstate.add("variants", variants);
+
+            if (cachedOutput == null) continue;
+            java.nio.file.Path bsPath = dataOutput.getOutputFolder()
+                    .resolve("assets").resolve(modId).resolve("blockstates")
+                    .resolve(type.registryId + ".json");
+            try {
+                java.nio.file.Files.createDirectories(bsPath.getParent());
+                DataProvider.saveStable(cachedOutput, blockstate, bsPath);
+
+                // Item model JSON — use minecraft:special/minecraft:chest for 3D chest preview
+                // The "texture" field omits "entity/chest/" prefix;
+                // the ChestSpecialRenderer resolves it to entity/chest/<path> on the chest sheet.
+                String itemTexturePath = type.texture.getPath();
+                String shortTexture = itemTexturePath.startsWith("entity/chest/")
+                        ? itemTexturePath.substring("entity/chest/".length())
+                        : itemTexturePath;
+                JsonObject itemModel = new JsonObject();
+                JsonObject specialRef = new JsonObject();
+                specialRef.addProperty("type", "minecraft:special");
+                specialRef.addProperty("base", "minecraft:item/chest");
+                JsonObject chestModel = new JsonObject();
+                chestModel.addProperty("type", "minecraft:chest");
+                chestModel.addProperty("texture", modId + ":" + shortTexture);
+                specialRef.add("model", chestModel);
+                itemModel.add("model", specialRef);
+                java.nio.file.Path itemPath = dataOutput.getOutputFolder()
+                        .resolve("assets").resolve(modId).resolve("items")
+                        .resolve(type.registryId + ".json");
+                java.nio.file.Files.createDirectories(itemPath.getParent());
+                DataProvider.saveStable(cachedOutput, itemModel, itemPath);
+            } catch (java.io.IOException e) {
+                throw new RuntimeException("Failed to write blockstate for " + type.registryId, e);
             }
         }
     }

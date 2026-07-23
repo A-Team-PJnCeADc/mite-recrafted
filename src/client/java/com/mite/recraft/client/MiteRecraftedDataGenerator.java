@@ -1,9 +1,11 @@
 package com.mite.recraft.client;
 
+import com.mite.recraft.client.datagen.ModChestAtlasProvider;
 import com.mite.recraft.client.datagen.ModModelProvider;
 import com.mite.recraft.datagen.*;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 public class MiteRecraftedDataGenerator implements DataGeneratorEntrypoint {
     @Override
@@ -18,5 +20,6 @@ public class MiteRecraftedDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ModBlockLootTableProvider::new);
         pack.addProvider((output, future) -> new ModSoundProvider(output));
         pack.addProvider(ModJukeboxSongProvider::new);
+        pack.addProvider((output, future) -> new ModChestAtlasProvider((FabricPackOutput) output, future));
     }
 }
