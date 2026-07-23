@@ -41,8 +41,8 @@ Developing
 
 - **Java 25**
 - **[Fabric API](https://github.com/FabricMC/fabric)**
-- **[IronChests](https://github.com/A-Team-PJnCeADc/mite-recrafted/)**
-- **[AppleSkin](https://github.com/squeek502/AppleSkin)**
+- **[IronChests](https://github.com/4nner/IronChests)**
+- **[AppleSkin](https://github.com/squeek502/AppleSkin/tree/26.2-fabric)**
 
 ## 构建与开发
 
@@ -99,6 +99,22 @@ mite-recrafted/
 │   └── IronChests/              # 子模块
 └── build.gradle
 ```
+
+---
+
+## 贡献
+
+欢迎提交 Pull Request 或 Issue。在提交前请确保：
+
+1. 构建没有错误
+2. 客户端代码放在 `src/client/` 源集下，通用代码放在 `src/main/`
+3. 所有配方/标签/模型的修改优先使用 datagen 
+
+---
+
+## 致谢
+
+- 所有参与开发和建议的人员
 
 ---
 
