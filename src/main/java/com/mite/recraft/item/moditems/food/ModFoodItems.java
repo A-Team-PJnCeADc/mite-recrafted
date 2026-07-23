@@ -65,6 +65,10 @@ public class ModFoodItems {
     public static final Item MASHED_POTATO = register(BowlFood.MASHED_POTATO);
     //冰淇淋
     public static final Item ICE_CREAM = register(BowlFood.ICE_CREAM);
+    //生虫子
+    public static final Item WORM_RAW = register(CommonFood.WORM_RAW);
+    //熟虫子
+    public static final Item WORM_COOKED = register(CommonFood.WORM_COOKED);
 
     //奶桶
     public static final Item COPPER_MILK_BUCKET       = register(BucketFood.COPPER_MILK_BUCKET);

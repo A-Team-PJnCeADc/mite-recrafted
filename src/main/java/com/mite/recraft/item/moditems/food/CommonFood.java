@@ -9,7 +9,6 @@ import net.minecraft.world.item.Items;
  *
  * <p>所有数值直接传入：hunger=鸡腿，saturation=金鸡腿。</p>
  */
-//todo add Worm，Mushroom
 public enum CommonFood implements FoodType {
 
     // 洋葱
@@ -26,6 +25,10 @@ public enum CommonFood implements FoodType {
     DOUGH("dough", 2, 6, 0, 0, 0, 0, 16),
     // 巧克力
     CHOCOLATE("chocolate", 3, 3, 0, 0, 0, 4800, 16),
+    // 生虫子
+    WORM_RAW("worm_raw", 1, 0, 8000, 0, 0, 0, 16),
+    // 熟虫子
+    WORM_COOKED("worm_cooked", 1, 1, 8000, 0, 0, 0, 16),
 
     //原版食物 MITE 重制（不注册为独立物品，通过 mixin 覆盖原版）
     // 土豆

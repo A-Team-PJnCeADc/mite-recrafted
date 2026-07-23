@@ -21,28 +21,24 @@ public class AppleSkinEventHandler implements AppleSkinApi {
             // MITE 自定义食物
             if (stack.getItem() instanceof ModFoodItem mfi) {
                 var ft = mfi.getFoodType();
-                var fp = buildFoodComponent(ft);
-                event.defaultFoodComponent = fp;
-                event.modifiedFoodComponent = fp;
+                event.defaultFoodComponent = buildFoodComponent(ft);
+                event.modifiedFoodComponent = buildFoodComponent(ft);
                 return;
             }
 
             // 原版食物 MITE 重制（定义在 CommonFood 中）
             FoodType miteFood = CommonFood.fromItem(stack.getItem());
-
             if (miteFood != null) {
-                var fp = buildFoodComponent(miteFood);
-                event.defaultFoodComponent = fp;
-                event.modifiedFoodComponent = fp;
+                event.defaultFoodComponent = buildFoodComponent(miteFood);
+                event.modifiedFoodComponent = buildFoodComponent(miteFood);
                 return;
             }
 
-            // 原版不可食物品 EdibleOverride
+            // 原版不可食物品 EdibleOverride — 传递实际值，不伪造 nutrition
             FoodType edibleOverride = EdibleOverride.fromItem(stack.getItem());
             if (edibleOverride != null) {
-                var fp = buildFoodComponent(edibleOverride);
-                event.defaultFoodComponent = fp;
-                event.modifiedFoodComponent = fp;
+                event.defaultFoodComponent = buildFoodComponent(edibleOverride);
+                event.modifiedFoodComponent = buildFoodComponent(edibleOverride);
             }
         });
     }

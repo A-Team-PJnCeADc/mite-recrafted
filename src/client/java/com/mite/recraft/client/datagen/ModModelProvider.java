@@ -24,6 +24,7 @@ import com.mite.recraft.item.tools.toolItem.ShovelItems;
 import com.mite.recraft.item.tools.toolItem.ScytheItems;
 import com.mite.recraft.item.tools.toolItem.SwordItems;
 import com.mite.recraft.item.moditems.ModRecordItems;
+import com.mite.recraft.item.moditems.ManureItems;
 import com.mite.recraft.item.moditems.food.ModFoodItem;
 import com.mite.recraft.item.moditems.food.ContainerType;
 import com.mite.recraft.item.tools.toolItem.WoodenItems;
@@ -285,7 +286,7 @@ public class ModModelProvider extends FabricModelProvider {
                 ModMaterials.GLASS_SHARD, ModMaterials.NETHER_QUARTZ_SHARD);
         // 食物材料（纹理在 item/food/ 下）
         generateFlatModels(gen, "food",
-                ModMaterials.FLOUR);
+                ModMaterials.FLOUR, ManureItems.MANURE);
         // 唱片（纹理在 item/records/ 下）
         generateFlatModels(gen, "records",
                         ModRecordItems.RECORD_DESCENT, ModRecordItems.RECORD_LEGENDS,

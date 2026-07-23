@@ -2,8 +2,8 @@ package com.mite.recraft.item;
 
 import com.mite.recraft.item.material.ModMaterials;
 import com.mite.recraft.item.moditems.ModRecordItems;
+import com.mite.recraft.item.moditems.ManureItems;
 import com.mite.recraft.item.moditems.bucket.ModBucketItems;
-import com.mite.recraft.item.moditems.food.EdibleOverride;
 import com.mite.recraft.item.moditems.food.ModFoodItems;
 import com.mite.recraft.item.tools.ModTools;
 import net.minecraft.world.item.Item;
@@ -64,7 +64,7 @@ public class ModItems {
         ModTools.init();
         ModRecordItems.init();
         ModBucketItems.init();
-        EdibleOverride.init();
+        ManureItems.init();
         ModFoodItems.init();
     }
 }

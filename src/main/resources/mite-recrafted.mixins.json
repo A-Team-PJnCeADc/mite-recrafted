@@ -14,7 +14,11 @@
 			    "CowMilkingMixin",
 			    "FoodDataMixin",
 			    "VanillaFoodOverrideMixin",
-			    "ItemMaxStackMixin"
+			    "ItemMaxStackMixin",
+			    "GrassWormMixin",
+			    "ChestWormMixin",
+			    "ChestCompostMixin",
+			    "EdibleOverrideUseMixin"
 			],
 	"injectors": {
 		"defaultRequire": 1

@@ -16,11 +16,14 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.concurrent.CompletableFuture;
@@ -364,6 +367,12 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .requires(Items.COCOA_BEANS)
                         .unlockedBy(getHasName(Items.COCOA_BEANS), has(Items.COCOA_BEANS))
                         .save(output);
+
+                // ============ 虫子烤熟 ============
+                SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModFoodItems.WORM_RAW),
+                                RecipeCategory.FOOD, CookingBookCategory.FOOD, ModFoodItems.WORM_COOKED, 0.0f, 200)
+                        .unlockedBy(getHasName(ModFoodItems.WORM_RAW), has(ModFoodItems.WORM_RAW))
+                        .save(output, "worm_cooked_smelting");
 
                 // ============ 南瓜汤（南瓜 + 水碗） ============
                 shapeless(RecipeCategory.FOOD, ModFoodItems.PUMPKIN_SOUP, 1)

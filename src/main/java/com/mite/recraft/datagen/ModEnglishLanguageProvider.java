@@ -120,6 +120,8 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
                 case "cereal" -> "Cereal";
                 case "water_bowl" -> "Water Bowl";
                 case "milk_bowl" -> "Milk Bowl";
+                case "worm_raw" -> "Worm";
+                case "worm_cooked" -> "Cooked Worm";
                 case "copper_milk_bucket" -> "Copper Bucket of Milk";
                 case "silver_milk_bucket" -> "Silver Bucket of Milk";
                 case "gold_milk_bucket" -> "Golden Bucket of Milk";

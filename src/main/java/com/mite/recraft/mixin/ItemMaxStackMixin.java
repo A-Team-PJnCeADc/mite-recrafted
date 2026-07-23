@@ -1,6 +1,7 @@
 package com.mite.recraft.mixin;
 
 import com.mite.recraft.item.moditems.food.CommonFood;
+import com.mite.recraft.item.moditems.food.EdibleOverride;
 import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,6 +20,11 @@ public class ItemMaxStackMixin {
         CommonFood food = CommonFood.fromItem(self);
         if (food != null) {
             cir.setReturnValue(food.maxStackSize());
+            return;
+        }
+        EdibleOverride edible = EdibleOverride.fromItem(self);
+        if (edible != null) {
+            cir.setReturnValue(edible.maxStackSize());
         }
     }
 }

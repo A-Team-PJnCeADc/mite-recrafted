@@ -130,6 +130,8 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
                 case "cereal" -> "麦片粥";
                 case "water_bowl" -> "水碗";
                 case "milk_bowl" -> "牛奶碗";
+                case "worm_raw" -> "虫子";
+                case "worm_cooked" -> "熟虫子";
                 case "copper_milk_bucket" -> "装满牛奶的铜桶";
                 case "silver_milk_bucket" -> "装满牛奶的银桶";
                 case "gold_milk_bucket" -> "装满牛奶的金桶";
@@ -187,6 +189,7 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (id.equals("golden_chain")) return "金锁链";
             if (id.equals("golden_coin")) return "金币";
             if (id.equals("flour")) return "面粉";
+            if (id.equals("manure")) return "粪便";
         }
         return null;
     }
