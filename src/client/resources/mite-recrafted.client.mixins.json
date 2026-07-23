@@ -3,9 +3,13 @@
     "package": "com.mite.recraft.client.mixin",
     "compatibilityLevel": "JAVA_25",
     "client": [
-        "AppleSkinFoodHelperMixin"
+        "AppleSkinFoodHelperMixin",
+        "RecipeCollectionMixin"
     ],
     "injectors": {
         "defaultRequire": 1
+    },
+    "overwrites": {
+        "requireAnnotations": true
     }
 }

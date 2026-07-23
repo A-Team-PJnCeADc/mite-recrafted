@@ -14,8 +14,11 @@ public enum EdibleOverride implements FoodType {
     WHEAT_SEEDS(Items.WHEAT_SEEDS, 0, 1, 0, 4000, 0, 0,1.6f, 16),
     // 南瓜种子
     PUMPKIN_SEEDS(Items.PUMPKIN_SEEDS, 1, 2, 0, 0, 0, 0,1.6f, 16),
-    // 棕色蘑菇
-    BROWN_MUSHROOM(Items.BROWN_MUSHROOM, 1, 1, 0, 0, 0, 0, 1.6f,16),
+    // 棕色蘑菇 //todo
+    BROWN_MUSHROOM(Items.BROWN_MUSHROOM, 1, 1, 0, 0, 0, 0, 1.6f,32),
+    //红色蘑菇
+    // todo (-)只能种植在地表的草方块上，且上方拥有足够的方块避免阳光直射；//(+)最佳的种植区域是在沼泽、雨林、树林生态群系；//(-)不可在菌丝上种植。
+    RED_MUSHROOM(Items.RED_MUSHROOM, 1, 1, 0, 0, 0, 0, 1.6f,32),
     ;
 
     private final Item vanillaItem;

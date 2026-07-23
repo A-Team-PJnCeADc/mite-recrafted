@@ -19,7 +19,9 @@
 			    "ChestWormMixin",
 			    "ChestCompostMixin",
 			    "EdibleOverrideUseMixin",
-			    "RecipeManagerMixin"
+			    "RecipeManagerMixin",
+			    "LeavesDropMixin",
+			    "EntityOnionDropMixin"
 			],
 	"injectors": {
 		"defaultRequire": 1

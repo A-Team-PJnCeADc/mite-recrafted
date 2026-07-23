@@ -196,6 +196,8 @@ public class ModWorkbenchMenu extends CraftingMenu {
     /** 检查工作台等级是否足够合成该物品 */
     public boolean canCraftItem(ItemStack result) {
         if (result.isEmpty()) return true;
+        // 客户端不做等级检查（服务端会做），避免客户端硬编码 FLINT 导致预览空白
+        if (!(playerInventory.player.level() instanceof net.minecraft.server.level.ServerLevel)) return true;
         float benchDur = material.getToolMaterial().getDurabilityCoefficient();
         return benchDur >= TieredResultSlot.getItemMaterialDurabilityStatic(result, this.craftSlots);
     }

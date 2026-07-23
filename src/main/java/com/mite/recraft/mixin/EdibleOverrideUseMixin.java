@@ -8,6 +8,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.Level;
 import net.minecraft.sounds.SoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
@@ -100,6 +102,12 @@ public class EdibleOverrideUseMixin {
         float newSat = Math.min(foodData.getSaturationLevel() + saturationToAdd, newFood);
         foodData.setFoodLevel(newFood);
         foodData.setSaturation(newSat);
+
+        // 红色蘑菇负面效果
+        if (edible == EdibleOverride.RED_MUSHROOM) {
+            player.addEffect(new MobEffectInstance(MobEffects.POISON, 10 * 20, 0)); // 中毒I 10秒
+            player.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 60 * 20, 0)); // 反胃 60秒
+        }
 
         stack.shrink(1);
         cir.setReturnValue(stack);
