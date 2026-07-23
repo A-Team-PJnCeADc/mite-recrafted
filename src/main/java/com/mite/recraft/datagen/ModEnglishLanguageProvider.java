@@ -164,6 +164,9 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
 
         // Milking message
         tb.add("message.mite-recrafted.cow_already_milked", "This cow has already been milked today");
+
+        // Item tag translations
+        tb.add("tag.item.mite-recrafted.water_buckets", "Water Buckets");
     }
 
     private String buildMaterialName(String id) {

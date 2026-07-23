@@ -174,6 +174,9 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
 
         // 挤奶提示
         tb.add("message.mite-recrafted.cow_already_milked", "这头牛今天已经挤过奶了");
+
+        // 物品标签翻译
+        tb.add("tag.item.mite-recrafted.water_buckets", "水桶");
     }
 
     private String buildMaterialName(String id) {
