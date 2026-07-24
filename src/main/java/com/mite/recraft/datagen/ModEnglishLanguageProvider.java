@@ -167,6 +167,7 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
 
         // Item tag translations
         tb.add("tag.item.mite-recrafted.water_buckets", "Water Buckets");
+        tb.add("tag.item.mite-recrafted.strings", "Strings");
     }
 
     private String buildMaterialName(String id) {

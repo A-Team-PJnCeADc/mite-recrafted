@@ -36,6 +36,11 @@ public class ModRecipeProvider extends FabricRecipeProvider {
     @Override
     protected RecipeProvider createRecipeProvider(HolderLookup.Provider registryLookup, RecipeOutput exporter) {
         return new RecipeProvider(registryLookup, exporter) {
+            private static final TagKey<Item> STRINGS_TAG = TagKey.create(
+                    BuiltInRegistries.ITEM.key(),
+                    Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "strings")
+            );
+
             @Override
             public void buildRecipes() {
 
@@ -56,8 +61,10 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 axe(ModMaterials.ADAMANTIUM_INGOT, AexItems.ADAMANTIUM_AXE);
 
                 // ============ 手斧 (1材料) ============
-                hatchet(Items.FLINT, HatchetItems.FLINT_HATCHET);
-                hatchet(ModMaterials.OBSIDIAN_CHIP, HatchetItems.OBSIDIAN_HATCHET);
+                // 燧石/黑曜石手斧需要线
+                flintHatchet(Items.FLINT, HatchetItems.FLINT_HATCHET);
+                flintHatchet(Items.OBSIDIAN, HatchetItems.OBSIDIAN_HATCHET);
+                // 金属手斧需要木棍
                 hatchet(ModMaterials.COPPER_INGOT, HatchetItems.COPPER_HATCHET);
                 hatchet(ModMaterials.SILVER_INGOT, HatchetItems.SILVER_HATCHET);
                 hatchet(ModMaterials.GOLD_INGOT, HatchetItems.GOLD_HATCHET);
@@ -322,6 +329,12 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .unlockedBy(getHasName(Items.WHEAT), has(Items.WHEAT))
                         .save(output);
 
+                // ============ 皮革线（皮革 → 皮革线 × 4） ============
+                shapeless(RecipeCategory.MISC, ModMaterials.SINEW, 4)
+                        .requires(Items.LEATHER)
+                        .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
+                        .save(output);
+
                 // ============ 面团（面粉 + 水碗） ============
                 shapeless(RecipeCategory.FOOD, ModFoodItems.DOUGH, 1)
                         .requires(ModMaterials.FLOUR)
@@ -478,6 +491,17 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 shaped(RecipeCategory.TOOLS, result)
                         .pattern("MS").pattern(" S")
                         .define('M', m).define('S', Items.STICK)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            /** 燧石/黑曜石手斧：材料 +木棍 + 线 */
+            void flintHatchet(ItemLike m, Item result) {
+                shaped(RecipeCategory.TOOLS, result)
+                        .pattern("MS")
+                        .pattern("TS")
+                        .define('M', m)              // 主材料（燧石/黑曜石）
+                        .define('S', Items.STICK)   // 木棍
+                        .define('T', STRINGS_TAG)         // 线的集合标签
                         .unlockedBy(getHasName(m), has(m)).save(output);
             }
 

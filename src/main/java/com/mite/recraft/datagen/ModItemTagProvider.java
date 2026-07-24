@@ -66,6 +66,13 @@ public class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
         arrowsTag.add(key(ArrowItems.ANCIENT_METAL_ARROW));
         arrowsTag.add(key(ArrowItems.MITHRIL_ARROW));
         arrowsTag.add(key(ArrowItems.ADAMANTIUM_ARROW));
+
+        // 线标签 — 原版线 + 皮革线合并
+        var strings = TagKey.create(BuiltInRegistries.ITEM.key(),
+                Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "strings"));
+        tag(strings)
+                .add(key(Items.STRING))
+                .add(key(ModMaterials.SINEW));
     }
 
     private static TagKey<Item> repairs(String path) {

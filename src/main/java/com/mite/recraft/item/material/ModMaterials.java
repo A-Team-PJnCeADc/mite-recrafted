@@ -51,6 +51,9 @@ public class ModMaterials {
     // 面粉
     public static final Item FLOUR = registerMaterials("flour", 16);
 
+    // 皮革线
+    public static final Item SINEW = registerMaterials("sinew", 16);
+
     // 注册物品
     private static Item registerMaterials(String path, int maxStack) {
         Identifier id = Identifier.fromNamespaceAndPath("mite-recrafted", path);

@@ -177,6 +177,7 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
 
         // 物品标签翻译
         tb.add("tag.item.mite-recrafted.water_buckets", "水桶");
+        tb.add("tag.item.mite-recrafted.strings", "线");
     }
 
     private String buildMaterialName(String id) {
@@ -193,6 +194,7 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (id.equals("golden_coin")) return "金币";
             if (id.equals("flour")) return "面粉";
             if (id.equals("manure")) return "粪便";
+            if (id.equals("sinew")) return "皮革线";
         }
         return null;
     }

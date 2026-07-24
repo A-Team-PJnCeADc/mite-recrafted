@@ -291,6 +291,14 @@ public class ModModelProvider extends FabricModelProvider {
         // 食物材料（纹理在 item/food/ 下）
         generateFlatModels(gen, "food",
                 ModMaterials.FLOUR, ManureItems.MANURE);
+        // 其他材料（纹理直接在 item/ 下）
+        {
+            Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/sinew");
+            Identifier texId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/sinew");
+            ModelTemplates.FLAT_ITEM.create(modelId,
+                    TextureMapping.layer0(new Material(texId)), gen.modelOutput);
+            gen.itemModelOutput.accept(ModMaterials.SINEW, ItemModelUtils.plainModel(modelId));
+        }
         // 唱片（纹理在 item/records/ 下）
         generateFlatModels(gen, "records",
                         ModRecordItems.RECORD_DESCENT, ModRecordItems.RECORD_LEGENDS,
