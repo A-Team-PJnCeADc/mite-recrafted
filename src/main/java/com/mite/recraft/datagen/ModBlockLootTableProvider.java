@@ -56,5 +56,10 @@ public class ModBlockLootTableProvider extends FabricBlockLootSubProvider {
                             .include(DataComponents.DAMAGE)
                             .build()));
         }
+
+        // MITE 熔炉
+        for (Block furnace : com.mite.recraft.block.furnace.ModFurnaceRegistry.FURNACE_BLOCKS) {
+            dropSelf(furnace);
+        }
     }
 }

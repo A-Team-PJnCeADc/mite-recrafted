@@ -142,6 +142,9 @@ public class ModModelProvider extends FabricModelProvider {
 
         // 箱子
         generateStrongboxModels(gen);
+
+        // MITE 熔炉
+        generateFurnaceModels(gen);
     }
 
     @Override
@@ -833,6 +836,52 @@ public class ModModelProvider extends FabricModelProvider {
             } catch (java.io.IOException e) {
                 throw new RuntimeException("Failed to write blockstate for " + type.registryId, e);
             }
+        }
+    }
+
+    /** Generate MITE furnace blockstate + block model + item model */
+    private void generateFurnaceModels(BlockModelGenerators gen) {
+        var modId = MiteRecrafted.MOD_ID;
+        for (int i = 0; i < com.mite.recraft.block.furnace.FurnaceTier.VALUES.length; i++) {
+            var tier = com.mite.recraft.block.furnace.FurnaceTier.VALUES[i];
+            Block block = com.mite.recraft.block.furnace.ModFurnaceRegistry.FURNACE_BLOCKS.get(i);
+            if (block == null) continue;
+
+            // Textures are in block/furnace/<material>/{front_off,front_on,side,top}.png
+            var prefix = "block/furnace/" + tier.textureBase + "/";
+
+            // Create unlit model
+            var unlitMap = TextureMapping.orientableCubeOnlyTop(block);
+            unlitMap = unlitMap
+                    .put(TextureSlot.FRONT, new Material(Identifier.fromNamespaceAndPath(modId, prefix + "front_off")))
+                    .put(TextureSlot.SIDE, new Material(Identifier.fromNamespaceAndPath(modId, prefix + "side")))
+                    .put(TextureSlot.TOP, new Material(Identifier.fromNamespaceAndPath(modId, prefix + "top")))
+                    .put(TextureSlot.BOTTOM, new Material(Identifier.fromNamespaceAndPath(modId, prefix + "top")));
+            var unlitModel = ModelTemplates.CUBE_ORIENTABLE.create(block, unlitMap, gen.modelOutput);
+
+            // Create lit model (front_on replaces front_off)
+            var litMap = TextureMapping.orientableCubeOnlyTop(block);
+            litMap = litMap
+                    .put(TextureSlot.FRONT, new Material(Identifier.fromNamespaceAndPath(modId, prefix + "front_on")))
+                    .put(TextureSlot.SIDE, new Material(Identifier.fromNamespaceAndPath(modId, prefix + "side")))
+                    .put(TextureSlot.TOP, new Material(Identifier.fromNamespaceAndPath(modId, prefix + "top")))
+                    .put(TextureSlot.BOTTOM, new Material(Identifier.fromNamespaceAndPath(modId, prefix + "top")));
+            var litModel = ModelTemplates.CUBE_ORIENTABLE.createWithSuffix(block, "_on", litMap, gen.modelOutput);
+
+            // Blockstate: dispatch LIT (unlit/lit)
+            gen.blockStateOutput.accept(
+                    net.minecraft.client.data.models.blockstates.MultiVariantGenerator.dispatch(block)
+                            .with(net.minecraft.client.data.models.blockstates.PropertyDispatch.initial(
+                                    net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT)
+                                    .generate(lit -> {
+                                        var modelId = lit ? litModel : unlitModel;
+                                        return new net.minecraft.client.data.models.MultiVariant(
+                                                net.minecraft.util.random.WeightedList.of(
+                                                        new net.minecraft.client.renderer.block.dispatch.Variant(modelId)));
+                                    }))
+            );
+
+            gen.registerSimpleItemModel(block, unlitModel);
         }
     }
 

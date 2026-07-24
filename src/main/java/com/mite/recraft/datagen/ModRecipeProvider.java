@@ -449,6 +449,38 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .requires(ModFoodItems.WATER_BOWL)
                         .unlockedBy(getHasName(Items.COOKED_CHICKEN), has(Items.COOKED_CHICKEN))
                         .save(output);
+
+                // ============ 熔炉配方 ============
+                // 粘土熔炉：4 粘土块
+                shaped(RecipeCategory.DECORATIONS, com.mite.recraft.block.furnace.ModFurnaceRegistry.FURNACE_BLOCKS.get(0), 1)
+                        .pattern("CC").pattern("CC")
+                        .define('C', Items.CLAY)
+                        .unlockedBy(getHasName(Items.CLAY), has(Items.CLAY)).save(output);
+                // 大粘土烤炉：8 陶瓦
+                shaped(RecipeCategory.DECORATIONS, com.mite.recraft.block.furnace.ModFurnaceRegistry.FURNACE_BLOCKS.get(1), 1)
+                        .pattern("TTT").pattern("T T").pattern("TTT")
+                        .define('T', Items.TERRACOTTA)
+                        .unlockedBy(getHasName(Items.TERRACOTTA), has(Items.TERRACOTTA)).save(output);
+                // 沙石熔炉：8 砂岩
+                shaped(RecipeCategory.DECORATIONS, com.mite.recraft.block.furnace.ModFurnaceRegistry.FURNACE_BLOCKS.get(2), 1)
+                        .pattern("SSS").pattern("S S").pattern("SSS")
+                        .define('S', Items.SANDSTONE)
+                        .unlockedBy(getHasName(Items.SANDSTONE), has(Items.SANDSTONE)).save(output);
+                // 圆石熔炉：8 圆石
+                shaped(RecipeCategory.DECORATIONS, com.mite.recraft.block.furnace.ModFurnaceRegistry.FURNACE_BLOCKS.get(3), 1)
+                        .pattern("CCC").pattern("C C").pattern("CCC")
+                        .define('C', Items.COBBLESTONE)
+                        .unlockedBy(getHasName(Items.COBBLESTONE), has(Items.COBBLESTONE)).save(output);
+                // 黑曜石熔炉：8 黑曜石
+                shaped(RecipeCategory.DECORATIONS, com.mite.recraft.block.furnace.ModFurnaceRegistry.FURNACE_BLOCKS.get(4), 1)
+                        .pattern("OOO").pattern("O O").pattern("OOO")
+                        .define('O', Items.OBSIDIAN)
+                        .unlockedBy(getHasName(Items.OBSIDIAN), has(Items.OBSIDIAN)).save(output);
+                // 地狱岩熔炉：8 地狱岩
+                shaped(RecipeCategory.DECORATIONS, com.mite.recraft.block.furnace.ModFurnaceRegistry.FURNACE_BLOCKS.get(5), 1)
+                        .pattern("NNN").pattern("N N").pattern("NNN")
+                        .define('N', Items.NETHERRACK)
+                        .unlockedBy(getHasName(Items.NETHERRACK), has(Items.NETHERRACK)).save(output);
             }
 
             void bucket(ItemLike ingot, Item result) {

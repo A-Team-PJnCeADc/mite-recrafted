@@ -178,6 +178,14 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
         // 物品标签翻译
         tb.add("tag.item.mite-recrafted.water_buckets", "水桶");
         tb.add("tag.item.mite-recrafted.strings", "线");
+
+        // 熔炉界面标题
+        tb.add("container.clay_oven", "粘土熔炉");
+        tb.add("container.large_clay_oven", "大粘土烤炉");
+        tb.add("container.sandstone_furnace", "沙石熔炉");
+        tb.add("container.stone_furnace", "圆石熔炉");
+        tb.add("container.obsidian_furnace", "黑曜石熔炉");
+        tb.add("container.netherrack_furnace", "地狱岩熔炉");
     }
 
     private String buildMaterialName(String id) {
@@ -255,6 +263,17 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             String mat = id.substring(0, id.length() - "_strongbox".length());
             String cnName = MATERIAL_NAMES.getOrDefault(mat, mat);
             return cnName + "箱子";
+        }
+
+        // 熔炉/烤炉
+        if (id.endsWith("_furnace") || id.endsWith("_oven")) {
+            if (id.equals("stone_furnace")) return "圆石熔炉";
+            if (id.equals("sandstone_furnace")) return "沙石熔炉";
+            if (id.equals("clay_oven")) return "粘土熔炉";
+            if (id.equals("large_clay_oven")) return "大粘土烤炉";
+            if (id.equals("obsidian_furnace")) return "黑曜石熔炉";
+            if (id.equals("netherrack_furnace")) return "地狱岩熔炉";
+            return net.minecraft.world.item.Items.AIR.getDescriptionId(); // fallback
         }
 
         return null;

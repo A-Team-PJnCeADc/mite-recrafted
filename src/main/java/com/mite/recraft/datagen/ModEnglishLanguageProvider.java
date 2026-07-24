@@ -168,6 +168,14 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
         // Item tag translations
         tb.add("tag.item.mite-recrafted.water_buckets", "Water Buckets");
         tb.add("tag.item.mite-recrafted.strings", "Strings");
+
+        // Furnace container titles
+        tb.add("container.clay_oven", "Clay Oven");
+        tb.add("container.large_clay_oven", "Large Clay Oven");
+        tb.add("container.sandstone_furnace", "Sandstone Furnace");
+        tb.add("container.stone_furnace", "Stone Furnace");
+        tb.add("container.obsidian_furnace", "Obsidian Furnace");
+        tb.add("container.netherrack_furnace", "Netherrack Furnace");
     }
 
     private String buildMaterialName(String id) {

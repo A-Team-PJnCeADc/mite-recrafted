@@ -20,6 +20,8 @@
 		"ChestCompostMixin",
 		"StrongboxOwnContainerMixin",
 		"EdibleOverrideUseMixin",
+		"MiteFurnaceRecipeFilterMixin",
+		"AccessorFurnaceBlockEntity",
 		"RecipeManagerMixin",
 		"LeavesDropMixin",
 		"EntityOnionDropMixin"

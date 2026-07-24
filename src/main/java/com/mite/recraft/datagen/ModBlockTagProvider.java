@@ -68,6 +68,10 @@ public class ModBlockTagProvider extends FabricTagsProvider.BlockTagsProvider {
         pickaxe.add(key(ChestTypes.CRYSTAL.getBlock()));
         pickaxe.add(key(ChestTypes.OBSIDIAN.getBlock()));
         pickaxe.add(key(ChestTypes.NETHERITE.getBlock()));
+        // MITE 熔炉
+        for (var furnace : com.mite.recraft.block.furnace.ModFurnaceRegistry.FURNACE_BLOCKS) {
+            pickaxe.add(key(furnace));
+        }
 
         // 原版 needs 标签
         tag(BlockTags.NEEDS_STONE_TOOL);
