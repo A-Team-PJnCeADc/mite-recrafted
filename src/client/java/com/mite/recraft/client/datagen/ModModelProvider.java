@@ -140,7 +140,7 @@ public class ModModelProvider extends FabricModelProvider {
         // 金属砧
         generateAnvilModels(gen);
 
-        // 保险箱
+        // 箱子
         generateStrongboxModels(gen);
     }
 
