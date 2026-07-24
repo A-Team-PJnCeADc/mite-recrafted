@@ -36,7 +36,6 @@ public class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
         tag(repairs("repairs_mithril")).add(key(ModMaterials.MITHRIL_NUGGET));
         tag(repairs("repairs_adamantium")).add(key(ModMaterials.ADAMANTIUM_NUGGET));
         tag(repairs("repairs_gold")).add(key(Items.GOLD_NUGGET));
-        tag(repairs("repairs_rusted_iron")).add(key(ModMaterials.IRON_NUGGET));
 
         tag(repairs("repairs_flint")).add(key(Items.FLINT));
         tag(repairs("repairs_obsidian")).add(key(Items.OBSIDIAN));

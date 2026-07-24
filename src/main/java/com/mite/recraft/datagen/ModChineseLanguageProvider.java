@@ -143,6 +143,15 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (cnName != null) tb.add(key, cnName);
         }
 
+        // 所有护甲翻译
+        for (Item item : ModItems.getArmors()) {
+            String key = item.getDescriptionId();
+            if (!key.startsWith("item.mite-recrafted.")) continue;
+            String id = key.substring("item.mite-recrafted.".length());
+            String cnName = buildArmorName(id);
+            if (cnName != null) tb.add(key, cnName);
+        }
+
         // 物品标签翻译 (repairs_*)
         String[][] tagMats = {
                 {"copper", "铜"}, {"silver", "银"}, {"gold", "金"},
@@ -186,6 +195,10 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
         tb.add("container.stone_furnace", "圆石熔炉");
         tb.add("container.obsidian_furnace", "黑曜石熔炉");
         tb.add("container.netherrack_furnace", "地狱岩熔炉");
+
+        // 工作台品质显示
+        tb.add("gui.mite-recraft.workbench.quality_prefix", "%s的%s");
+        tb.add("gui.mite-recraft.workbench.xp_cost", "合成花费: %d级");
     }
 
     private String buildMaterialName(String id) {
@@ -287,6 +300,36 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (id.equals(mat + "_water_bucket")) return "装满水的" + name + "桶";
             if (id.equals(mat + "_lava_bucket")) return "装满岩浆的" + name + "桶";
             if (id.equals(mat + "_stone_bucket")) return "装满石头的" + name + "桶";
+        }
+        return null;
+    }
+
+    private String buildArmorName(String id) {
+        for (var entry : MATERIAL_NAMES.entrySet()) {
+            String mat = entry.getKey();
+            String name = entry.getValue();
+            String prefix;
+            String piece;
+            boolean chainmail = false;
+            if (id.startsWith(mat + "_chainmail_")) {
+                chainmail = true;
+                prefix = mat + "_chainmail_";
+            } else if (id.startsWith(mat + "_")) {
+                prefix = mat + "_";
+            } else {
+                continue;
+            }
+            piece = id.substring(prefix.length());
+            String pieceName = switch (piece) {
+                case "helmet" -> "头盔";
+                case "chestplate" -> "胸甲";
+                case "leggings" -> "护腿";
+                case "boots" -> "靴子";
+                case "horse_armor" -> "马铠";
+                default -> null;
+            };
+            if (pieceName == null) continue;
+            return chainmail ? name + "锁链" + pieceName : name + pieceName;
         }
         return null;
     }

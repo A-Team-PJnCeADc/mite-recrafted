@@ -24,7 +24,8 @@
 		"AccessorFurnaceBlockEntity",
 		"RecipeManagerMixin",
 		"LeavesDropMixin",
-		"EntityOnionDropMixin"
+		"EntityOnionDropMixin",
+		"ItemStackQualityNameMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

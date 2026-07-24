@@ -1,6 +1,7 @@
 package com.mite.recraft.block.anvil;
 
 import com.mite.recraft.component.ModDataComponents;
+import com.mite.recraft.item.moditems.armor.ModArmorItem;
 import com.mite.recraft.mixin.AnvilMenuCostAccessor;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -31,25 +32,38 @@ public class ModAnvilMenu extends AnvilMenu {
     @Override
     public void createResult() {
         canRepair = false;
-        ItemStack tool = inputSlots.getItem(0);
+        ItemStack target = inputSlots.getItem(0);
         ItemStack material = inputSlots.getItem(1);
 
-        if (tool.isEmpty() || material.isEmpty()) {
+        if (target.isEmpty() || material.isEmpty()) {
             resultSlots.setItem(0, ItemStack.EMPTY);
             return;
         }
 
-        Integer numComponents = tool.get(ModDataComponents.TOOL_COMPONENTS);
-        if (numComponents == null || numComponents <= 0) {
+        // 部件数：工具读 TOOL_COMPONENTS，护甲读 ModArmorItem.numComponents()
+        int numComponents;
+        String repairTagName = null;
+        Float toolTier = null;
+
+        Integer nc = target.get(ModDataComponents.TOOL_COMPONENTS);
+        if (nc != null && nc > 0) {
+            numComponents = nc;
+            repairTagName = target.get(ModDataComponents.TOOL_REPAIR_TAG);
+            toolTier = target.get(ModDataComponents.TOOL_MATERIAL_TIER);
+        } else if (target.getItem() instanceof ModArmorItem armor) {
+            numComponents = armor.numComponents();
+            repairTagName = armor.material().repairTagName();
+            toolTier = armor.material().durabilityCoefficient();
+        } else {
             super.createResult();
             return;
         }
 
-        // 相同 MITE 工具修复（简单耐久叠加，无增益）
-        if (tool.getItem() == material.getItem()) {
-            int maxDamage = tool.getMaxDamage();
-            int toolDamage = tool.getDamageValue();
-            if (toolDamage <= 0) {
+        // 相同物品修复（简单耐久叠加，无增益）
+        if (target.getItem() == material.getItem()) {
+            int maxDamage = target.getMaxDamage();
+            int targetDamage = target.getDamageValue();
+            if (targetDamage <= 0) {
                 resultSlots.setItem(0, ItemStack.EMPTY);
                 return;
             }
@@ -58,8 +72,8 @@ public class ModAnvilMenu extends AnvilMenu {
                 resultSlots.setItem(0, ItemStack.EMPTY);
                 return;
             }
-            int newDamage = Math.max(0, toolDamage - matRemaining);
-            ItemStack result = tool.copyWithCount(1);
+            int newDamage = Math.max(0, targetDamage - matRemaining);
+            ItemStack result = target.copyWithCount(1);
             result.setDamageValue(newDamage);
             resultSlots.setItem(0, result);
             canRepair = true;
@@ -69,57 +83,51 @@ public class ModAnvilMenu extends AnvilMenu {
             return;
         }
 
-        // 检查砧等级是否 ≥ 工具等级
-        Float toolTier = tool.get(ModDataComponents.TOOL_MATERIAL_TIER);
-        if (toolTier == null) {
-            resultSlots.setItem(0, ItemStack.EMPTY);
-            return;
-        }
-        float anvilTier = getBlockAnvil().getMaterialTier();
-        if (toolTier > anvilTier) {
-            resultSlots.setItem(0, ItemStack.EMPTY);
-            return;
+        // 需要检查砧等级
+        if (toolTier != null) {
+            float anvilTier = getBlockAnvil().getMaterialTier();
+            if (toolTier > anvilTier) {
+                resultSlots.setItem(0, ItemStack.EMPTY);
+                return;
+            }
         }
 
-        // 检查修理材料是否正确（工具只能用对应材料粒维修）
-        String tagName = tool.get(ModDataComponents.TOOL_REPAIR_TAG);
-        if (tagName != null) {
+        // 检查修理材料匹配
+        if (repairTagName != null) {
             TagKey<Item> repairTag = TagKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath("mite-recrafted", tagName));
+                    Identifier.fromNamespaceAndPath("mite-recrafted", repairTagName));
             if (!material.is(repairTag)) {
                 resultSlots.setItem(0, ItemStack.EMPTY);
                 return;
             }
         }
 
-        int damage = tool.getDamageValue();
+        int damage = target.getDamageValue();
         if (damage <= 0) {
             resultSlots.setItem(0, ItemStack.EMPTY);
             return;
         }
 
         int maxNeeded = numComponents * 2;
-        Integer maxDamage = tool.get(DataComponents.MAX_DAMAGE);
+        Integer maxDamage = target.get(DataComponents.MAX_DAMAGE);
         if (maxDamage == null || maxDamage <= 0) {
             resultSlots.setItem(0, ItemStack.EMPTY);
             return;
         }
 
         int perNugget = maxDamage / maxNeeded;
-        // 实际需要的粒数 = 向上取整(damage / 每粒修复量)
         int reallyNeeded = (int) Math.ceil((double) damage / perNugget);
-        reallyNeeded = Math.max(reallyNeeded, 1); // 至少 1 粒
+        reallyNeeded = Math.max(reallyNeeded, 1);
         int used = Math.min(reallyNeeded, Math.min(material.getCount(), maxNeeded));
         int newDamage = Math.max(0, damage - perNugget * used);
 
-        ItemStack result = tool.copy();
+        ItemStack result = target.copy();
         result.setDamageValue(newDamage);
         resultSlots.setItem(0, result);
         canRepair = true;
-        lastResult = result.copy();  // 保存用于 shift-click 时 fallback
-        lastUsed = used;  // 传递给 onTake
+        lastResult = result.copy();
+        lastUsed = used;
 
-        // 设置 cost（用于 GUI 和经验消耗）
         ((AnvilMenuCostAccessor) this).getCost().set(used);
     }
 

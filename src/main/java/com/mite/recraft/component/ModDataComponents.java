@@ -63,5 +63,14 @@ public class ModDataComponents {
                     .build()
     );
 
+    /** 基础制作难度 = material.durability × 100.0 × numComponents，用于品质调整和 XP 消耗计算 */
+    public static final DataComponentType<Float> CRAFTING_DIFFICULTY = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            Identifier.fromNamespaceAndPath(MOD_ID, "crafting_difficulty"),
+            DataComponentType.<Float>builder()
+                    .persistent(Codec.FLOAT)
+                    .build()
+    );
+
     public static void init() {}
 }

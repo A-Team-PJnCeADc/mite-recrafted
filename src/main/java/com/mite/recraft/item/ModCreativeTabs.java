@@ -43,6 +43,9 @@ public class ModCreativeTabs {
                 for (Item item : ModItems.getFoods()) {
                     entries.accept(item);
                 }
+                for (Item item : ModItems.getArmors()) {
+                    entries.accept(item);
+                }
             })
             .build();
 

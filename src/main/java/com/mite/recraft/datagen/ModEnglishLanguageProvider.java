@@ -133,6 +133,14 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
             if (enName != null) tb.add(key, enName);
         }
 
+        // Armor
+        for (Item item : ModItems.getArmors()) {
+            String key = item.getDescriptionId();
+            if (!key.startsWith("item.mite-recrafted.")) continue;
+            String id = key.substring("item.mite-recrafted.".length());
+            tb.add(key, buildArmorName(id));
+        }
+
         // Item tag translations (repairs_*)
         String[][] tagMats = {
                 {"copper", "Copper"}, {"silver", "Silver"}, {"gold", "Gold"},
@@ -176,6 +184,10 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
         tb.add("container.stone_furnace", "Stone Furnace");
         tb.add("container.obsidian_furnace", "Obsidian Furnace");
         tb.add("container.netherrack_furnace", "Netherrack Furnace");
+
+        // Workbench quality display
+        tb.add("gui.mite-recraft.workbench.quality_prefix", "%s %s");
+        tb.add("gui.mite-recraft.workbench.xp_cost", "Crafting Cost: %d level(s)");
     }
 
     private String buildMaterialName(String id) {
@@ -225,6 +237,22 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
             return materialDisplay(mat) + " Bucket";
         }
         return materialDisplay(id);
+    }
+
+    /** e.g. "copper_chainmail_helmet" → "Copper Chainmail Helmet" */
+    private String buildArmorName(String id) {
+        // Try matching chainmail first
+        for (int i = 0; i < id.length(); i++) {
+            if (id.startsWith("_chainmail_", i)) {
+                String material = id.substring(0, i);
+                String piece = id.substring(i + "_chainmail_".length());
+                return materialDisplay(material) + " Chainmail " + materialDisplay(piece);
+            }
+        }
+        // Regular armor: {material}_{piece}
+        int lastUnderscore = id.lastIndexOf('_');
+        if (lastUnderscore < 0) return materialDisplay(id);
+        return materialDisplay(id.substring(0, lastUnderscore)) + " " + materialDisplay(id.substring(lastUnderscore + 1));
     }
 
     @Override

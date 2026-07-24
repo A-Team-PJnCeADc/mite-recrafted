@@ -8,6 +8,7 @@ import com.mite.recraft.block.modblock.ModMetalBlocks;
 import com.mite.recraft.item.material.ModMaterials;
 import com.mite.recraft.item.moditems.bucket.ModBucketItems;
 import com.mite.recraft.item.moditems.food.ModFoodItems;
+import com.mite.recraft.item.moditems.armor.ModArmorItems;
 import com.mite.recraft.item.tools.toolItem.*;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -54,7 +55,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 axe(ModMaterials.COPPER_INGOT, AexItems.COPPER_AXE);
                 axe(ModMaterials.SILVER_INGOT, AexItems.SILVER_AXE);
                 axe(ModMaterials.GOLD_INGOT, AexItems.GOLD_AXE);
-                axe(ModMaterials.IRON_INGOT, AexItems.RUSTED_IRON_AXE);
                 axe(ModMaterials.IRON_INGOT, AexItems.IRON_AXE);
                 axe(ModMaterials.ANCIENT_METAL_INGOT, AexItems.ANCIENT_METAL_AXE);
                 axe(ModMaterials.MITHRIL_INGOT, AexItems.MITHRIL_AXE);
@@ -68,7 +68,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 hatchet(ModMaterials.COPPER_INGOT, HatchetItems.COPPER_HATCHET);
                 hatchet(ModMaterials.SILVER_INGOT, HatchetItems.SILVER_HATCHET);
                 hatchet(ModMaterials.GOLD_INGOT, HatchetItems.GOLD_HATCHET);
-                hatchet(ModMaterials.IRON_INGOT, HatchetItems.RUSTED_IRON_HATCHET);
                 hatchet(ModMaterials.IRON_INGOT, HatchetItems.IRON_HATCHET);
                 hatchet(ModMaterials.ANCIENT_METAL_INGOT, HatchetItems.ANCIENT_METAL_HATCHET);
                 hatchet(ModMaterials.MITHRIL_INGOT, HatchetItems.MITHRIL_HATCHET);
@@ -78,7 +77,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 battleAxe(ModMaterials.COPPER_INGOT, BattleAxeItems.COPPER_BATTLE_AXE);
                 battleAxe(ModMaterials.SILVER_INGOT, BattleAxeItems.SILVER_BATTLE_AXE);
                 battleAxe(ModMaterials.GOLD_INGOT, BattleAxeItems.GOLD_BATTLE_AXE);
-                battleAxe(ModMaterials.IRON_INGOT, BattleAxeItems.RUSTED_IRON_BATTLE_AXE);
                 battleAxe(ModMaterials.IRON_INGOT, BattleAxeItems.IRON_BATTLE_AXE);
                 battleAxe(ModMaterials.ANCIENT_METAL_INGOT, BattleAxeItems.ANCIENT_METAL_BATTLE_AXE);
                 battleAxe(ModMaterials.MITHRIL_INGOT, BattleAxeItems.MITHRIL_BATTLE_AXE);
@@ -88,7 +86,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 warHammer(ModMaterials.COPPER_INGOT, WarHammerItems.COPPER_WAR_HAMMER);
                 warHammer(ModMaterials.SILVER_INGOT, WarHammerItems.SILVER_WAR_HAMMER);
                 warHammer(ModMaterials.GOLD_INGOT, WarHammerItems.GOLD_WAR_HAMMER);
-                warHammer(ModMaterials.IRON_INGOT, WarHammerItems.RUSTED_IRON_WAR_HAMMER);
                 warHammer(ModMaterials.IRON_INGOT, WarHammerItems.IRON_WAR_HAMMER);
                 warHammer(ModMaterials.ANCIENT_METAL_INGOT, WarHammerItems.ANCIENT_METAL_WAR_HAMMER);
                 warHammer(ModMaterials.MITHRIL_INGOT, WarHammerItems.MITHRIL_WAR_HAMMER);
@@ -98,7 +95,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 pickaxe(ModMaterials.COPPER_INGOT, PickaxeItems.COPPER_PICKAXE);
                 pickaxe(ModMaterials.SILVER_INGOT, PickaxeItems.SILVER_PICKAXE);
                 pickaxe(ModMaterials.GOLD_INGOT, PickaxeItems.GOLD_PICKAXE);
-                pickaxe(ModMaterials.IRON_INGOT, PickaxeItems.RUSTED_IRON_PICKAXE);
                 pickaxe(ModMaterials.IRON_INGOT, PickaxeItems.IRON_PICKAXE);
                 pickaxe(ModMaterials.ANCIENT_METAL_INGOT, PickaxeItems.ANCIENT_METAL_PICKAXE);
                 pickaxe(ModMaterials.MITHRIL_INGOT, PickaxeItems.MITHRIL_PICKAXE);
@@ -110,7 +106,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 shovel(ModMaterials.COPPER_INGOT, ShovelItems.COPPER_SHOVEL);
                 shovel(ModMaterials.SILVER_INGOT, ShovelItems.SILVER_SHOVEL);
                 shovel(ModMaterials.GOLD_INGOT, ShovelItems.GOLD_SHOVEL);
-                shovel(ModMaterials.IRON_INGOT, ShovelItems.RUSTED_IRON_SHOVEL);
                 shovel(ModMaterials.IRON_INGOT, ShovelItems.IRON_SHOVEL);
                 shovel(ModMaterials.ANCIENT_METAL_INGOT, ShovelItems.ANCIENT_METAL_SHOVEL);
                 shovel(ModMaterials.MITHRIL_INGOT, ShovelItems.MITHRIL_SHOVEL);
@@ -120,7 +115,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 hoe(ModMaterials.COPPER_INGOT, HoeItems.COPPER_HOE);
                 hoe(ModMaterials.SILVER_INGOT, HoeItems.SILVER_HOE);
                 hoe(ModMaterials.GOLD_INGOT, HoeItems.GOLD_HOE);
-                hoe(ModMaterials.IRON_INGOT, HoeItems.RUSTED_IRON_HOE);
                 hoe(ModMaterials.IRON_INGOT, HoeItems.IRON_HOE);
                 hoe(ModMaterials.ANCIENT_METAL_INGOT, HoeItems.ANCIENT_METAL_HOE);
                 hoe(ModMaterials.MITHRIL_INGOT, HoeItems.MITHRIL_HOE);
@@ -139,7 +133,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 mattock(ModMaterials.COPPER_INGOT, MattockItems.COPPER_MATTOCK);
                 mattock(ModMaterials.SILVER_INGOT, MattockItems.SILVER_MATTOCK);
                 mattock(ModMaterials.GOLD_INGOT, MattockItems.GOLD_MATTOCK);
-                mattock(ModMaterials.IRON_INGOT, MattockItems.RUSTED_IRON_MATTOCK);
                 mattock(ModMaterials.IRON_INGOT, MattockItems.IRON_MATTOCK);
                 mattock(ModMaterials.ANCIENT_METAL_INGOT, MattockItems.ANCIENT_METAL_MATTOCK);
                 mattock(ModMaterials.MITHRIL_INGOT, MattockItems.MITHRIL_MATTOCK);
@@ -149,7 +142,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 shears(ModMaterials.COPPER_INGOT, ShearsItems.COPPER_SHEARS);
                 shears(ModMaterials.SILVER_INGOT, ShearsItems.SILVER_SHEARS);
                 shears(ModMaterials.GOLD_INGOT, ShearsItems.GOLD_SHEARS);
-                shears(ModMaterials.IRON_INGOT, ShearsItems.RUSTED_IRON_SHEARS);
                 shears(ModMaterials.ANCIENT_METAL_INGOT, ShearsItems.ANCIENT_METAL_SHEARS);
                 shears(ModMaterials.MITHRIL_INGOT, ShearsItems.MITHRIL_SHEARS);
                 shears(ModMaterials.ADAMANTIUM_INGOT, ShearsItems.ADAMANTIUM_SHEARS);
@@ -170,7 +162,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 sword(ModMaterials.GOLD_INGOT, SwordItems.GOLD_SWORD);
                 sword(ModMaterials.IRON_INGOT, SwordItems.IRON_SWORD);
                 sword(ModMaterials.SILVER_INGOT, SwordItems.SILVER_SWORD);
-                sword(ModMaterials.IRON_INGOT, SwordItems.RUSTED_IRON_SWORD);
                 sword(ModMaterials.ANCIENT_METAL_INGOT, SwordItems.ANCIENT_METAL_SWORD);
                 sword(ModMaterials.MITHRIL_INGOT, SwordItems.MITHRIL_SWORD);
                 sword(ModMaterials.ADAMANTIUM_INGOT, SwordItems.ADAMANTIUM_SWORD);
@@ -179,7 +170,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 dagger(ModMaterials.COPPER_INGOT, DaggerItems.COPPER_DAGGER);
                 dagger(ModMaterials.SILVER_INGOT, DaggerItems.SILVER_DAGGER);
                 dagger(ModMaterials.GOLD_INGOT, DaggerItems.GOLD_DAGGER);
-                dagger(ModMaterials.IRON_INGOT, DaggerItems.RUSTED_IRON_DAGGER);
                 dagger(ModMaterials.IRON_INGOT, DaggerItems.IRON_DAGGER);
                 dagger(ModMaterials.ANCIENT_METAL_INGOT, DaggerItems.ANCIENT_METAL_DAGGER);
                 dagger(ModMaterials.MITHRIL_INGOT, DaggerItems.MITHRIL_DAGGER);
@@ -195,7 +185,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 arrow(ModMaterials.COPPER_NUGGET, ArrowItems.COPPER_ARROW);
                 arrow(ModMaterials.SILVER_NUGGET, ArrowItems.SILVER_ARROW);
                 arrow(Items.GOLD_NUGGET, ArrowItems.GOLD_ARROW);
-                arrow(ModMaterials.IRON_NUGGET, ArrowItems.RUSTED_IRON_ARROW);
                 arrow(ModMaterials.IRON_NUGGET, ArrowItems.IRON_ARROW);
                 arrow(ModMaterials.ANCIENT_METAL_NUGGET, ArrowItems.ANCIENT_METAL_ARROW);
                 arrow(ModMaterials.MITHRIL_NUGGET, ArrowItems.MITHRIL_ARROW);
@@ -481,6 +470,43 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .pattern("NNN").pattern("N N").pattern("NNN")
                         .define('N', Items.NETHERRACK)
                         .unlockedBy(getHasName(Items.NETHERRACK), has(Items.NETHERRACK)).save(output);
+
+                // ============ 护甲 (普通: 锭, 锁链: 锁链物品) ============
+                armorRecipes(ModMaterials.COPPER_INGOT, ModMaterials.COPPER_CHAIN,
+                        ModArmorItems.COPPER_HELMET, ModArmorItems.COPPER_CHESTPLATE,
+                        ModArmorItems.COPPER_LEGGINGS, ModArmorItems.COPPER_BOOTS,
+                        ModArmorItems.COPPER_CHAINMAIL_HELMET, ModArmorItems.COPPER_CHAINMAIL_CHESTPLATE,
+                        ModArmorItems.COPPER_CHAINMAIL_LEGGINGS, ModArmorItems.COPPER_CHAINMAIL_BOOTS);
+                armorRecipes(ModMaterials.SILVER_INGOT, ModMaterials.SILVER_CHAIN,
+                        ModArmorItems.SILVER_HELMET, ModArmorItems.SILVER_CHESTPLATE,
+                        ModArmorItems.SILVER_LEGGINGS, ModArmorItems.SILVER_BOOTS,
+                        ModArmorItems.SILVER_CHAINMAIL_HELMET, ModArmorItems.SILVER_CHAINMAIL_CHESTPLATE,
+                        ModArmorItems.SILVER_CHAINMAIL_LEGGINGS, ModArmorItems.SILVER_CHAINMAIL_BOOTS);
+                armorRecipes(ModMaterials.GOLD_INGOT, ModMaterials.GOLDEN_CHAIN,
+                        ModArmorItems.GOLD_HELMET, ModArmorItems.GOLD_CHESTPLATE,
+                        ModArmorItems.GOLD_LEGGINGS, ModArmorItems.GOLD_BOOTS,
+                        ModArmorItems.GOLD_CHAINMAIL_HELMET, ModArmorItems.GOLD_CHAINMAIL_CHESTPLATE,
+                        ModArmorItems.GOLD_CHAINMAIL_LEGGINGS, ModArmorItems.GOLD_CHAINMAIL_BOOTS);
+                armorRecipes(ModMaterials.IRON_INGOT, ModMaterials.IRON_CHAIN,
+                        ModArmorItems.IRON_HELMET, ModArmorItems.IRON_CHESTPLATE,
+                        ModArmorItems.IRON_LEGGINGS, ModArmorItems.IRON_BOOTS,
+                        ModArmorItems.IRON_CHAINMAIL_HELMET, ModArmorItems.IRON_CHAINMAIL_CHESTPLATE,
+                        ModArmorItems.IRON_CHAINMAIL_LEGGINGS, ModArmorItems.IRON_CHAINMAIL_BOOTS);
+                armorRecipes(ModMaterials.ANCIENT_METAL_INGOT, ModMaterials.ANCIENT_METAL_CHAIN,
+                        ModArmorItems.ANCIENT_METAL_HELMET, ModArmorItems.ANCIENT_METAL_CHESTPLATE,
+                        ModArmorItems.ANCIENT_METAL_LEGGINGS, ModArmorItems.ANCIENT_METAL_BOOTS,
+                        ModArmorItems.ANCIENT_METAL_CHAINMAIL_HELMET, ModArmorItems.ANCIENT_METAL_CHAINMAIL_CHESTPLATE,
+                        ModArmorItems.ANCIENT_METAL_CHAINMAIL_LEGGINGS, ModArmorItems.ANCIENT_METAL_CHAINMAIL_BOOTS);
+                armorRecipes(ModMaterials.MITHRIL_INGOT, ModMaterials.MITHRIL_CHAIN,
+                        ModArmorItems.MITHRIL_HELMET, ModArmorItems.MITHRIL_CHESTPLATE,
+                        ModArmorItems.MITHRIL_LEGGINGS, ModArmorItems.MITHRIL_BOOTS,
+                        ModArmorItems.MITHRIL_CHAINMAIL_HELMET, ModArmorItems.MITHRIL_CHAINMAIL_CHESTPLATE,
+                        ModArmorItems.MITHRIL_CHAINMAIL_LEGGINGS, ModArmorItems.MITHRIL_CHAINMAIL_BOOTS);
+                armorRecipes(ModMaterials.ADAMANTIUM_INGOT, ModMaterials.ADAMANTIUM_CHAIN,
+                        ModArmorItems.ADAMANTIUM_HELMET, ModArmorItems.ADAMANTIUM_CHESTPLATE,
+                        ModArmorItems.ADAMANTIUM_LEGGINGS, ModArmorItems.ADAMANTIUM_BOOTS,
+                        ModArmorItems.ADAMANTIUM_CHAINMAIL_HELMET, ModArmorItems.ADAMANTIUM_CHAINMAIL_CHESTPLATE,
+                        ModArmorItems.ADAMANTIUM_CHAINMAIL_LEGGINGS, ModArmorItems.ADAMANTIUM_CHAINMAIL_BOOTS);
             }
 
             void bucket(ItemLike ingot, Item result) {
@@ -688,6 +714,54 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .define('B', Items.BOWL)
                         .unlockedBy(getHasName(milkBucket), has(milkBucket))
                         .save(output, BuiltInRegistries.ITEM.getKey(milkBucket.asItem()).getPath() + "_uncraft");
+            }
+
+            // ============ 护甲配方 ============
+
+            /** 一组 8 个护甲配方 (4 普通 + 4 锁链) */
+            void armorRecipes(ItemLike ingot, ItemLike chain,
+                              Item helmet, Item chestplate, Item leggings, Item boots,
+                              Item chainHelmet, Item chainChestplate, Item chainLeggings, Item chainBoots) {
+                helmet(ingot, helmet);
+                chestplate(ingot, chestplate);
+                leggings(ingot, leggings);
+                boots(ingot, boots);
+                helmet(chain, chainHelmet);
+                chestplate(chain, chainChestplate);
+                leggings(chain, chainLeggings);
+                boots(chain, chainBoots);
+            }
+
+            /** 头盔: 5 锭 (顶排 3 + 左右中排 2) */
+            void helmet(ItemLike m, Item result) {
+                shaped(RecipeCategory.COMBAT, result)
+                        .pattern("MMM").pattern("M M")
+                        .define('M', m)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            /** 胸甲: 8 锭 (除顶排中间外全部) */
+            void chestplate(ItemLike m, Item result) {
+                shaped(RecipeCategory.COMBAT, result)
+                        .pattern("M M").pattern("MMM").pattern("MMM")
+                        .define('M', m)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            /** 护腿: 7 锭 (除顶排中间 + 底排中间外全部) */
+            void leggings(ItemLike m, Item result) {
+                shaped(RecipeCategory.COMBAT, result)
+                        .pattern("MMM").pattern("M M").pattern("M M")
+                        .define('M', m)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
+            }
+
+            /** 靴子: 4 锭 (左右底排 + 左右中排) */
+            void boots(ItemLike m, Item result) {
+                shaped(RecipeCategory.COMBAT, result)
+                        .pattern("M M").pattern("M M")
+                        .define('M', m)
+                        .unlockedBy(getHasName(m), has(m)).save(output);
             }
         };
     }

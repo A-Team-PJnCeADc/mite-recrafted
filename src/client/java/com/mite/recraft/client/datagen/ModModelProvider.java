@@ -312,6 +312,33 @@ public class ModModelProvider extends FabricModelProvider {
 
         // 食物：碗装食物纹理在 item/bowls/ 下，普通食物在 item/foods/ 下
         generateFoodModels(gen);
+
+        // 护甲：纹理在 item/armor/ 下
+        generateArmorModels(gen);
+    }
+
+    /**
+     * 为所有护甲物品生成 FLAT_ITEM 模型。
+     * 纹理路径: item/armor/{material}_{piece}.png
+     * 锁链: item/armor/{material}_chainmail_{piece}.png
+     */
+    private void generateArmorModels(ItemModelGenerators gen) {
+        String modId = MiteRecrafted.MOD_ID;
+        for (Item item : ModItems.getArmors()) {
+            String itemName = BuiltInRegistries.ITEM.getKey(item).getPath();
+            Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/armor/" + itemName);
+            // 马铠纹理在 item/armor/horse/ 子目录，文件名只用材料名
+            Identifier texId;
+            if (itemName.endsWith("_horse_armor")) {
+                String material = itemName.substring(0, itemName.length() - "_horse_armor".length());
+                texId = Identifier.fromNamespaceAndPath(modId, "item/armor/horse/" + material);
+            } else {
+                texId = Identifier.fromNamespaceAndPath(modId, "item/armor/" + itemName);
+            }
+            ModelTemplates.FLAT_ITEM.create(modelId,
+                    TextureMapping.layer0(new Material(texId)), gen.modelOutput);
+            gen.itemModelOutput.accept(item, ItemModelUtils.plainModel(modelId));
+        }
     }
 
     /**

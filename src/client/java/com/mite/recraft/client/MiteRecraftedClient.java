@@ -20,6 +20,8 @@ public class MiteRecraftedClient implements ClientModInitializer {
     public static volatile int syncedCraftingPeriod;
     public static volatile int syncedCraftingTicks;
     public static volatile float syncedBenchCoefficient = 1.0f;
+    public static volatile int syncedQualityIndex = -1;
+    public static volatile int syncedXpCost = 0;
 
     @Override
     public void onInitializeClient() {
@@ -31,6 +33,8 @@ public class MiteRecraftedClient implements ClientModInitializer {
                     syncedCraftingPeriod = payload.period();
                     syncedCraftingTicks = payload.ticks();
                     syncedBenchCoefficient = payload.benchCoefficient();
+                    syncedQualityIndex = payload.qualityIndex();
+                    syncedXpCost = payload.xpCost();
                 });
 
         // 营养同步：将服务端数据附加到客户端玩家

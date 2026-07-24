@@ -3,6 +3,10 @@ package com.mite.recraft.item;
 import com.mite.recraft.item.material.ModMaterials;
 import com.mite.recraft.item.moditems.ModRecordItems;
 import com.mite.recraft.item.moditems.ManureItems;
+import com.mite.recraft.item.moditems.armor.ModArmorItems;
+import com.mite.recraft.item.moditems.armor.ModArmorRegister;
+import com.mite.recraft.item.moditems.armor.ModEquipmentAssets;
+import com.mite.recraft.item.moditems.armor.ModHorseArmorItems;
 import com.mite.recraft.item.moditems.bucket.ModBucketItems;
 import com.mite.recraft.item.moditems.food.ModFoodItems;
 import com.mite.recraft.item.moditems.strongbox.StrongboxRegistry;
@@ -19,6 +23,7 @@ public class ModItems {
     private static final List<Item> RECORDS = new ArrayList<>();
     private static final List<Item> BUCKETS = new ArrayList<>();
     private static final List<Item> FOODS = new ArrayList<>();
+    private static final List<Item> ARMORS = new ArrayList<>();
 
     public static void addMaterial(Item item) {
         MATERIALS.add(item);
@@ -38,6 +43,10 @@ public class ModItems {
 
     public static void addFood(Item item) {
         FOODS.add(item);
+    }
+
+    public static void addArmor(Item item) {
+        ARMORS.add(item);
     }
 
     public static List<Item> getMaterials() {
@@ -60,6 +69,10 @@ public class ModItems {
         return Collections.unmodifiableList(FOODS);
     }
 
+    public static List<Item> getArmors() {
+        return Collections.unmodifiableList(ARMORS);
+    }
+
     public static void init() {
         ModMaterials.init();
         ModTools.init();
@@ -67,6 +80,10 @@ public class ModItems {
         ModBucketItems.init();
         ManureItems.init();
         ModFoodItems.init();
+        ModArmorItems.init();
+        ModArmorRegister.init();
+        ModHorseArmorItems.init();
+        ModEquipmentAssets.init();
         // Strongboxes
         StrongboxRegistry.register();
     }
