@@ -1,11 +1,14 @@
 package com.mite.recraft.client;
 
 import com.mite.recraft.client.datagen.ModChestAtlasProvider;
+import com.mite.recraft.datagen.ModEnchantmentProvider;
 import com.mite.recraft.client.datagen.ModModelProvider;
 import com.mite.recraft.datagen.*;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
 
 public class MiteRecraftedDataGenerator implements DataGeneratorEntrypoint {
     @Override
@@ -22,5 +25,12 @@ public class MiteRecraftedDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider((output, future) -> new ModSoundProvider(output));
         pack.addProvider(ModJukeboxSongProvider::new);
         pack.addProvider((output, future) -> new ModChestAtlasProvider((FabricPackOutput) output, future));
+        pack.addProvider(ModEnchantmentProvider::new);
+        pack.addProvider(ModEnchantmentTagProvider::new);
+    }
+
+    @Override
+    public void buildRegistry(RegistrySetBuilder registryBuilder) {
+        registryBuilder.add(Registries.ENCHANTMENT, ModEnchantmentProvider::bootstrap);
     }
 }

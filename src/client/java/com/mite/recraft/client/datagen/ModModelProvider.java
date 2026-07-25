@@ -8,6 +8,7 @@ import com.mite.recraft.block.modblock.ModDoorBlocks;
 import com.mite.recraft.block.modblock.ModMetalBlocks;
 import com.mite.recraft.block.workbench.WorkbenchMaterial;
 import com.mite.recraft.client.renderer.item.NockedArrowProperty;
+import com.mite.recraft.client.renderer.item.QuicknessDrawProperty;
 import com.mite.recraft.item.moditems.strongbox.StrongboxType;
 import com.mite.recraft.item.tools.toolItem.AexItems;
 import com.mite.recraft.item.tools.toolItem.BowItems;
@@ -48,7 +49,6 @@ import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.properties.conditional.FishingRodCast;
-import net.minecraft.client.renderer.item.properties.numeric.UseDuration;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.data.CachedOutput;
@@ -494,7 +494,7 @@ public class ModModelProvider extends FabricModelProvider {
             // range_dispatch：拉弓持续时间 → 3 阶段（阈值 0.65 / 0.9，scale=0.05 换算为 0-20 tick）
             // UseDuration(false): 已过时间从 0 到 max，UseDuration(true) 是剩余时间 max→0
             ItemModel.Unbaked onTrue = ItemModelUtils.rangeSelect(
-                    new UseDuration(false), 0.05f,
+                    new QuicknessDrawProperty(), 0.05f,
                     selectStages[0],  // fallback: stage 0
                     ItemModelUtils.override(selectStages[1], 0.65f),
                     ItemModelUtils.override(selectStages[2], 0.9f));

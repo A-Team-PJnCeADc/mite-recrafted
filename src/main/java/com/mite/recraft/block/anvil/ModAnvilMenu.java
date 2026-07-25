@@ -14,6 +14,7 @@ import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -24,6 +25,8 @@ public class ModAnvilMenu extends AnvilMenu {
     private boolean canRepair;
     private int lastUsed;  // createResult 计算的消耗粒数
     private ItemStack lastResult = ItemStack.EMPTY;  // createResult 的结果，用于 shift-click 时取回
+    private boolean usingBook;  // 附魔书模式
+    private boolean sameItemCombine;  // 相同物品合并
 
     public ModAnvilMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
         super(containerId, playerInventory, access);
@@ -32,6 +35,8 @@ public class ModAnvilMenu extends AnvilMenu {
     @Override
     public void createResult() {
         canRepair = false;
+        usingBook = false;
+        sameItemCombine = false;
         ItemStack target = inputSlots.getItem(0);
         ItemStack material = inputSlots.getItem(1);
 
@@ -40,26 +45,46 @@ public class ModAnvilMenu extends AnvilMenu {
             return;
         }
 
+        // 检查砧等级 — 工具/护甲的材料等级不能高于砧
+        Float toolTier = target.get(ModDataComponents.TOOL_MATERIAL_TIER);
+        if (toolTier == null && target.getItem() instanceof ModArmorItem armor) {
+            toolTier = armor.material().durabilityCoefficient();
+        }
+        if (toolTier != null) {
+            float anvilTier = getBlockAnvil().getMaterialTier();
+            if (toolTier > anvilTier) {
+                resultSlots.setItem(0, ItemStack.EMPTY);
+                return;
+            }
+        }
+
+        // 附魔书 → 走原版附魔合并逻辑
+        if (material.is(Items.ENCHANTED_BOOK)) {
+            super.createResult();
+            if (!resultSlots.getItem(0).isEmpty()) {
+                canRepair = true;
+                usingBook = true;
+            }
+            return;
+        }
+
         // 部件数：工具读 TOOL_COMPONENTS，护甲读 ModArmorItem.numComponents()
         int numComponents;
         String repairTagName = null;
-        Float toolTier = null;
 
         Integer nc = target.get(ModDataComponents.TOOL_COMPONENTS);
         if (nc != null && nc > 0) {
             numComponents = nc;
             repairTagName = target.get(ModDataComponents.TOOL_REPAIR_TAG);
-            toolTier = target.get(ModDataComponents.TOOL_MATERIAL_TIER);
         } else if (target.getItem() instanceof ModArmorItem armor) {
             numComponents = armor.numComponents();
             repairTagName = armor.material().repairTagName();
-            toolTier = armor.material().durabilityCoefficient();
         } else {
             super.createResult();
             return;
         }
 
-        // 相同物品修复（简单耐久叠加，无增益）
+        // 相同物品修复 — 简单耐久叠加（无修复加成）
         if (target.getItem() == material.getItem()) {
             int maxDamage = target.getMaxDamage();
             int targetDamage = target.getDamageValue();
@@ -73,35 +98,30 @@ public class ModAnvilMenu extends AnvilMenu {
                 return;
             }
             int newDamage = Math.max(0, targetDamage - matRemaining);
-            ItemStack result = target.copyWithCount(1);
+            ItemStack result = target.copy();
+            // 若两件都有附魔，保留原版合并结果中的附魔
+            if (target.isEnchanted() || material.isEnchanted()) {
+                super.createResult();
+                result = resultSlots.getItem(0);
+                if (result.isEmpty()) return;
+            }
             result.setDamageValue(newDamage);
             resultSlots.setItem(0, result);
             canRepair = true;
-            lastResult = result.copy();
-            lastUsed = 1;
-            ((AnvilMenuCostAccessor) this).getCost().set(1);
+            sameItemCombine = true;
             return;
         }
 
-        // 需要检查砧等级
-        if (toolTier != null) {
-            float anvilTier = getBlockAnvil().getMaterialTier();
-            if (toolTier > anvilTier) {
-                resultSlots.setItem(0, ItemStack.EMPTY);
-                return;
-            }
-        }
-
-        // 检查修理材料匹配
+        // 修理材料检查
         if (repairTagName != null) {
-            TagKey<Item> repairTag = TagKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath("mite-recrafted", repairTagName));
+            TagKey<Item> repairTag = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("mite-recrafted", repairTagName));
             if (!material.is(repairTag)) {
                 resultSlots.setItem(0, ItemStack.EMPTY);
                 return;
             }
         }
 
+        // 耐久修复计算
         int damage = target.getDamageValue();
         if (damage <= 0) {
             resultSlots.setItem(0, ItemStack.EMPTY);
@@ -140,6 +160,15 @@ public class ModAnvilMenu extends AnvilMenu {
 
     @Override
     protected void onTake(Player player, ItemStack stack) {
+        // 附魔书 / 相同物品合并 → 原版 onTake 处理消耗和 XP
+        if (usingBook || sameItemCombine) {
+            usingBook = false;
+            sameItemCombine = false;
+            canRepair = false;
+            super.onTake(player, stack);
+            return;
+        }
+
         int cost = ((AnvilMenuCostAccessor) this).getCost().get();
         int used = lastUsed;  // 使用 createResult 计算的粒数
         lastUsed = 0;

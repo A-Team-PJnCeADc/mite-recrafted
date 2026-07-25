@@ -4,7 +4,9 @@
     "compatibilityLevel": "JAVA_25",
     "client": [
         "AppleSkinFoodHelperMixin",
-        "RecipeCollectionMixin"
+        "RecipeCollectionMixin",
+        "RangeSelectItemModelPropertiesAccessor",
+        "ItemInHandRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1

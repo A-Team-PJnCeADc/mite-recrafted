@@ -4,6 +4,7 @@ import com.mite.recraft.block.workbench.ModWorkbenchBlock;
 import com.mite.recraft.client.command.ClientNutritionCommand;
 import com.mite.recraft.client.renderer.ModArrowRenderer;
 import com.mite.recraft.client.renderer.item.NockedArrowProperty;
+import com.mite.recraft.client.renderer.item.QuicknessDrawProperty;
 import com.mite.recraft.client.screen.ModWorkbenchScreen;
 import com.mite.recraft.client.strongbox.StrongboxClientRegistry;
 import com.mite.recraft.entity.ModEntitys;
@@ -55,6 +56,7 @@ public class MiteRecraftedClient implements ClientModInitializer {
 
         // 弓的箭矢材质 Select 属性注册
         NockedArrowProperty.register();
+        QuicknessDrawProperty.register();
 
         // Strongboxes
         StrongboxClientRegistry.register();

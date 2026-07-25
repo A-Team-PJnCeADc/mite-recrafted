@@ -172,6 +172,30 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             tb.add("jukebox_song.mite-recrafted." + s[0], s[1]);
         }
 
+        // 魔咒翻译
+        tb.add("enchantment.mite-recrafted.arrow_recovery", "箭矢回收");
+        tb.add("enchantment.mite-recrafted.quickness", "急速");
+        tb.add("enchantment.mite-recrafted.true_flight", "真直");
+        tb.add("enchantment.mite-recrafted.poison", "淬毒");
+        tb.add("enchantment.mite-recrafted.stun", "眩晕");
+        tb.add("enchantment.mite-recrafted.vampiric", "吸血");
+        tb.add("enchantment.mite-recrafted.disarming", "缴械");
+        tb.add("enchantment.mite-recrafted.butchering", "屠宰");
+        tb.add("enchantment.mite-recrafted.tree_felling", "砍伐");
+        tb.add("enchantment.mite-recrafted.harvesting", "丰收");
+        tb.add("enchantment.mite-recrafted.fertility", "肥沃");
+        tb.add("enchantment.mite-recrafted.fishing_fortune", "钓鱼幸运");
+        tb.add("enchantment.mite-recrafted.speed", "轻盈");
+        tb.add("enchantment.mite-recrafted.regeneration", "再生");
+        tb.add("enchantment.mite-recrafted.free_action", "自由行动");
+        tb.add("enchantment.mite-recrafted.endurance", "坚韧");
+        tb.add("enchantment.mite-recrafted.unbreaking", "耐久");
+        tb.add("enchantment.mite-recrafted.accuracy", "精准");
+        tb.add("enchantment.mite-recrafted.slaying", "杀害");
+        tb.add("enchantment.mite-recrafted.piercing", "穿透");
+        tb.add("enchantment.mite-recrafted.cleaving", "劈裂");
+        tb.add("enchantment.mite-recrafted.protection", "保护");
+
         // 营养命令
         tb.add("command.mite-recrafted.cnutrition.title", "§6=== 客户端营养数据 ===");
         tb.add("command.mite-recrafted.cnutrition.protein", "蛋白质: §b%d");
@@ -187,6 +211,16 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
         // 物品标签翻译
         tb.add("tag.item.mite-recrafted.water_buckets", "水桶");
         tb.add("tag.item.mite-recrafted.strings", "线");
+
+        // 自定义物品标签 — 魔咒作用域
+        tb.add("tag.item.mite-recrafted.butchering_weapon", "屠宰武器");
+        tb.add("tag.item.mite-recrafted.stun_weapon", "击晕武器");
+        tb.add("tag.item.mite-recrafted.vampiric_weapon", "吸血武器");
+        tb.add("tag.item.mite-recrafted.slaying_weapon", "杀害武器");
+        tb.add("tag.item.mite-recrafted.harvesting_tool", "收获工具");
+        tb.add("tag.item.mite-recrafted.piercing_tool", "穿透工具");
+        tb.add("tag.item.mite-recrafted.cleaving_weapon", "劈裂武器");
+        tb.add("tag.item.mite-recrafted.tree_felling_tool", "砍伐工具");
 
         // 熔炉界面标题
         tb.add("container.clay_oven", "粘土熔炉");

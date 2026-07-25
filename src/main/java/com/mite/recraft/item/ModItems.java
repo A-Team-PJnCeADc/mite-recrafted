@@ -12,6 +12,7 @@ import com.mite.recraft.item.moditems.food.ModFoodItems;
 import com.mite.recraft.item.moditems.strongbox.StrongboxRegistry;
 import com.mite.recraft.item.tools.ModTools;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +25,7 @@ public class ModItems {
     private static final List<Item> BUCKETS = new ArrayList<>();
     private static final List<Item> FOODS = new ArrayList<>();
     private static final List<Item> ARMORS = new ArrayList<>();
+    private static final List<Item> ENCHANTED_BOOKS = new ArrayList<>();
 
     public static void addMaterial(Item item) {
         MATERIALS.add(item);
@@ -47,6 +49,10 @@ public class ModItems {
 
     public static void addArmor(Item item) {
         ARMORS.add(item);
+    }
+
+    public static void addEnchantedBook(Item item) {
+        ENCHANTED_BOOKS.add(item);
     }
 
     public static List<Item> getMaterials() {
@@ -73,6 +79,10 @@ public class ModItems {
         return Collections.unmodifiableList(ARMORS);
     }
 
+    public static List<Item> getEnchantedBooks() {
+        return Collections.unmodifiableList(ENCHANTED_BOOKS);
+    }
+
     public static void init() {
         ModMaterials.init();
         ModTools.init();
@@ -86,5 +96,7 @@ public class ModItems {
         ModEquipmentAssets.init();
         // Strongboxes
         StrongboxRegistry.register();
+        // 附魔书
+        addEnchantedBook(Items.ENCHANTED_BOOK);
     }
 }

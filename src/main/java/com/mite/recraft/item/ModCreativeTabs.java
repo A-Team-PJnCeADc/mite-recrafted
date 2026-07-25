@@ -1,10 +1,12 @@
 package com.mite.recraft.item;
 
 import com.mite.recraft.block.ModBlocks;
+import com.mite.recraft.enchantment.ModEnchantments;
 import com.mite.recraft.item.material.ModMaterials;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -45,6 +47,15 @@ public class ModCreativeTabs {
                 }
                 for (Item item : ModItems.getArmors()) {
                     entries.accept(item);
+                }
+                // 附魔书 — 每个 MITE 魔咒最大等级的附魔书
+                var enchLookup = displayContext.holders().lookupOrThrow(Registries.ENCHANTMENT);
+                for (Item bookItem : ModItems.getEnchantedBooks()) {
+                    for (ModEnchantments enc : ModEnchantments.values()) {
+                        ItemStack book = new ItemStack(bookItem);
+                        book.enchant(enchLookup.getOrThrow(enc.key()), enc.maxLevel());
+                        entries.accept(book);
+                    }
                 }
             })
             .build();

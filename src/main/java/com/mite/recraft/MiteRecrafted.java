@@ -4,6 +4,8 @@ import com.mite.recraft.block.ModBlocks;
 import com.mite.recraft.block.furnace.ModFurnaceRegistry;
 import com.mite.recraft.block.workbench.ModWorkbenchBlock;
 import com.mite.recraft.component.ModDataComponents;
+import com.mite.recraft.enchantment.effects.SilentApplyMobEffect;
+import com.mite.recraft.enchantment.effects.StunEffect;
 import com.mite.recraft.entity.ModEntitys;
 import com.mite.recraft.item.ModCreativeTabs;
 import com.mite.recraft.item.ModItems;
@@ -31,6 +33,18 @@ public class MiteRecrafted implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Hello Fabric world!");
+
+        // 注册自定义附魔效果类型
+        Registry.register(
+                BuiltInRegistries.ENCHANTMENT_ENTITY_EFFECT_TYPE,
+                Identifier.fromNamespaceAndPath(MOD_ID, "silent_apply_mob_effect"),
+                SilentApplyMobEffect.CODEC
+        );
+        Registry.register(
+                BuiltInRegistries.ENCHANTMENT_ENTITY_EFFECT_TYPE,
+                Identifier.fromNamespaceAndPath(MOD_ID, "stun_effect"),
+                StunEffect.CODEC
+        );
 
         registerSoundEvents();
         ModDataComponents.init();

@@ -161,6 +161,30 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
             tb.add("jukebox_song.mite-recrafted." + s[0], s[1]);
         }
 
+        // Enchantments
+        tb.add("enchantment.mite-recrafted.arrow_recovery", "Arrow Recovery");
+        tb.add("enchantment.mite-recrafted.quickness", "Quickness");
+        tb.add("enchantment.mite-recrafted.true_flight", "True Flight");
+        tb.add("enchantment.mite-recrafted.poison", "Poison");
+        tb.add("enchantment.mite-recrafted.stun", "Stun");
+        tb.add("enchantment.mite-recrafted.vampiric", "Vampiric");
+        tb.add("enchantment.mite-recrafted.disarming", "Disarming");
+        tb.add("enchantment.mite-recrafted.butchering", "Butchering");
+        tb.add("enchantment.mite-recrafted.tree_felling", "Tree Felling");
+        tb.add("enchantment.mite-recrafted.harvesting", "Harvesting");
+        tb.add("enchantment.mite-recrafted.fertility", "Fertility");
+        tb.add("enchantment.mite-recrafted.fishing_fortune", "Fishing Fortune");
+        tb.add("enchantment.mite-recrafted.speed", "Speed");
+        tb.add("enchantment.mite-recrafted.regeneration", "Regeneration");
+        tb.add("enchantment.mite-recrafted.free_action", "Free Action");
+        tb.add("enchantment.mite-recrafted.endurance", "Endurance");
+        tb.add("enchantment.mite-recrafted.unbreaking", "Unbreaking");
+        tb.add("enchantment.mite-recrafted.accuracy", "Accuracy");
+        tb.add("enchantment.mite-recrafted.slaying", "Slaying");
+        tb.add("enchantment.mite-recrafted.piercing", "Piercing");
+        tb.add("enchantment.mite-recrafted.cleaving", "Cleaving");
+        tb.add("enchantment.mite-recrafted.protection", "Protection");
+
         // Nutrition command
         tb.add("command.mite-recrafted.cnutrition.title", "§6=== Client Nutrition Data ===");
         tb.add("command.mite-recrafted.cnutrition.protein", "Protein: §b%d");
@@ -176,6 +200,16 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
         // Item tag translations
         tb.add("tag.item.mite-recrafted.water_buckets", "Water Buckets");
         tb.add("tag.item.mite-recrafted.strings", "Strings");
+
+        // 自定义物品标签 — 魔咒作用域
+        tb.add("tag.item.mite-recrafted.butchering_weapon", "Butchering Weapons");
+        tb.add("tag.item.mite-recrafted.stun_weapon", "Stun Weapons");
+        tb.add("tag.item.mite-recrafted.vampiric_weapon", "Vampiric Weapons");
+        tb.add("tag.item.mite-recrafted.slaying_weapon", "Slaying Weapons");
+        tb.add("tag.item.mite-recrafted.harvesting_tool", "Harvesting Tools");
+        tb.add("tag.item.mite-recrafted.piercing_tool", "Piercing Tools");
+        tb.add("tag.item.mite-recrafted.cleaving_weapon", "Cleaving Weapons");
+        tb.add("tag.item.mite-recrafted.tree_felling_tool", "Tree Felling Tools");
 
         // Furnace container titles
         tb.add("container.clay_oven", "Clay Oven");

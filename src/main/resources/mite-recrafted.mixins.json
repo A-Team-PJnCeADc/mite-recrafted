@@ -5,7 +5,6 @@
 	"mixins": [
 		"FishingHookMixin",
 		"AbstractArrowInvoker",
-		"ArrowRecoveryMixin",
 		"LivingEntityStuckArrowsMixin",
 		"AnvilMenuCostAccessor",
 		"ItemEntityMixin",
@@ -25,7 +24,17 @@
 		"RecipeManagerMixin",
 		"LeavesDropMixin",
 		"EntityOnionDropMixin",
-		"ItemStackQualityNameMixin"
+		"ItemStackQualityNameMixin",
+		"DisarmingMixin",
+		"ButcheringMixin",
+		"VampiricMixin",
+		"HarvestingMixin",
+		"PiercingMixin",
+		"TreeFellingMixin",
+		"SpeedFreeActionMixin",
+		"FreeActionWebMixin",
+		"ItemStackTooltipMixin",
+		"ProtectionMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
