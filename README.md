@@ -2,7 +2,7 @@
 
 > "一个人不可能只是走进群山，用手中的石镐挖下铁矿。"
 
-MITE-Recrafted 是经典 Minecraft 难度模组 **[MITE (Minecraft Is Too Easy)](https://www.mcmod.cn/class/226.html)** 的高版本移植项目，基于 Fabric 模组加载器，目标 Minecraft 版本为 **26.3**（Java 25）。
+MITE-Recrafted 是经典 Minecraft 难度模组 **[MITE (Minecraft Is Too Easy)](https://www.mcmod.cn/class/226.html)** 的高版本移植项目，基于 Fabric 模组加载器，目标 Minecraft 版本为 **26.x**（Java 25）。
 
 原版 MITE 仅基于 Minecraft 1.6.4 核心，通过直接覆盖类文件实现，不兼容任何其他模组。本项目使用 Mixin 技术以非侵入方式重新实现 MITE 的核心机制，使其能够在现代 Minecraft 版本上运行，并具备一定的与其他 Fabric 模组的兼容性。
 
