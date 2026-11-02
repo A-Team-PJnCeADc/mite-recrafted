@@ -1,11 +1,12 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.item.moditems.food.ModFoodItems;
+import com.mite.recraft.content.item.food.ModFoodItems;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,20 +18,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * 树叶破坏时额外掉落香蕉/橘子。
  * <ul>
- *   <li>丛林树叶 → 1/16 概率掉香蕉</li>
- *   <li>丛林生物群系的橡树树叶 → 1/24 概率掉橘子</li>
+ *   <li>丛林树叶 -> 1/16 概率掉香蕉</li>
+ *   <li>丛林生物群系的橡树树叶 -> 1/24 概率掉橘子</li>
  * </ul>
  */
 @Mixin(Block.class)
 public class LeavesDropMixin {
 
     @Inject(method = "playerDestroy", at = @At("TAIL"))
-    private void mite$onLeafDestroyed(Level level, Player player, BlockPos pos,
+    private void mite$onLeafDestroyed(ServerLevel level, ServerPlayer player, BlockPos pos,
                                       BlockState state, BlockEntity blockEntity, ItemStack tool,
                                       CallbackInfo ci) {
-        if (level.isClientSide()) return;
-
-        // 只在丛林生物群系掉落 — 用 Identifier 比较
         var biomeKey = level.getBiome(pos).unwrapKey();
         if (biomeKey.isEmpty()) return;
         if (!biomeKey.get().identifier().getPath().contains("jungle")) return;

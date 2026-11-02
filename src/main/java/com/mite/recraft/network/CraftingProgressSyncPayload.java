@@ -1,6 +1,7 @@
 package com.mite.recraft.network;
 
 import com.mite.recraft.MiteRecrafted;
+
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -8,7 +9,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 /**
- * S→C: 同步合成进度（周期 + 当前 tick + 工作台材料系数 + 品质 + XP消耗）。
+ * S->C: 同步合成进度（周期 + 当前 tick + 工作台材料系数 + 品质 + XP消耗）。
  *
  * qualityIndex: 当前品质 ordinal (-1 表示无品质物品)
  * xpCost:      当前品质所需 XP 消耗 (0 表示免费)

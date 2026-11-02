@@ -1,6 +1,7 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.enchantment.ModEnchantments;
+import com.mite.recraft.registry.ModEnchantments;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * 灵活移动 — 蜘蛛网减速抵消。
+ * 灵活移动 - 蜘蛛网减速抵消。
  * 使用递归标志避免 @Inject(cancel)+递归调用导致的 StackOverflow。
  */
 @Mixin(Entity.class)

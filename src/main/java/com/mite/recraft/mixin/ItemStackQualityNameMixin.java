@@ -1,7 +1,8 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.component.ModDataComponents;
-import com.mite.recraft.item.quality.Quality;
+import com.mite.recraft.content.item.quality.Quality;
+import com.mite.recraft.registry.ModDataComponents;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;

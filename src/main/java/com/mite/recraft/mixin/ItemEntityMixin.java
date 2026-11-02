@@ -1,7 +1,8 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.item.moditems.bucket.ModEmptyBucketItem;
-import com.mite.recraft.item.material.ModMaterials;
+import com.mite.recraft.content.item.bucket.ModEmptyBucketItem;
+import com.mite.recraft.content.item.material.ModMaterials;
+
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,7 +37,7 @@ public class ItemEntityMixin {
             self.setItem(new ItemStack(empty.waterPeer, stack.getCount()));
         }
 
-        // 面粉落入水中 → 5 秒后消失
+        // 面粉落入水中 -> 5 秒后消失
         if (stack.is(ModMaterials.FLOUR) && age >= 100) {
             self.discard();
         }

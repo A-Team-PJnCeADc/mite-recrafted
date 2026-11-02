@@ -6,7 +6,9 @@
         "AppleSkinFoodHelperMixin",
         "RecipeCollectionMixin",
         "RangeSelectItemModelPropertiesAccessor",
-        "ItemInHandRendererMixin"
+        "FirstPersonHandsAndItemsMixin",
+        "ChestSpriteFallbackMixin",
+        "ChestMaterialFallbackMixin"
     ],
     "injectors": {
         "defaultRequire": 1

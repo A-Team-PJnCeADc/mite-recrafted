@@ -1,15 +1,18 @@
 package com.mite.recraft.client.mixin;
 
-import com.mite.recraft.block.workbench.ModWorkbenchMenu;
-import com.mite.recraft.block.workbench.WorkbenchMaterial;
-import com.mite.recraft.client.MiteRecraftedClient;
+import com.mite.recraft.client.state.ClientWorkbenchState;
+import com.mite.recraft.content.block.workbench.ModWorkbenchMenu;
+import com.mite.recraft.content.block.workbench.WorkbenchMaterial;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.recipebook.RecipeCollection;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
 import net.minecraft.world.item.crafting.display.RecipeDisplayId;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
@@ -22,12 +25,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * 配方书视觉反馈：超过工作台等级的配方标记为不可合成。
  *
- * <p>注入 {@code selectRecipes} 末尾，用服务端同步的工作台材料系数
- * 对比配方结果物品的材料系数，超出者从 craftable 集合中移除。</p>
+ * <p>在 {@code selectRecipes} 末尾用服务端同步的工作台材料系数对比配方结果物品的材料系数，
+ * 超出者从 craftable 集合中移除。</p>
  */
 @Mixin(RecipeCollection.class)
 public class RecipeCollectionMixin {
@@ -38,9 +42,9 @@ public class RecipeCollectionMixin {
     @Shadow
     private Set<RecipeDisplayId> craftable;
 
-    @Inject(method = "selectRecipes(Lnet/minecraft/world/entity/player/StackedItemContents;Ljava/util/function/Predicate;)V",
-            at = @At("RETURN"))
-    private void filterByWorkbenchTier(CallbackInfo ci) {
+    @Inject(method = "selectRecipes", at = @At("RETURN"))
+    private void filterByWorkbenchTier(StackedItemContents contents, Predicate<RecipeDisplay> predicate,
+                                       CallbackInfo ci) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (player == null) return;
@@ -51,7 +55,7 @@ public class RecipeCollectionMixin {
         // 只在 MITE 工作台菜单中生效
         if (!isMiteWorkbench(menu)) return;
 
-        float benchCoefficient = MiteRecraftedClient.syncedBenchCoefficient;
+        float benchCoefficient = ClientWorkbenchState.benchCoefficient();
         ContextMap ctx = SlotDisplayContext.fromLevel(mc.level);
         if (ctx == null) return;
 
@@ -82,7 +86,6 @@ public class RecipeCollectionMixin {
         return null;
     }
 
-    /** 与 TieredResultSlot.getItemDurability 逻辑一致 */
     private static float getItemDurability(ItemStack stack) {
         var key = BuiltInRegistries.ITEM.getKey(stack.getItem());
         if (key == null || !key.getNamespace().equals("mite-recrafted")) return 1.0f;

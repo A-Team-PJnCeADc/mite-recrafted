@@ -1,17 +1,18 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.item.moditems.food.EdibleOverride;
+import com.mite.recraft.content.item.food.EdibleOverride;
+
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.Level;
-import net.minecraft.sounds.SoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -89,7 +90,7 @@ public class EdibleOverrideUseMixin {
                     SoundEvents.GENERIC_EAT, entity.getSoundSource(), 1.0F, 1.0F);
         }
 
-        // 应用食物值 — nutrition=0 时绕过 FoodData.eat 公式，直接加原始饱和度
+        // 应用食物值 - nutrition=0 时绕过 FoodData.eat 公式，直接加原始饱和度
         var foodData = player.getFoodData();
         int hunger = edible.hunger();
         int newFood = Math.min(foodData.getFoodLevel() + hunger, 20);

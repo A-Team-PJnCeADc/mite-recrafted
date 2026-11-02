@@ -1,6 +1,7 @@
 package com.mite.recraft.mixin;
 
 import com.mite.recraft.util.CompostAccess;
+
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;

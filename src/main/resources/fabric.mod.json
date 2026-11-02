@@ -3,12 +3,12 @@
 	"id": "mite-recrafted",
 	"version": "${version}",
 	"name": "mite-recrafted",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "MITE (Minecraft Is Too Easy) mechanics for modern Minecraft.",
 	"authors": [
 		"abzxc"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
+		"homepage": "https://github.com/A-Team-PJnCeADc/mite-recrafted",
 		"sources": "https://github.com/A-Team-PJnCeADc/mite-recrafted"
 	},
 	"license": "CC BY-NC-SA 4.0",
@@ -25,7 +25,7 @@
 			"com.mite.recraft.client.MiteRecraftedDataGenerator"
 		],
 		"appleskin": [
-			"com.mite.recraft.client.AppleSkinEventHandler"
+			"com.mite.recraft.client.compat.appleskin.AppleSkinEventHandler"
 		]
 	},
 	"mixins": [
@@ -36,10 +36,9 @@
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.19.3",
-		"minecraft": "~26.2",
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
 		"java": ">=25",
-		"fabric-api": "*",
-		"ironchest": ">=2.0.7"
+		"fabric-api": "*"
 	}
 }

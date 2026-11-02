@@ -1,9 +1,7 @@
 package com.mite.recraft.client;
 
-import com.mite.recraft.client.datagen.ModChestAtlasProvider;
-import com.mite.recraft.datagen.ModEnchantmentProvider;
-import com.mite.recraft.client.datagen.ModModelProvider;
-import com.mite.recraft.datagen.*;
+import com.mite.recraft.client.datagen.*;
+
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
@@ -18,8 +16,12 @@ public class MiteRecraftedDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ModRecipeProvider::new);
         pack.addProvider(ModEnglishLanguageProvider::new);
         pack.addProvider(ModChineseLanguageProvider::new);
+        ModChestLanguageData.LOCALES.forEach((locale, entries) -> pack.addProvider(
+                (output, future) -> new ModChestLanguageProvider(
+                        (FabricPackOutput) output, future, locale, entries)));
         pack.addProvider(ModItemTagProvider::new);
         pack.addProvider(ModBlockTagProvider::new);
+        pack.addProvider(ModBlockEntityTypeTagProvider::new);
         pack.addProvider(ModEquipmentAssetProvider::new);
         pack.addProvider(ModBlockLootTableProvider::new);
         pack.addProvider((output, future) -> new ModSoundProvider(output));

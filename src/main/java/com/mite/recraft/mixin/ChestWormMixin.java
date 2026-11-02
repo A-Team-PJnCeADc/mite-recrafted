@@ -1,8 +1,9 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.item.moditems.ManureItems;
-import com.mite.recraft.item.moditems.food.ModFoodItems;
+import com.mite.recraft.content.item.food.ModFoodItems;
+import com.mite.recraft.content.item.material.ManureItems;
 import com.mite.recraft.util.CompostAccess;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 箱子蠕虫堆肥系统 — 复刻 MITE 1.6.4 机制。
+ * 箱子蠕虫堆肥系统 - 复刻 MITE 1.6.4 机制。
  *
  * <p>通过 {@link ChestBlock#getTicker} 添加服务端 ticker。</p>
  *

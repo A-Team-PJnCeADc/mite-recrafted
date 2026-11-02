@@ -1,7 +1,8 @@
 package com.mite.recraft.mixin;
 
+import com.mite.recraft.registry.ModEnchantments;
+
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.mite.recraft.enchantment.ModEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffects;
@@ -15,7 +16,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 /**
- * 灵活移动 (Free Action) — 削弱缓慢效果。
+ * 灵活移动 (Free Action) - 削弱缓慢效果。
  * 蜘蛛网部分在 FreeActionWebMixin 中处理（Entity 级别的注入）。
  * Speed 附魔也在此合并处理避免链式冲突。
  */
@@ -50,7 +51,7 @@ public class SpeedFreeActionMixin {
                 self.getItemBySlot(EquipmentSlot.FEET)
         );
         if (speedLevel > 0) {
-            float multiplier = com.mite.recraft.enchantment.Speed.getMultiplier(speedLevel);
+            float multiplier = com.mite.recraft.content.enchantment.Speed.getMultiplier(speedLevel);
             result = result * multiplier;
         }
 

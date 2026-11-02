@@ -1,11 +1,13 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.item.moditems.food.ModFoodItems;
-import com.mite.recraft.item.moditems.food.NutritionSystem;
+import com.mite.recraft.content.item.food.ModFoodItems;
+import com.mite.recraft.content.item.food.NutritionSystem;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.animal.cow.AbstractCow;
@@ -19,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * 牛挤奶 — 支持 MITE 金属桶和碗，每日冷却（持久化）。
+ * 牛挤奶 - 支持 MITE 金属桶和碗，每日冷却（持久化）。
  *
  * <p>冷却时间通过 {@link NutritionSystem#COW_LAST_MILKED} 持久化到牛实体上。</p>
  */
@@ -51,7 +53,7 @@ public class CowMilkingMixin {
 
         Item held = stack.getItem();
 
-        // —— 碗 → 牛奶碗 ——
+        // - 碗 -> 牛奶碗 -
         if (held == Items.BOWL) {
             if (cow.level().isClientSide()) {
                 cir.setReturnValue(InteractionResult.SUCCESS);
@@ -64,14 +66,14 @@ public class CowMilkingMixin {
             // 一碗得 4 个牛奶碗
             ItemStack result = new ItemStack(ModFoodItems.MILK_BOWL, 4);
             if (!player.getInventory().add(result)) {
-                player.drop(result, false);
+                player.drop(result, false, Prediction.SERVER_ONLY);
             }
             cow.setAttached(NutritionSystem.COW_LAST_MILKED, now);
             cir.setReturnValue(InteractionResult.SUCCESS);
             return;
         }
 
-        // —— MITE 空桶 → 对应奶桶 ——
+        // - MITE 空桶 -> 对应奶桶 -
         String path = BuiltInRegistries.ITEM.getKey(held).getPath();
         if (path.endsWith("_bucket") && !path.equals("bucket")) {
             String material = path.substring(0, path.length() - "_bucket".length());
@@ -87,7 +89,7 @@ public class CowMilkingMixin {
                 }
                 ItemStack result = new ItemStack(milkBucket);
                 if (!player.getInventory().add(result)) {
-                    player.drop(result, false);
+                    player.drop(result, false, Prediction.SERVER_ONLY);
                 }
                 cow.setAttached(NutritionSystem.COW_LAST_MILKED, now);
                 cir.setReturnValue(InteractionResult.SUCCESS);
@@ -95,7 +97,7 @@ public class CowMilkingMixin {
             }
         }
 
-        // 其他物品（原版桶等）→ 不拦截，走原版逻辑
+        // 其他物品（原版桶等）-> 不拦截，走原版逻辑
     }
 
     private static Item findMilkBucket(String material) {

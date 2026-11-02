@@ -1,16 +1,14 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.block.furnace.MiteFurnaceBlockEntity;
+import com.mite.recraft.content.block.furnace.MiteFuels;
+import com.mite.recraft.content.block.furnace.MiteFurnaceBlockEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -29,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AbstractFurnaceBlockEntity.class)
 public class MiteFurnaceRecipeFilterMixin {
 
-    // ======================== 配方过滤 ========================
 
     @Inject(method = "serverTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;setRecipeUsed(Lnet/minecraft/world/item/crafting/RecipeHolder;)V",
@@ -43,11 +40,10 @@ public class MiteFurnaceRecipeFilterMixin {
         ItemStack input = be.getItem(0);
         if (input.isEmpty()) return;
 
-        // ======= 沙→砂岩/玻璃 热量区分 =======
         if (input.is(Items.SAND)) {
-            int heat = com.mite.recraft.block.furnace.FuelHeatHelper.getHeatLevel(be.getItem(1));
+            int heat = MiteFuels.heat(be.getItem(1));
             if (heat == 1) {
-                // 热1: 4沙→1砂岩（手动处理，跳过配方）
+                // 热1: 4沙->1砂岩（手动处理，跳过配方）
                 ItemStack output = be.getItem(2);
                 if (output.isEmpty() || output.is(Items.SANDSTONE)) {
                     if (input.getCount() >= 4) {
@@ -66,14 +62,12 @@ public class MiteFurnaceRecipeFilterMixin {
             // 热2+: 由 vanilla 玻璃配方处理
         }
 
-        // ======= 通用配方按热量过滤 =======
         if (!isAllowedForTier(input, maxHeat)) {
             ((AccessorFurnaceBlockEntity) be).mite$setCookingProgress(0);
             ci.cancel();
         }
     }
 
-    // ======================== 流水熄灭 + 前方阻挡 ========================
 
     @Inject(method = "serverTick", at = @At("HEAD"))
     private static void mite$checkExtinguish(ServerLevel level, BlockPos pos, BlockState state,
@@ -112,7 +106,6 @@ public class MiteFurnaceRecipeFilterMixin {
         return frontState.isFaceSturdy(level, frontPos, facing.getOpposite());
     }
 
-    // ======================== 配方白名单 ========================
 
     private static boolean isAllowedForTier(ItemStack input, int maxHeat) {
         if (maxHeat == 1) {

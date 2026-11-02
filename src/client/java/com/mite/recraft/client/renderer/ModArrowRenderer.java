@@ -1,7 +1,8 @@
 package com.mite.recraft.client.renderer;
 
 import com.mite.recraft.MiteRecrafted;
-import com.mite.recraft.entity.arrowentity.ArrowEntity;
+import com.mite.recraft.content.entity.ArrowEntity;
+
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.ArrowRenderState;

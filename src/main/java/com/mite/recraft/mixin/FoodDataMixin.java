@@ -1,6 +1,7 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.item.moditems.food.NutritionSystem;
+import com.mite.recraft.content.item.food.NutritionSystem;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.food.FoodData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  *   <li>每 tick 累积 hunger (0.002/tick)，hunger ≥ 4 时消耗 1 点 satiation</li>
  *   <li>hunger_for_nutrition_only 累积到 4 时开始消耗 nutrition 而非 satiation</li>
  *   <li>回血公式：heal_progress += (0.0004 + nutrition×0.00002) × 修正</li>
- *   <li>heal_progress ≥ 1.0 → heal(1HP)，消耗 1 hunger</li>
+ *   <li>heal_progress ≥ 1.0 -> heal(1HP)，消耗 1 hunger</li>
  * </ol>
  * </p>
  */
@@ -38,7 +39,7 @@ public class FoodDataMixin {
         int foodLevel = self.getFoodLevel();
         int limit = getNutrientLimit(player.experienceLevel);
 
-        // 食物条 < 上限 且 nutrition > 0 → 从 nutrition 补充到食物条
+        // 食物条 < 上限 且 nutrition > 0 -> 从 nutrition 补充到食物条
         if (foodLevel < limit && nutrition > 0) {
             int transfer = Math.min(limit - foodLevel, nutrition);
             self.setFoodLevel(foodLevel + transfer);
@@ -46,7 +47,6 @@ public class FoodDataMixin {
             nutrition -= transfer;
         }
 
-        //todo
         // MITE 回血
         if (foodLevel > 0 && !player.isDeadOrDying()) {
             float hp = player.getAttachedOrCreate(NutritionSystem.HEAL_PROGRESS);

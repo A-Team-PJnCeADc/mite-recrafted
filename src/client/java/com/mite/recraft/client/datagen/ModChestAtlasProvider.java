@@ -1,6 +1,8 @@
 package com.mite.recraft.client.datagen;
 
-import com.mite.recraft.item.moditems.strongbox.StrongboxType;
+import com.mite.recraft.chest.ChestVariant;
+import com.mite.recraft.content.block.strongbox.StrongboxType;
+
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.minecraft.client.renderer.texture.atlas.SpriteSource;
@@ -18,10 +20,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 /**
- * Generates {@code assets/minecraft/atlases/chests.json} for the CHEST_SHEET atlas.
+ * 生成 {@code assets/minecraft/atlases/chests.json}，为箱子图集登记原版目录源、本模组箱子贴图与保险箱贴图。
  * <p>
- * Registers vanilla directory source, IronChests single sources, and MITE strongbox single sources
- * so the {@link net.minecraft.client.renderer.blockentity.ChestRenderer} can find all chest textures.
+ * 原版目录源收录 {@code minecraft:textures/entity/chest/*.png}，箱子与保险箱贴图逐个登记为 single 源，
+ * 供箱子渲染器按 sprite 查找。
  */
 public class ModChestAtlasProvider extends FabricCodecDataProvider<List<SpriteSource>> {
 
@@ -33,26 +35,14 @@ public class ModChestAtlasProvider extends FabricCodecDataProvider<List<SpriteSo
     protected void configure(BiConsumer<Identifier, List<SpriteSource>> provider, HolderLookup.Provider lookup) {
         List<SpriteSource> sources = new ArrayList<>();
 
-        // 1. Vanilla directory source: picks up minecraft:textures/entity/chest/*.png
+        // 原版贴图目录
         sources.add(new DirectoryLister("entity/chest", "entity/chest/"));
 
-        // 2. IronChests single sources
-        String[] ironChestIds = {
-                "copper_chest", "iron_chest", "gold_chest", "diamond_chest",
-                "emerald_chest", "crystal_chest", "obsidian_chest", "netherite_chest"
-        };
-        for (String id : ironChestIds) {
-            sources.add(new SingleFile(
-                    Identifier.fromNamespaceAndPath("ironchest", "entity/chest/" + id),
-                    Optional.empty()
-            ));
+        // 2. 箱子实体贴图
+        for (ChestVariant variant : ChestVariant.REGISTERED) {
+            sources.add(new SingleFile(variant.texture(), Optional.empty()));
         }
-        sources.add(new SingleFile(
-                Identifier.fromNamespaceAndPath("minecraft", "entity/chest/christmas"),
-                Optional.empty()
-        ));
-
-        // 3. MITE strongbox single sources
+        // 保险箱贴图
         for (StrongboxType type : StrongboxType.VALUES) {
             sources.add(new SingleFile(type.texture, Optional.empty()));
         }

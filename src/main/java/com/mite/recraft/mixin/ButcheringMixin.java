@@ -1,7 +1,8 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.enchantment.Butchering;
-import com.mite.recraft.enchantment.ModEnchantments;
+import com.mite.recraft.content.enchantment.Butchering;
+import com.mite.recraft.registry.ModEnchantments;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -22,7 +23,6 @@ public class ButcheringMixin {
     private void mite$afterDropLoot(ServerLevel serverLevel, DamageSource source, boolean playerKilled, CallbackInfo ci) {
         LivingEntity victim = (LivingEntity) (Object) this;
 
-        // 获取攻击者武器上的屠宰魔咒等级
         if (source.getEntity() instanceof LivingEntity attacker) {
             int level = EnchantmentHelper.getItemEnchantmentLevel(
                     serverLevel.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)

@@ -1,7 +1,8 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.item.moditems.food.ModFoodItems;
-import com.mite.recraft.item.moditems.bucket.ModFilledBucketItem;
+import com.mite.recraft.content.item.bucket.ModFilledBucketItem;
+import com.mite.recraft.content.item.food.ModFoodItems;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -16,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * 玩家浸入水中时物品转换：
  * <ul>
- *   <li>装满岩浆的金属桶 → 同材质石头桶</li>
- *   <li>牛奶碗 → 水碗</li>
+ *   <li>装满岩浆的金属桶 -> 同材质石头桶</li>
+ *   <li>牛奶碗 -> 水碗</li>
  * </ul>
  */
 @Mixin(Player.class)
@@ -35,7 +36,7 @@ public class SubmergedConversionMixin {
             ItemStack stack = inv.getItem(i);
             if (stack.isEmpty()) continue;
 
-            // 岩浆桶 → 石头桶
+            // 岩浆桶 -> 石头桶
             if (stack.getItem() instanceof ModFilledBucketItem filled) {
                 if (!filled.fluid.isSame(Fluids.LAVA)) continue;
                 Item stoneBucket = findStoneBucket(stack.getItem());
@@ -45,7 +46,7 @@ public class SubmergedConversionMixin {
                 continue;
             }
 
-            // 牛奶碗 → 水碗
+            // 牛奶碗 -> 水碗
             if (stack.is(ModFoodItems.MILK_BOWL)) {
                 inv.setItem(i, new ItemStack(ModFoodItems.WATER_BOWL, stack.getCount()));
             }

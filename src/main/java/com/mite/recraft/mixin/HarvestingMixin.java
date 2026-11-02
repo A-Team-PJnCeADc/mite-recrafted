@@ -1,7 +1,8 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.enchantment.Harvesting;
-import com.mite.recraft.enchantment.ModEnchantments;
+import com.mite.recraft.content.enchantment.Harvesting;
+import com.mite.recraft.registry.ModEnchantments;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -51,7 +52,6 @@ public class HarvestingMixin {
         if (!id.contains("scythe") && !id.contains("_hoe") && !id.contains("_mattock")) return;
         String toolType = id.contains("scythe") ? "scythe" : id.contains("_hoe") ? "hoe" : "mattock";
 
-        // 获取原本的掉落列表，然后逐个检查并施加额外掉落
         List<ItemStack> drops = Block.getDrops(state, serverLevel, pos, null, entity, tool);
         for (ItemStack drop : drops) {
             String cropId = Harvesting.getCropId(drop);

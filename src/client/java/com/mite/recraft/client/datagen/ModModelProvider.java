@@ -1,39 +1,44 @@
 package com.mite.recraft.client.datagen;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.mite.recraft.MiteRecrafted;
-import com.mite.recraft.block.modblock.ModBarBlocks;
-import com.mite.recraft.block.modblock.ModDoorBlocks;
-import com.mite.recraft.block.modblock.ModMetalBlocks;
-import com.mite.recraft.block.workbench.WorkbenchMaterial;
+import com.mite.recraft.api.MiteIds;
+import com.mite.recraft.chest.ChestVariant;
+import com.mite.recraft.api.ItemCategory;
 import com.mite.recraft.client.renderer.item.NockedArrowProperty;
 import com.mite.recraft.client.renderer.item.QuicknessDrawProperty;
-import com.mite.recraft.item.moditems.strongbox.StrongboxType;
-import com.mite.recraft.item.tools.toolItem.AexItems;
-import com.mite.recraft.item.tools.toolItem.BowItems;
-import com.mite.recraft.item.tools.toolItem.ArrowItems;
-import com.mite.recraft.item.tools.toolItem.BattleAxeItems;
-import com.mite.recraft.item.tools.toolItem.DaggerItems;
-import com.mite.recraft.item.tools.toolItem.FishingRodItems;
-import com.mite.recraft.item.tools.toolItem.HatchetItems;
-import com.mite.recraft.item.tools.toolItem.HoeItems;
-import com.mite.recraft.item.tools.toolItem.KnifeItems;
-import com.mite.recraft.item.tools.toolItem.MattockItems;
-import com.mite.recraft.item.tools.toolItem.PickaxeItems;
-import com.mite.recraft.item.tools.toolItem.ShearsItems;
-import com.mite.recraft.item.tools.toolItem.ShovelItems;
-import com.mite.recraft.item.tools.toolItem.ScytheItems;
-import com.mite.recraft.item.tools.toolItem.SwordItems;
-import com.mite.recraft.item.moditems.ModRecordItems;
-import com.mite.recraft.item.moditems.ManureItems;
-import com.mite.recraft.item.moditems.food.ModFoodItem;
-import com.mite.recraft.item.moditems.food.ContainerType;
-import com.mite.recraft.item.tools.toolItem.WoodenItems;
-import com.mite.recraft.item.tools.toolItem.WarHammerItems;
-import com.mite.recraft.item.material.ModMaterials;
-import com.mite.recraft.item.moditems.bucket.ModBucketItems;
-import com.mite.recraft.item.ModItems;
+import com.mite.recraft.content.block.metal.ModBarBlocks;
+import com.mite.recraft.content.block.metal.ModDoorBlocks;
+import com.mite.recraft.content.block.metal.ModMetalBlocks;
+import com.mite.recraft.content.block.strongbox.StrongboxType;
+import com.mite.recraft.content.block.workbench.WorkbenchMaterial;
+import com.mite.recraft.content.item.bucket.ModBucketItems;
+import com.mite.recraft.content.item.food.ContainerType;
+import com.mite.recraft.content.item.food.ModFoodItem;
+import com.mite.recraft.content.item.material.ManureItems;
+import com.mite.recraft.content.item.material.ModMaterials;
+import com.mite.recraft.content.item.record.ModRecordItems;
+import com.mite.recraft.content.item.tool.AexItems;
+import com.mite.recraft.content.item.tool.ArrowItems;
+import com.mite.recraft.content.item.tool.BattleAxeItems;
+import com.mite.recraft.content.item.tool.BowItems;
+import com.mite.recraft.content.item.tool.DaggerItems;
+import com.mite.recraft.content.item.tool.FishingRodItems;
+import com.mite.recraft.content.item.tool.HatchetItems;
+import com.mite.recraft.content.item.tool.HoeItems;
+import com.mite.recraft.content.item.tool.KnifeItems;
+import com.mite.recraft.content.item.tool.MattockItems;
+import com.mite.recraft.content.item.tool.PickaxeItems;
+import com.mite.recraft.content.item.tool.ScytheItems;
+import com.mite.recraft.content.item.tool.ShearsItems;
+import com.mite.recraft.content.item.tool.ShovelItems;
+import com.mite.recraft.content.item.tool.SwordItems;
+import com.mite.recraft.content.item.tool.WarHammerItems;
+import com.mite.recraft.content.item.tool.WoodenItems;
+import com.mite.recraft.registry.ModFurnaces;
+import com.mite.recraft.registry.ModItems;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -51,20 +56,19 @@ import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.properties.conditional.FishingRodCast;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
 import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.jspecify.annotations.NonNull;
+import static com.mite.recraft.registry.ModBlocks.getBlocks;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import static com.mite.recraft.block.ModBlocks.getBlocks;
 
 public class ModModelProvider extends FabricModelProvider {
 
@@ -142,6 +146,7 @@ public class ModModelProvider extends FabricModelProvider {
 
         // 箱子
         generateStrongboxModels(gen);
+        generateChestModels(gen);
 
         // MITE 熔炉
         generateFurnaceModels(gen);
@@ -149,15 +154,25 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(@NonNull ItemModelGenerators gen) {
-        // 门的物品模型（flat item → models/item/，覆盖自动生成的 block/ 路径）
+        // 门的物品模型（flat item -> models/item/，覆盖自动生成的 block/ 路径）
         generateDoorItemModels(gen);
+
+        // 箱子升级物品
+        for (com.mite.recraft.chest.ChestUpgrade upgrade : com.mite.recraft.chest.ChestUpgrade.ALL) {
+            Identifier modelId = Identifier.fromNamespaceAndPath(ChestVariant.GPL_TEXTURE_NAMESPACE,
+                    "item/chest/" + upgrade.id());
+            ModelTemplates.FLAT_ITEM.create(modelId,
+                    TextureMapping.layer0(new Material(modelId)), gen.modelOutput);
+            gen.itemModelOutput.accept(com.mite.recraft.registry.ModChests.upgradeItem(upgrade),
+                    ItemModelUtils.plainModel(modelId));
+        }
 
         // 木棒 / 短木棒（木材材质，独立于 ToolType 体系）
         for (Item item : new Item[]{WoodenItems.CLUB, WoodenItems.CUDGEL}) {
             generateToolModel(gen, item, "tools");
         }
 
-        // 弓：conditional(using_item) → range_dispatch(use_duration) → select(nocked_arrow)
+        // 弓：conditional(using_item) -> range_dispatch(use_duration) -> select(nocked_arrow)
         generateBowModels(gen,
                 BowItems.WOOD_BOW, BowItems.ANCIENT_METAL_BOW, BowItems.MITHRIL_BOW);
 
@@ -324,7 +339,7 @@ public class ModModelProvider extends FabricModelProvider {
      */
     private void generateArmorModels(ItemModelGenerators gen) {
         String modId = MiteRecrafted.MOD_ID;
-        for (Item item : ModItems.getArmors()) {
+        for (Item item : ModItems.get(ItemCategory.ARMOR)) {
             String itemName = BuiltInRegistries.ITEM.getKey(item).getPath();
             Identifier modelId = Identifier.fromNamespaceAndPath(modId, "item/armor/" + itemName);
             // 马铠纹理在 item/armor/horse/ 子目录，文件名只用材料名
@@ -343,11 +358,11 @@ public class ModModelProvider extends FabricModelProvider {
 
     /**
      * 为所有食物物品生成 FLAT_ITEM 模型。
-     * 纹理路径：碗装食物 → {@code item/bowls/<id>.png}，普通食物 → {@code item/foods/<id>.png}。
+     * 纹理路径：碗装食物 -> {@code item/bowls/<id>.png}，普通食物 -> {@code item/foods/<id>.png}。
      */
     private void generateFoodModels(ItemModelGenerators gen) {
         String modId = MiteRecrafted.MOD_ID;
-        for (Item item : ModItems.getFoods()) {
+        for (Item item : ModItems.get(ItemCategory.FOOD)) {
             String itemName = BuiltInRegistries.ITEM.getKey(item).getPath();
 
             // 桶装食物（奶桶）：纹理在 item/buckets/<材质>/milk.png
@@ -417,7 +432,6 @@ public class ModModelProvider extends FabricModelProvider {
      * 纹理在 item/fishing_rods/ 下。
      */
     private void generateFishingRodModels(ItemModelGenerators gen, Item... rods) {
-        // 所有材质共用的抛竿纹理
         Identifier sharedCastTex = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/fishing_rods/fishing_rod_cast");
         for (Item rod : rods) {
             String itemName = BuiltInRegistries.ITEM.getKey(rod).getPath();
@@ -434,7 +448,7 @@ public class ModModelProvider extends FabricModelProvider {
             ModelTemplates.FLAT_HANDHELD_ROD_ITEM.create(castModelId,
                     TextureMapping.layer0(new Material(sharedCastTex)), gen.modelOutput);
 
-            // conditional: 抛竿 → cast 模型，未抛 → uncast 模型
+            // conditional: 抛竿 -> cast 模型，未抛 -> uncast 模型
             gen.itemModelOutput.accept(rod,
                     ItemModelUtils.conditional(new FishingRodCast(),
                             ItemModelUtils.plainModel(castModelId),
@@ -445,9 +459,9 @@ public class ModModelProvider extends FabricModelProvider {
     /**
      * 弓的模型使用三层 dispatch 结构（MC 26.2 SelectItemModelProperty 体系）：
      * <ol>
-     *   <li>{@code conditional(using_item)} — 未使用 → standby 待机纹理</li>
-     *   <li>{@code range_dispatch(use_duration, scale=0.05)} — 拉弓进度分 3 阶段（阈值 0/0.65/0.9）</li>
-     *   <li>{@code select(nocked_arrow)} — 每阶段内按箭袋中的箭种选择材质（10 种箭×3 阶段=30 模型）</li>
+     *   <li>{@code conditional(using_item)} - 未使用 -> standby 待机纹理</li>
+     *   <li>{@code range_dispatch(use_duration, scale=0.05)} - 拉弓进度分 3 阶段（阈值 0/0.65/0.9）</li>
+     *   <li>{@code select(nocked_arrow)} - 每阶段内按箭袋中的箭种选择材质（10 种箭×3 阶段=30 模型）</li>
      * </ol>
      */
     private void generateBowModels(ItemModelGenerators gen, Item... bows) {
@@ -491,15 +505,15 @@ public class ModModelProvider extends FabricModelProvider {
                 selectStages[pull] = ItemModelUtils.select(nockedArrow, cases);
             }
 
-            // range_dispatch：拉弓持续时间 → 3 阶段（阈值 0.65 / 0.9，scale=0.05 换算为 0-20 tick）
-            // UseDuration(false): 已过时间从 0 到 max，UseDuration(true) 是剩余时间 max→0
+            // range_dispatch：拉弓持续时间 -> 3 阶段（阈值 0.65 / 0.9，scale=0.05 换算为 0-20 tick）
+            // UseDuration(false): 已过时间从 0 到 max，UseDuration(true) 是剩余时间 max->0
             ItemModel.Unbaked onTrue = ItemModelUtils.rangeSelect(
                     new QuicknessDrawProperty(), 0.05f,
                     selectStages[0],  // fallback: stage 0
                     ItemModelUtils.override(selectStages[1], 0.65f),
                     ItemModelUtils.override(selectStages[2], 0.9f));
 
-            // conditional：正在使用物品 → range_dispatch，否则 → standby
+            // conditional：正在使用物品 -> range_dispatch，否则 -> standby
             ItemModel.Unbaked bowModel = ItemModelUtils.conditional(
                     ItemModelUtils.isUsingItem(),
                     onTrue,
@@ -760,7 +774,7 @@ public class ModModelProvider extends FabricModelProvider {
             bs.add("variants", variants);
 
             // 物品 JSON：range_dispatch(minecraft:damage) 按损伤比例切换模型
-            // 裂纹阈值：stage 1 → damage >= 0.25，stage 2 → damage >= 0.75
+            // 裂纹阈值：stage 1 -> damage >= 0.25，stage 2 -> damage >= 0.75
             JsonObject itemJson = new JsonObject();
             JsonObject rd = new JsonObject();
             rd.addProperty("type", "minecraft:range_dispatch");
@@ -795,6 +809,64 @@ public class ModModelProvider extends FabricModelProvider {
         }
     }
 
+
+    /** 生成箱子方块的 blockstate、block model 与 special 物品模型 */
+    private void generateChestModels(BlockModelGenerators gen) {
+        String modId = MiteRecrafted.MOD_ID;
+        String[] facings = {"north", "east", "south", "west"};
+        int[] rotations = {0, 90, 180, 270};
+
+        for (ChestVariant variant : ChestVariant.REGISTERED) {
+            Identifier blockModelId = Identifier.fromNamespaceAndPath(modId, "block/" + variant.id());
+
+            JsonObject modelJson = new JsonObject();
+            modelJson.addProperty("parent", modId + ":block/chest_template");
+            JsonObject textures = new JsonObject();
+            textures.addProperty("particle", "minecraft:block/oak_planks");
+            modelJson.add("textures", textures);
+            gen.modelOutput.accept(blockModelId, () -> modelJson);
+
+            JsonObject variants = new JsonObject();
+            for (int i = 0; i < facings.length; i++) {
+                JsonObject entry = new JsonObject();
+                entry.addProperty("model", blockModelId.toString());
+                if (rotations[i] > 0) entry.addProperty("y", rotations[i]);
+                variants.add("facing=" + facings[i], entry);
+            }
+            JsonObject blockstate = new JsonObject();
+            blockstate.add("variants", variants);
+
+            if (cachedOutput == null) continue;
+            java.nio.file.Path bsPath = dataOutput.getOutputFolder()
+                    .resolve("assets").resolve(modId).resolve("blockstates")
+                    .resolve(variant.id() + ".json");
+            java.nio.file.Path itemPath = dataOutput.getOutputFolder()
+                    .resolve("assets").resolve(modId).resolve("items")
+                    .resolve(variant.id() + ".json");
+            try {
+                java.nio.file.Files.createDirectories(bsPath.getParent());
+                DataProvider.saveStable(cachedOutput, blockstate, bsPath);
+
+                String texturePath = variant.texture().getPath();
+                String shortTexture = texturePath.startsWith("entity/chest/")
+                        ? texturePath.substring("entity/chest/".length())
+                        : texturePath;
+                JsonObject specialRef = new JsonObject();
+                specialRef.addProperty("type", "minecraft:special");
+                specialRef.addProperty("base", "minecraft:item/chest");
+                JsonObject chestModel = new JsonObject();
+                chestModel.addProperty("type", "minecraft:chest");
+                chestModel.addProperty("texture", variant.texture().getNamespace() + ":" + shortTexture);
+                specialRef.add("model", chestModel);
+                JsonObject itemModel = new JsonObject();
+                itemModel.add("model", specialRef);
+                DataProvider.saveStable(cachedOutput, itemModel, itemPath);
+            } catch (java.io.IOException e) {
+                throw new RuntimeException("Failed to write chest data for " + variant.id(), e);
+            }
+        }
+    }
+
     /** Generate strongbox blockstate, block model via datagen */
     private void generateStrongboxModels(BlockModelGenerators gen) {
         String modId = MiteRecrafted.MOD_ID;
@@ -813,7 +885,6 @@ public class ModModelProvider extends FabricModelProvider {
             JsonObject modelJson = new JsonObject();
             modelJson.addProperty("parent", modId + ":block/chest_template");
             JsonObject textures = new JsonObject();
-            textures.addProperty("0", textureId.toString());
             textures.addProperty("particle", "minecraft:block/stone");
             modelJson.add("textures", textures);
             gen.modelOutput.accept(blockModelId, () -> modelJson);
@@ -839,7 +910,7 @@ public class ModModelProvider extends FabricModelProvider {
                 java.nio.file.Files.createDirectories(bsPath.getParent());
                 DataProvider.saveStable(cachedOutput, blockstate, bsPath);
 
-                // Item model JSON — use minecraft:special/minecraft:chest for 3D chest preview
+                // Item model JSON - use minecraft:special/minecraft:chest for 3D chest preview
                 // The "texture" field omits "entity/chest/" prefix;
                 // the ChestSpecialRenderer resolves it to entity/chest/<path> on the chest sheet.
                 String itemTexturePath = type.texture.getPath();
@@ -869,9 +940,9 @@ public class ModModelProvider extends FabricModelProvider {
     /** Generate MITE furnace blockstate + block model + item model */
     private void generateFurnaceModels(BlockModelGenerators gen) {
         var modId = MiteRecrafted.MOD_ID;
-        for (int i = 0; i < com.mite.recraft.block.furnace.FurnaceTier.VALUES.length; i++) {
-            var tier = com.mite.recraft.block.furnace.FurnaceTier.VALUES[i];
-            Block block = com.mite.recraft.block.furnace.ModFurnaceRegistry.FURNACE_BLOCKS.get(i);
+        for (int i = 0; i < com.mite.recraft.content.block.furnace.FurnaceTier.VALUES.length; i++) {
+            var tier = com.mite.recraft.content.block.furnace.FurnaceTier.VALUES[i];
+            Block block = ModFurnaces.getFurnaceBlocks().get(i);
             if (block == null) continue;
 
             // Textures are in block/furnace/<material>/{front_off,front_on,side,top}.png

@@ -1,6 +1,7 @@
 package com.mite.recraft.network;
 
 import com.mite.recraft.MiteRecrafted;
+
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -8,7 +9,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 /**
- * S→C: 同步营养数据（蛋白/植营/脂肪/糖/胰岛素）。
+ * S->C: 同步营养数据（蛋白/植营/脂肪/糖/胰岛素）。
  */
 public record NutritionSyncPayload(
         int nutrition,

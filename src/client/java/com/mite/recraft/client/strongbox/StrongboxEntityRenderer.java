@@ -1,7 +1,8 @@
 package com.mite.recraft.client.strongbox;
 
-import com.mite.recraft.item.moditems.strongbox.StrongboxBlock;
-import com.mite.recraft.item.moditems.strongbox.StrongboxBlockEntity;
+import com.mite.recraft.content.block.strongbox.StrongboxBlock;
+import com.mite.recraft.content.block.strongbox.StrongboxBlockEntity;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -79,8 +80,7 @@ public class StrongboxEntityRenderer<T extends StrongboxBlockEntity & LidBlockEn
                 -1,
                 renderState.modSprite,
                 this.sprites,
-                0,
-                state.breakProgress
+                0
         );
         poseStack.popPose();
     }

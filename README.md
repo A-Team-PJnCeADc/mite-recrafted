@@ -1,10 +1,8 @@
 # MITE-Recrafted
 
-> "一个人不可能只是走进群山，用手中的石镐挖下铁矿。"
+MITE-Recrafted 是 **[MITE (Minecraft Is Too Easy)](https://www.mcmod.cn/class/226.html)** 的高版本移植项目，基于 Fabric，目标 Minecraft **26.3**（Java 25）。
 
-MITE-Recrafted 是经典 Minecraft 难度模组 **[MITE (Minecraft Is Too Easy)](https://www.mcmod.cn/class/226.html)** 的高版本移植项目，基于 Fabric 模组加载器，目标 Minecraft 版本为 **26.x**（Java 25）。
-
-原版 MITE 仅基于 Minecraft 1.6.4 核心，通过直接覆盖类文件实现，不兼容任何其他模组。本项目使用 Mixin 技术以非侵入方式重新实现 MITE 的核心机制，使其能够在现代 Minecraft 版本上运行，并具备一定的与其他 Fabric 模组的兼容性。
+原版 MITE 基于 1.6.4 并覆盖类文件实现，不兼容其他模组。本项目用 Mixin 非侵入地重新实现 MITE 机制，并保持与其他 Fabric 模组的兼容性。
 
 ## Progress
 
@@ -12,113 +10,145 @@ Developing
 
 ## 未实现的原版 MITE 功能
 
-以下为原版 MITE 中已有但 MITE-Recrafted 尚未实现的功能：
-
-- [ ] **玩家初始状态限制**：初始只有 3 格血与饥饿值（代码中有 `//todo 初始饱食度3个` 注释）
-- [ ] **银质工具对亡灵伤害加成**：代码中有 `//TODO 银质工具对亡灵怪物有伤害加成` 注释
-- [ ] **数值配平**：代码中有 `//todo 配平数值` 注释，表明工具/伤害/速度物品数值尚未最终确定
-- [ ] **新的维度**：地下世界 (Underworld) 和修改后的地狱进入条件
-- [ ] **新生物**：惧狼/地狱犬/食尸鬼/古尸/影子潜伏者等 26 种新生物
-- [ ] **新的熔炉与热量等级**：粘土/沙石/黑曜石/地狱岩熔炉
-- [ ] **附魔系统**：速度/再生/击晕/吸血/缴械/穿刺等新附魔
-- [ ] **耕种机制修改**：洋葱种植/蓝莓丛/疫病/粪肥等
-- [ ] **天气影响**：血月/蓝月/丰收之月
-- [ ] **创造模式移除**
-- [ ] **F3 屏幕限制**
-- [ ] **方块重力系统修改**
-- [ ] **动物生病系统**
-- [ ] **其他**
-
----
-
-### 客户端命令
-
-- `/mite-recrafted:cnutrition` — 显示当前玩家的营养状态调试信息
-
----
+- [ ] 玩家初始状态限制：初始 3 格血与饥饿值
+- [ ] 银质工具对亡灵伤害加成
+- [ ] 数值配平：工具/伤害/速度尚未最终确定
+- [ ] 新的维度：地下世界 (Underworld) 与修改后的地狱进入条件
+- [ ] 新生物：惧狼/地狱犬/食尸鬼/古尸/影子潜伏者等 26 种
+- [ ] 耕种机制修改：洋葱种植/蓝莓丛/疫病/粪肥
+- [ ] 天气影响：血月/蓝月/丰收之月
+- [ ] 创造模式移除
+- [ ] F3 屏幕限制
+- [ ] 方块重力系统修改
+- [ ] 动物生病系统
 
 ## 依赖
 
 - **Java 25**
-- **[Fabric API](https://github.com/FabricMC/fabric)**
-- **[IronChests](https://github.com/4nner/IronChests)**
-- **[AppleSkin](https://github.com/squeek502/AppleSkin/tree/26.2-fabric)**
+- **[Fabric API](https://github.com/FabricMC/fabric)** `0.165.0+26.3`
+- **[AppleSkin](https://github.com/squeek502/AppleSkin)**（开发环境与客户端可选，编译期仅用 API）
 
-## 构建与开发
+## 构建
 
 ```bash
-# 克隆仓库
-git clone --recursive https://github.com/A-Team-PJnCeADc/mite-recrafted.git
-cd mite-recrafted
-
-# 生成数据
-./gradlew runDatagen
-
-# 构建模组
-./gradlew build
-
-# 生成 Minecraft 源代码
-./gradlew genSources
-
-# 运行客户端
-./gradlew runClient
-
-# 运行服务端
-./gradlew runServer
+./gradlew runDatagen    # 生成数据，输出到 src/main/generated
+./gradlew build         # 构建模组
+./gradlew genSources    # 生成 Minecraft 源码
+./gradlew runClient     # 运行客户端
+./gradlew runServer     # 运行服务端
 ```
 
 ## 项目结构
 
-```
-mite-recrafted/
-├── src/
-│   ├── main/
-│   │   ├── java/com/mite/recraft/
-│   │   │   ├── block/           # 方块相关
-│   │   │   ├── component/       # 数据组件
-│   │   │   ├── datagen/         # 数据生成（配方、标签、语言）
-│   │   │   ├── entity/          # 实体相关
-│   │   │   ├── item/            # 物品相关
-│   │   │   │   ├── tools/       # 工具系统
-│   │   │   │   ├── quality/     # 品质系统
-│   │   │   │   └── moditems/    # 自定义物品（含 strongbox）
-│   │   │   ├── mixin/           # 服务端/通用 Mixin 注入
-│   │   │   ├── network/         # 网络同步
-│   │   │   └── MiteRecrafted.java
-│   │   └── resources/
-│   │       ├── assets/          # 纹理、模型、语言文件
-│   │       ├── data/            # 战利品表、标签
-│   │       ├── fabric.mod.json  # 模组配置
-│   │       └── mite-recrafted.mixins.json
-│   ├── client/
-│   │    java/com/mite/recraft/client/
-│   │      ├── strongbox/       # 箱子渲染器、GUI 界面
-│   │      └── datagen/         # 客户端数据生成（atlas、模型）
-│   └── main/generated/          # datagen 输出
-├── submodules/
-│   └── IronChests/              # 子模块
-└── build.gradle
+```text
+src/main/java/com/mite/recraft/
+├── MiteRecrafted.java        通用入口，固定注册顺序
+├── api/                      子模组接入层
+├── registry/                 全部注册入口与登记表
+│   ├── ModItems              物品登记表（按 ItemCategory 分类）
+│   ├── ModBlocks             方块登记表
+│   ├── ModBlockRegister      方块 + BlockItem 注册
+│   ├── ModChests             箱子方块、BlockEntityType、菜单、物品与升级
+│   ├── ModFurnaces           熔炉方块与共用 BlockEntityType
+│   ├── ModStrongboxes        保险箱方块、BlockEntityType、菜单
+│   ├── ModToolRegister       工具注册
+│   ├── ModCreativeTabs       创造模式物品栏
+│   ├── ModEnchantments       附魔键与定义
+│   ├── ModEnchantmentEffects 附魔效果类型编解码器
+│   ├── ModDataComponents     数据组件
+│   ├── ModMenus / ModNetwork / ModSounds / ModFuels
+│   └── ModBlockTags / ModItemTags / ModJukeboxSongs
+├── content/
+│   ├── block/{anvil,furnace,metal,strongbox,workbench}
+│   ├── enchantment/{,effects}
+│   ├── entity/
+│   └── item/{armor,bucket,food,material,quality,record,tool}
+├── chest/                    箱子等级、方块、方块实体、菜单、升级物品
+├── mixin/                    通用与仅服务端 Mixin
+├── network/                  自定义载荷
+└── util/
+
+src/client/java/com/mite/recraft/client/
+├── MiteRecraftedClient.java  客户端入口
+├── MiteRecraftedDataGenerator 数据生成入口
+├── datagen/                  全部数据生成器
+├── chest/                    箱子渲染器与界面
+├── renderer/ screen/ command/ strongbox/
+├── compat/appleskin/         AppleSkin 集成
+├── state/                    客户端同步状态
+└── mixin/                    客户端 Mixin
 ```
 
----
+源集约束：
+
+- 引用 `net.minecraft.client.*` 的代码只能放在 `src/client`；`src/main` 只放服务端与通用类。
+- 注册表的写入集中在 `registry/`，`content/` 只放行为实现，不直接注册。
+- 数据生成器只放在 `client.datagen`，避免 main 反向依赖 client。
+- 箱子渲染与界面集中在 `client/chest`；箱子方块、箱子实体与升级物品贴图位于 `assets/ironchests`，界面条带与保险箱贴图位于 `assets/mite-recrafted`，图集由 `ModChestAtlasProvider` 生成。
+- `Mixin` 目标方法必须存在于 26.3；注入方法名与参数表按目标签名书写，`mite-recrafted.mixins.json` 中 `defaultRequire: 1`。
+
+## 子模组接入
+
+`com.mite.recraft.api` 是唯一对外接口，位于 main 源集：
+
+| 类 | 用途 |
+| --- | --- |
+| `MiteIds` | `Identifier` / `ResourceKey` / `TagKey` 工厂，含命名空间重载 |
+| `ItemCategory` | 创造模式物品栏分类，枚举顺序即展示顺序 |
+| `MiteRegistration` | 物品、方块 + BlockItem、食物、工具、燃料注册，并自动登记物品栏 |
+| `MiteContent` | 查询已注册物品/方块/熔炉/保险箱 |
+| `MiteToolMaterials` | 工具材料反查（名称、耐久系数、最高品质） |
+| `MiteNutrition` | 营养数值读写、进食、客户端同步 |
+| `MiteEvents` | `NUTRITION_CHANGED`、`CRAFT_COMPLETED` |
+
+示例：
+
+```java
+public class ExampleMod implements ModInitializer {
+
+    private static final Identifier DUST = Identifier.fromNamespaceAndPath("examplemod", "example_dust");
+
+    @Override
+    public void onInitialize() {
+        // 使用本模组命名空间
+        MiteRegistration.registerStackedItem(ItemCategory.MATERIAL, "example_dust", 16);
+
+        // 使用子模组命名空间
+        Item dust = MiteRegistration.registerItem(ItemCategory.MATERIAL, DUST,
+                props -> new Item(props.stacksTo(16)));
+
+        MiteRegistration.registerBlock(MiteIds.id("example_block"),
+                props -> new Block(props.strength(2.0F)),
+                props -> props.stacksTo(64));
+
+        MiteRegistration.registerFuel(dust, 200, 1);
+
+        MiteEvents.CRAFT_COMPLETED.register((player, result, quality, xp) ->
+                MiteRecrafted.LOGGER.info("{} 制作 {} 品质 {} 消耗 XP {}", player.getName().getString(), result, quality, xp));
+    }
+}
+```
+
+注册时机不早于 `MiteRecrafted.onInitialize()`；物品栏内容在客户端打开时读取，注册后无需刷新。
+
+
+## 客户端命令
+
+- `/mite-recrafted:cnutrition` - 显示当前玩家的营养状态
 
 ## 贡献
 
-欢迎提交 Pull Request 或 Issue。在提交前请确保：
-
-1. 构建没有错误
-2. 客户端代码放在 `src/client/` 源集下，通用代码放在 `src/main/`
-3. 所有配方/标签/模型的修改优先使用 datagen 
-
----
+1. `./gradlew build` 无错误
+2. 客户端代码放 `src/client`，通用代码放 `src/main`
+3. 注册表写入放 `registry/`，配方/标签/模型优先使用 datagen
+4. 注释只写实现事实：公式、单位、调用时机、约束
 
 ## 致谢
 
 - 所有参与开发和建议的人员
 
----
-
 ## License
 
-<a href="https://github.com/A-Team-PJnCeADc/mite-recrafted">mite-recrafted</a> © 2026 by <a href="https://github.com/A-Team-PJnCeADc">A-Team-PJnCeADc</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+<a href="https://github.com/A-Team-PJnCeADc/mite-recrafted">mite-recrafted</a> © 2026 by <a href="https://github.com/A-Team-PJnCeADc">A-Team-PJnCeADc</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
 
+例外：`assets/ironchests/` 下的 38 张贴图（箱子实体贴图与升级物品图标）取自 <a href="https://github.com/cpw/ironchest">IronChests</a> 项目，按 <a href="[https://www.gnu.org/licenses/gpl-3.0.txt](https://github.com/4nner/IronChests?tab=GPL-3.0-1-ov-file)">GPL-3.0</a> 提供。该目录与项目其余部分为聚合关系：贴图独立存放并按普通 PNG 资源读取，主项目不含 IronChests 的 GPL 代码，其余代码仍适用前述 CC BY-NC-SA 4.0。逐文件清单与隔离方式见 [THIRD-PARTY-NOTICES.md](docs/THIRD-PARTY-NOTICES.md)，许可全文见 `LICENSES/IronChests-GPL-3.0-license`。

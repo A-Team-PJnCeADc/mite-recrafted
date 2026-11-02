@@ -1,7 +1,8 @@
 package com.mite.recraft.client.screen;
 
-import com.mite.recraft.block.workbench.ModWorkbenchMenu;
-import com.mite.recraft.client.MiteRecraftedClient;
+import com.mite.recraft.client.state.ClientWorkbenchState;
+import com.mite.recraft.content.block.workbench.ModWorkbenchMenu;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.CraftingScreen;
@@ -32,8 +33,8 @@ public class ModWorkbenchScreen extends CraftingScreen {
 
     /** 合成进度箭头 + 百分比 */
     private void drawCraftingProgress(GuiGraphicsExtractor graphics) {
-        int period = MiteRecraftedClient.syncedCraftingPeriod;
-        int ticks = MiteRecraftedClient.syncedCraftingTicks;
+        int period = ClientWorkbenchState.craftingPeriod();
+        int ticks = ClientWorkbenchState.craftingTicks();
         if (period <= 0 || ticks <= 0) return;
 
         int pct = Math.min(100, ticks * 100 / period);
@@ -59,7 +60,7 @@ public class ModWorkbenchScreen extends CraftingScreen {
 
     /** 产物槽下方显示「合成花费：?级」，绿色可合成 / 红色不足 */
     private void drawXpCost(GuiGraphicsExtractor graphics) {
-        int xpCost = MiteRecraftedClient.syncedXpCost;
+        int xpCost = ClientWorkbenchState.xpCost();
         if (xpCost <= 0) return;
 
         var player = Minecraft.getInstance().player;

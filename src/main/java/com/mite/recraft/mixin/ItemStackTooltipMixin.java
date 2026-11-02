@@ -1,6 +1,7 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.enchantment.ModEnchantments;
+import com.mite.recraft.registry.ModEnchantments;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -11,8 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,7 +23,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 /**
- * 保护附魔 tooltip — 在原版护甲数值后追加绿色加成值。
+ * 保护附魔 tooltip - 在原版护甲数值后追加绿色加成值。
  */
 @Mixin(ItemStack.class)
 public class ItemStackTooltipMixin {

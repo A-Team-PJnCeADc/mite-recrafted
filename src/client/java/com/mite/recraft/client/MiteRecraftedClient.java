@@ -1,16 +1,19 @@
 package com.mite.recraft.client;
 
-import com.mite.recraft.block.workbench.ModWorkbenchBlock;
+import com.mite.recraft.client.chest.ChestClientSetup;
 import com.mite.recraft.client.command.ClientNutritionCommand;
 import com.mite.recraft.client.renderer.ModArrowRenderer;
 import com.mite.recraft.client.renderer.item.NockedArrowProperty;
 import com.mite.recraft.client.renderer.item.QuicknessDrawProperty;
 import com.mite.recraft.client.screen.ModWorkbenchScreen;
+import com.mite.recraft.client.state.ClientWorkbenchState;
 import com.mite.recraft.client.strongbox.StrongboxClientRegistry;
-import com.mite.recraft.entity.ModEntitys;
-import com.mite.recraft.item.moditems.food.NutritionSystem;
+import com.mite.recraft.content.item.food.NutritionSystem;
 import com.mite.recraft.network.CraftingProgressSyncPayload;
 import com.mite.recraft.network.NutritionSyncPayload;
+import com.mite.recraft.registry.ModEntityTypes;
+import com.mite.recraft.registry.ModMenus;
+
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -18,25 +21,14 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 
 public class MiteRecraftedClient implements ClientModInitializer {
 
-    public static volatile int syncedCraftingPeriod;
-    public static volatile int syncedCraftingTicks;
-    public static volatile float syncedBenchCoefficient = 1.0f;
-    public static volatile int syncedQualityIndex = -1;
-    public static volatile int syncedXpCost = 0;
 
     @Override
     public void onInitializeClient() {
-        EntityRenderers.register(ModEntitys.MITE_ARROW, ModArrowRenderer::new);
-        MenuScreens.register(ModWorkbenchBlock.MENU_TYPE, ModWorkbenchScreen::new);
+        EntityRenderers.register(ModEntityTypes.MITE_ARROW, ModArrowRenderer::new);
+        MenuScreens.register(ModMenus.WORKBENCH, ModWorkbenchScreen::new);
 
         ClientPlayNetworking.registerGlobalReceiver(CraftingProgressSyncPayload.TYPE,
-                (payload, context) -> {
-                    syncedCraftingPeriod = payload.period();
-                    syncedCraftingTicks = payload.ticks();
-                    syncedBenchCoefficient = payload.benchCoefficient();
-                    syncedQualityIndex = payload.qualityIndex();
-                    syncedXpCost = payload.xpCost();
-                });
+                (payload, context) -> ClientWorkbenchState.update(payload));
 
         // 营养同步：将服务端数据附加到客户端玩家
         ClientPlayNetworking.registerGlobalReceiver(NutritionSyncPayload.TYPE,
@@ -58,7 +50,7 @@ public class MiteRecraftedClient implements ClientModInitializer {
         NockedArrowProperty.register();
         QuicknessDrawProperty.register();
 
-        // Strongboxes
         StrongboxClientRegistry.register();
+        ChestClientSetup.register();
     }
 }

@@ -1,7 +1,8 @@
 package com.mite.recraft.mixin;
 
+import com.mite.recraft.registry.ModEnchantments;
+
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.mite.recraft.enchantment.ModEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 /**
- * 保护 (Protection) — 百分比增加被附魔装备的盔甲值，每级 12.5%，最高 IV 级。
+ * 保护 (Protection) - 百分比增加被附魔装备的盔甲值，每级 12.5%，最高 IV 级。
  */
 @Mixin(LivingEntity.class)
 public class ProtectionMixin {

@@ -1,6 +1,7 @@
 package com.mite.recraft.client.mixin;
 
-import com.mite.recraft.item.moditems.food.EdibleOverride;
+import com.mite.recraft.content.item.food.EdibleOverride;
+
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * <p>AppleSkin 的 {@code FoodHelper.isFood} 检查 ItemStack 是否有
  * FOOD + CONSUMABLE 组件。EdibleOverride 物品无此组件（避免渲染马赛克），
  * 导致 AppleSkin 不显示预览值。此 mixin 绕过该检查。
- * 食物预览值由 {@link com.mite.recraft.client.AppleSkinEventHandler}</p>
+ * 食物预览值由 {@link com.mite.recraft.client.compat.appleskin.AppleSkinEventHandler}</p>
  */
 @Pseudo
 @Mixin(targets = "squeek.appleskin.helpers.FoodHelper", remap = false)

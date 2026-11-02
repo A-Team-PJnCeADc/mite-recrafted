@@ -1,9 +1,10 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.item.moditems.food.CommonFood;
-import com.mite.recraft.item.moditems.food.EdibleOverride;
-import com.mite.recraft.item.moditems.food.FoodType;
-import com.mite.recraft.item.moditems.food.NutritionSystem;
+import com.mite.recraft.content.item.food.CommonFood;
+import com.mite.recraft.content.item.food.EdibleOverride;
+import com.mite.recraft.content.item.food.FoodType;
+import com.mite.recraft.content.item.food.NutritionSystem;
+
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -39,7 +40,7 @@ public class VanillaFoodOverrideMixin {
         FoodProperties fp = stack.get(DataComponents.FOOD);
         if (fp == null) return;
 
-        // 差值修正：原版已加的值 → 调整到 MITE 目标值
+        // 差值修正：原版已加的值 -> 调整到 MITE 目标值
         int targetHunger = miteFood.hunger();
         // MC 26.2: actualSat = hunger × satMod × 2
         float targetSat = miteFood.saturationModifier() * targetHunger * 2;

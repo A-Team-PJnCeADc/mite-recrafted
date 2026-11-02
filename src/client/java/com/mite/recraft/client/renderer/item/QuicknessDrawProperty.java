@@ -1,8 +1,9 @@
 package com.mite.recraft.client.renderer.item;
 
 import com.mite.recraft.client.mixin.RangeSelectItemModelPropertiesAccessor;
-import com.mite.recraft.enchantment.ModEnchantments;
-import com.mite.recraft.enchantment.Quickness;
+import com.mite.recraft.content.enchantment.Quickness;
+import com.mite.recraft.registry.ModEnchantments;
+
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperty;
@@ -14,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 /**
- * 弓的蓄力动画属性 —— 返回被 Quickness 加速后的 use_duration 值。
+ * 弓的蓄力动画属性 - 返回被 Quickness 加速后的 use_duration 值。
  * <p>
  * 原版动画阈值（scale=0.05）：bow_pulling_0 (1+)、bow_pulling_1 (13+)、bow_pulling_2 (18+) ticks。
  * Quickness Lv5 (×2) 后：pulling_2 在 9+ ticks 触发，与 12 tick 满蓄同步。

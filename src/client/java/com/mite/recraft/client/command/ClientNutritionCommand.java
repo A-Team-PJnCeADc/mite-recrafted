@@ -1,13 +1,14 @@
 package com.mite.recraft.client.command;
 
-import com.mite.recraft.item.moditems.food.NutritionSystem;
+import com.mite.recraft.content.item.food.NutritionSystem;
+
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.network.chat.Component;
 
 /**
- * 客户端营养调试命令 — /cnutrition
+ * 客户端营养调试命令 - /cnutrition
  */
 public class ClientNutritionCommand {
 

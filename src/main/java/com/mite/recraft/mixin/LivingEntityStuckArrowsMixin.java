@@ -1,6 +1,7 @@
 package com.mite.recraft.mixin;
 
 import com.mite.recraft.util.StuckArrowTracker;
+
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;

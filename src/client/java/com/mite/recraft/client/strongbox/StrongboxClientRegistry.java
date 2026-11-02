@@ -1,7 +1,8 @@
 package com.mite.recraft.client.strongbox;
 
-import com.mite.recraft.item.moditems.strongbox.StrongboxRegistry;
-import com.mite.recraft.item.moditems.strongbox.StrongboxType;
+import com.mite.recraft.content.block.strongbox.StrongboxType;
+import com.mite.recraft.registry.ModStrongboxes;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -13,7 +14,7 @@ public class StrongboxClientRegistry {
         // Register screen for each strongbox menu type
         for (StrongboxType type : StrongboxType.VALUES) {
             MenuScreens.register(
-                    StrongboxRegistry.MENU_TYPES.get(type),
+                    ModStrongboxes.MENU_TYPES.get(type),
                     StrongboxScreen::new
             );
         }
@@ -21,7 +22,7 @@ public class StrongboxClientRegistry {
         // Register entity renderer for each strongbox block entity type
         for (StrongboxType type : StrongboxType.VALUES) {
             BlockEntityRenderers.register(
-                    StrongboxRegistry.BLOCK_ENTITY_TYPES.get(type),
+                    ModStrongboxes.BLOCK_ENTITY_TYPES.get(type),
                     StrongboxEntityRenderer::new
             );
         }

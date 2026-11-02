@@ -1,6 +1,7 @@
 package com.mite.recraft.client.renderer.item;
 
-import com.mite.recraft.item.tools.toolItem.ArrowItems;
+import com.mite.recraft.content.item.tool.ArrowItems;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.multiplayer.ClientLevel;

@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 跨类共享的卡箭注册表 —— 不与任何目标类绑定的纯工具类。
+ * 跨类共享的卡箭注册表 - 不与任何目标类绑定的纯工具类。
  * ArrowEntity 存，LivingEntityStuckArrowsMixin 取。
  */
 public final class StuckArrowTracker {

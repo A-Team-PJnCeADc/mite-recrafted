@@ -1,6 +1,7 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.enchantment.ModEnchantments;
+import com.mite.recraft.registry.ModEnchantments;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -64,9 +65,6 @@ public class PiercingMixin {
         mite_piercing$preArmor.remove();
     }
 
-    /**
-     * 注入到 getDamageAfterArmorAbsorb 返回赋值之后，此时 damage 已是护甲减免后的值。
-     */
     @ModifyVariable(
             method = "actuallyHurt",
             at = @At(

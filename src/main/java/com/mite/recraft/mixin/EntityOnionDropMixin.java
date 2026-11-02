@@ -1,6 +1,7 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.item.moditems.food.ModFoodItems;
+import com.mite.recraft.content.item.food.ModFoodItems;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -32,7 +33,6 @@ public class EntityOnionDropMixin {
         // 非玩家击杀不处理
         if (!(source.getEntity() instanceof Player player)) return;
 
-        // 获取抢夺等级
         Holder<Enchantment> lootingHolder = serverLevel.registryAccess()
                 .lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(Enchantments.LOOTING);

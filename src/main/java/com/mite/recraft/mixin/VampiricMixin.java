@@ -1,7 +1,8 @@
 package com.mite.recraft.mixin;
 
-import com.mite.recraft.enchantment.ModEnchantments;
-import com.mite.recraft.enchantment.Vampiric;
+import com.mite.recraft.content.enchantment.Vampiric;
+import com.mite.recraft.registry.ModEnchantments;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
