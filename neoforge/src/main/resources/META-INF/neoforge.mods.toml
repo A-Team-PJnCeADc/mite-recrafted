@@ -1,0 +1,41 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "CC BY-NC-SA 4.0"
+issueTrackerURL = "https://github.com/A-Team-PJnCeADc/mite-recrafted/issues"
+
+[[mods]]
+modId = "mite_recrafted"
+version = "${version}"
+displayName = "mite-recrafted"
+authors = "abzxc"
+description = '''
+MITE (Minecraft Is Too Easy) mechanics for modern Minecraft.
+'''
+iconFile = "assets/mite_recrafted/icon.png"
+
+[[dependencies.mite_recrafted]]
+modId = "neoforge"
+type = "required"
+versionRange = "[26.3.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mite_recrafted]]
+modId = "minecraft"
+type = "required"
+versionRange = "[26.3,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mite_recrafted]]
+modId = "architectury"
+type = "required"
+versionRange = "[22.0.3,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "mite-recrafted.mixins.json"
+
+[[mixins]]
+config = "mite-recrafted.client.mixins.json"

@@ -1,46 +1,47 @@
 # gradle
-
 .gradle/
 build/
 out/
 classes/
+*.class
 
-# eclipse
-
-*.launch
-
-# idea
-
+# ide
 .idea/
 *.iml
 *.ipr
 *.iws
-
-# vscode
-
-.settings/
+.run/
 .vscode/
-bin/
+.settings/
 .classpath
 .project
+bin/
+*.launch
 
 # macos
-
 *.DS_Store
 
-# fabric
-
+# 运行目录：两端 runClient / runServer / runDatagen 的工作目录
 run/
-/src/main/generated/
-/net/
-/data/
+runs/
 
-# java
+# datagen 产物，入库前需先执行 :fabric:runDatagen
+common/src/main/generated/
 
+# 上游参考源码（architectury-api / loom / plugin 的本地检出）
+/reference/
+
+# 日志与 JVM 崩溃产物
+*.log
+logs/
+crash-reports/
 hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
 
-
-/zh-*.jar
+# 截图与内存转储
+screenshots/
+screenshots_*/
+dumps/
+*.dump

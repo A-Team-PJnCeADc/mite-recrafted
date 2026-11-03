@@ -1,0 +1,38 @@
+package com.mite.recraft.fabric.client;
+
+import com.mite.recraft.fabric.client.datagen.*;
+
+import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
+
+public class MiteRecraftedDataGenerator implements DataGeneratorEntrypoint {
+    @Override
+    public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
+        FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
+        pack.addProvider(ModModelProvider::new);
+        pack.addProvider(ModRecipeProvider::new);
+        pack.addProvider(ModEnglishLanguageProvider::new);
+        pack.addProvider(ModChineseLanguageProvider::new);
+        ModChestLanguageData.LOCALES.forEach((locale, entries) -> pack.addProvider(
+                (output, future) -> new ModChestLanguageProvider(
+                        (FabricPackOutput) output, future, locale, entries)));
+        pack.addProvider(ModItemTagProvider::new);
+        pack.addProvider(ModBlockTagProvider::new);
+        pack.addProvider(ModBlockEntityTypeTagProvider::new);
+        pack.addProvider(ModEquipmentAssetProvider::new);
+        pack.addProvider(ModBlockLootTableProvider::new);
+        pack.addProvider((output, future) -> new ModSoundProvider(output));
+        pack.addProvider(ModJukeboxSongProvider::new);
+        pack.addProvider((output, future) -> new ModChestAtlasProvider((FabricPackOutput) output, future));
+        pack.addProvider(ModEnchantmentProvider::new);
+        pack.addProvider(ModEnchantmentTagProvider::new);
+    }
+
+    @Override
+    public void buildRegistry(RegistrySetBuilder registryBuilder) {
+        registryBuilder.add(Registries.ENCHANTMENT, ModEnchantmentProvider::bootstrap);
+    }
+}
