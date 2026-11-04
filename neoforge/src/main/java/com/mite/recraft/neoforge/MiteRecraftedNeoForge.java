@@ -4,6 +4,7 @@ import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.content.item.food.NutritionSystem;
 import com.mite.recraft.internal.data.neoforge.EntityDataImpl;
 import com.mite.recraft.registry.MiteRegistrationPhases;
+import com.mite.recraft.registry.neoforge.ModEntityAttributesImpl;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -28,6 +29,7 @@ public final class MiteRecraftedNeoForge {
 
         modBus.addListener(MiteRecraftedNeoForge::onRegister);
         modBus.addListener(MiteRecraftedNeoForge::onCommonSetup);
+        modBus.addListener(ModEntityAttributesImpl::onAttributeCreation);
     }
 
     private static void onRegister(RegisterEvent event) {

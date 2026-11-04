@@ -1,7 +1,6 @@
 package com.mite.recraft.mixin;
 
 import com.mite.recraft.content.block.strongbox.StrongboxScreenHandler;
-
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;

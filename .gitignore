@@ -45,3 +45,5 @@ screenshots/
 screenshots_*/
 dumps/
 *.dump
+
+/docs/PORTING-STATUS.md

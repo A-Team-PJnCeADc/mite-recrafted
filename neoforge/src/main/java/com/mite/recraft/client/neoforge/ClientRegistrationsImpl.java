@@ -5,7 +5,8 @@ import com.mite.recraft.chest.ChestVariant;
 import com.mite.recraft.client.chest.VariantChestRenderer;
 import com.mite.recraft.client.chest.VariantChestScreen;
 import com.mite.recraft.client.command.ClientNutritionCommand;
-import com.mite.recraft.client.renderer.ModArrowRenderer;
+import com.mite.recraft.client.model.GhoulModel;
+import com.mite.recraft.client.renderer.*;
 import com.mite.recraft.client.renderer.item.NockedArrowProperty;
 import com.mite.recraft.client.renderer.item.QuicknessDrawProperty;
 import com.mite.recraft.client.screen.ModWorkbenchScreen;
@@ -16,7 +17,14 @@ import com.mite.recraft.registry.ModChests;
 import com.mite.recraft.registry.ModEntityTypes;
 import com.mite.recraft.registry.ModMenus;
 import com.mite.recraft.registry.ModStrongboxes;
-
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.entity.ZombieRenderer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Silverfish;
+import net.minecraft.world.entity.monster.cubemob.Slime;
+import net.minecraft.world.entity.monster.spider.Spider;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -47,8 +55,48 @@ public final class ClientRegistrationsImpl {
     }
 
     @SubscribeEvent
+    public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(GhoulModel.LAYER, GhoulModel::createBodyLayer);
+    }
+
+    @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntityTypes.MITE_ARROW, ModArrowRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.GHOUL, GhoulRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.LONGDEAD, LongdeadRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.REVENANT, RevenantRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.WIGHT, WightRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.BONE_LORD, BoneLordRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.ANCIENT_BONE_LORD, BoneLordRenderer::new);
+        for (EntityType<? extends Spider> type : MiteSpiderRenderer.REGISTERED) {
+            registerSpider(event, type);
+        }
+        event.registerEntityRenderer(ModEntityTypes.DIRE_WOLF, DireWolfRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.HELLHOUND, HellhoundRenderer::new);
+        for (EntityType<? extends Silverfish> type : MiteSilverfishRenderer.REGISTERED) {
+            registerSilverfish(event, type);
+        }
+        event.registerEntityRenderer(ModEntityTypes.LONGDEAD_GUARDIAN, LongdeadGuardianRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.INFERNAL_CREEPER, InfernalCreeperRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.INVISIBLE_STALKER, InvisibleStalkerRenderer::new);
+        for (EntityType<? extends Slime> type : MiteSlimeRenderer.REGISTERED) {
+            event.registerEntityRenderer(type, MiteSlimeRenderer.provider(type));
+        }
+        event.registerEntityRenderer(ModEntityTypes.VAMPIRE_BAT,
+                MiteBatRenderer.provider("textures/entity/mob/vampire_bat.png"));
+        event.registerEntityRenderer(ModEntityTypes.GIANT_VAMPIRE_BAT,
+                MiteBatRenderer.provider("textures/entity/mob/vampire_bat.png"));
+        event.registerEntityRenderer(ModEntityTypes.NIGHTWING,
+                MiteBatRenderer.provider("textures/entity/mob/nightwing.png"));
+        event.registerEntityRenderer(ModEntityTypes.SHADOW, ShadowRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.FIRE_ELEMENTAL, FireElementalRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.EARTH_ELEMENTAL, EarthElementalRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.CLAY_GOLEM, EarthElementalRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.GIANT_ZOMBIE, ZombieRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.WEB, ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.BRICK, ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.GELATINOUS_SPHERE, ThrownItemRenderer::new);
+
         for (ChestVariant variant : ChestVariant.REGISTERED) {
             registerChestRenderer(event, ModChests.storageType(variant));
         }
@@ -58,14 +106,30 @@ public final class ClientRegistrationsImpl {
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void registerChestRenderer(EntityRenderersEvent.RegisterRenderers event,
-                                              net.minecraft.world.level.block.entity.BlockEntityType type) {
+    /** 蠹虫系渲染器的登记入口：模型固定为原版蠹虫模型，贴图按实体 id 推导。 */
+    private static void registerSilverfish(EntityRenderersEvent.RegisterRenderers event,
+                                           EntityType<? extends Silverfish> type) {
+        event.registerEntityRenderer(type, MiteSilverfishRenderer.provider(type));
+    }
+
+    /** 蛛形生物渲染器的登记入口：模型固定为原版蜘蛛模型，只有贴图不同。 */
+    private static void registerSpider(EntityRenderersEvent.RegisterRenderers event,
+                                       EntityType<? extends Spider> type) {
+        event.registerEntityRenderer(type, MiteSpiderRenderer.<Spider>provider(type));
+    }
+
+    private static <T extends BlockEntity & LidBlockEntity> void registerChestRenderer(
+            EntityRenderersEvent.RegisterRenderers event,
+            net.minecraft.world.level.block.entity.BlockEntityType<? extends T> type) {
         event.registerBlockEntityRenderer(type, VariantChestRenderer::new);
     }
 
     public static void registerScreens() {
         // 由 onRegisterMenuScreens 登记
+    }
+
+    public static void registerModelLayers() {
+        // 由 onRegisterLayerDefinitions 登记
     }
 
     public static void registerEntityRenderers() {

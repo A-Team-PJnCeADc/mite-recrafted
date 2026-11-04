@@ -3,14 +3,7 @@ package com.mite.recraft.registry;
 import com.mite.recraft.api.ItemCategory;
 import com.mite.recraft.api.MiteIds;
 import com.mite.recraft.api.MiteRegistration;
-import com.mite.recraft.chest.ChestMenu;
-import com.mite.recraft.chest.ChestUpgrade;
-import com.mite.recraft.chest.ChestUpgradeItem;
-import com.mite.recraft.chest.ChestVariant;
-import com.mite.recraft.chest.CrystalChestStorage;
-import com.mite.recraft.chest.VariantChestBlock;
-import com.mite.recraft.chest.VariantChestStorage;
-
+import com.mite.recraft.chest.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -24,15 +17,12 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 箱子内容注册：方块、方块实体类型、菜单、BlockItem 与升级物品。
@@ -44,7 +34,7 @@ public final class ModChests {
 
     private static final Map<ChestVariant, Block> BLOCKS = new LinkedHashMap<>();
     private static final Map<ChestVariant, BlockItem> ITEMS = new LinkedHashMap<>();
-    private static final Map<ChestVariant, BlockEntityType<? extends VariantChestStorage>> STORAGE_TYPES =
+    private static final Map<ChestVariant, BlockEntityType<VariantChestStorage>> STORAGE_TYPES =
             new LinkedHashMap<>();
     private static final Map<ChestVariant, MenuType<ChestMenu>> MENU_TYPES = new LinkedHashMap<>();
     private static final Map<ChestUpgrade, Item> UPGRADE_ITEMS = new LinkedHashMap<>();
@@ -92,7 +82,7 @@ public final class ModChests {
         for (ChestVariant variant : ChestVariant.REGISTERED) {
             Identifier id = variant.blockId();
             Block block = BLOCKS.get(variant);
-            BlockEntityType<? extends VariantChestStorage> type = new BlockEntityType<>(
+            BlockEntityType<VariantChestStorage> type = new BlockEntityType<>(
                     (pos, state) -> createStorage(variant, pos, state),
                     Set.of(block));
             Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, id, type);
@@ -131,7 +121,7 @@ public final class ModChests {
 
     public static Block block(ChestVariant variant) {
         Block block = BLOCKS.get(variant);
-        return block != null ? block : net.minecraft.world.level.block.Blocks.CHEST;
+        return block != null ? block : Blocks.CHEST;
     }
 
     public static BlockItem item(ChestVariant variant) {
@@ -142,8 +132,8 @@ public final class ModChests {
         return UPGRADE_ITEMS.get(upgrade);
     }
 
-    public static BlockEntityType<? extends VariantChestStorage> storageType(ChestVariant variant) {
-        BlockEntityType<? extends VariantChestStorage> type = STORAGE_TYPES.get(variant);
+    public static BlockEntityType<VariantChestStorage> storageType(ChestVariant variant) {
+        BlockEntityType<VariantChestStorage> type = STORAGE_TYPES.get(variant);
         return type != null ? type : null;
     }
 

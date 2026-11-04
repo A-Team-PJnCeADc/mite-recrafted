@@ -2,15 +2,16 @@ package com.mite.recraft.mixin;
 
 import com.mite.recraft.content.block.furnace.MiteFuels;
 import com.mite.recraft.content.block.furnace.MiteFurnaceBlockEntity;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.spongepowered.asm.mixin.Mixin;
@@ -78,7 +79,7 @@ public class MiteFurnaceRecipeFilterMixin {
         var accessor = (AccessorFurnaceBlockEntity) be;
         if (accessor.mite$getLitTimeRemaining() <= 0 && accessor.mite$getCookingProgress() <= 0) return;
 
-        Direction facing = state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING);
+        Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
 
         if (isFlooded(level, pos, facing)) {
             accessor.mite$setLitTimeRemaining(0);
@@ -109,7 +110,7 @@ public class MiteFurnaceRecipeFilterMixin {
 
     private static boolean isAllowedForTier(ItemStack input, int maxHeat) {
         if (maxHeat == 1) {
-            if (input.has(net.minecraft.core.component.DataComponents.FOOD)) return true;
+            if (input.has(DataComponents.FOOD)) return true;
             if (input.is(Items.CLAY)) return true;
             return false;
         }

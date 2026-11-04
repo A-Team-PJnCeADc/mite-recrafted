@@ -10,15 +10,11 @@ import com.mite.recraft.content.item.food.ModFoodItems;
 import com.mite.recraft.content.item.material.ManureItems;
 import com.mite.recraft.content.item.material.ModMaterials;
 import com.mite.recraft.content.item.record.ModRecordItems;
-
+import com.mite.recraft.content.item.throwable.ModThrowables;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 物品登记表：记录已注册物品与所属的创造模式物品栏分类，并由 {@link ModCreativeTabs} 消费。
@@ -58,6 +54,8 @@ public final class ModItems {
         ModArmorRegister.register();
         ModHorseArmorItems.register();
         ModEquipmentAssets.register();
+        ModSpawnEggs.register();
+        ModThrowables.init();
         addEnchantedBook(Items.ENCHANTED_BOOK);
     }
 }

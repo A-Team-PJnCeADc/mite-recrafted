@@ -2,6 +2,7 @@ package com.mite.recraft.content.enchantment;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -47,7 +48,7 @@ public final class TreeFelling {
         }
 
         // 工具耐久损耗：每额外破坏 1 块原木消耗 1 点耐久
-        if (felled > 0 && tool.isDamageableItem() && miner instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+        if (felled > 0 && tool.isDamageableItem() && miner instanceof ServerPlayer serverPlayer) {
             tool.hurtAndBreak(felled, serverLevel, serverPlayer, item -> {});
         }
     }

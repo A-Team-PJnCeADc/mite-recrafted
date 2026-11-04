@@ -3,10 +3,10 @@ package com.mite.recraft.content.block.anvil;
 import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.content.block.metal.ModAnvilBlocks;
 import com.mite.recraft.content.item.tool.ModToolMaterial;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -110,6 +110,6 @@ public class ModAnvilBlock extends AnvilBlock implements EntityBlock {
     protected MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         return new SimpleMenuProvider(
                 (containerId, inventory, p) -> new ModAnvilMenu(containerId, inventory, ContainerLevelAccess.create(level, pos)),
-                net.minecraft.network.chat.Component.translatable(getDescriptionId()));
+                Component.translatable(getDescriptionId()));
     }
 }

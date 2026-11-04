@@ -1,16 +1,15 @@
 package com.mite.recraft.content.item.armor;
 
 import com.mite.recraft.registry.ModDataComponents;
-
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.EquipmentSlotGroup;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.equipment.Equippable;
+
 import static com.mite.recraft.MiteRecrafted.MOD_ID;
 
 /**
@@ -130,19 +129,8 @@ public class ModArmorItems {
             case BOOTS -> EquipmentSlot.FEET;
         };
 
-        // MITE: (numComponents × protection) / 24.0 = 每点 4% 减伤
-        float armorValue = (float) (piece.numComponents() * mat.protection(chainmail)) / 24.0f;
-        if (armorValue < 0.5f) armorValue = 0.5f;
-
-        // ARMOR 属性修饰符：作用于对应槽位组
-        ItemAttributeModifiers armorAttrs = ItemAttributeModifiers.builder()
-                .add(Attributes.ARMOR,
-                        new AttributeModifier(
-                                Identifier.fromNamespaceAndPath(MOD_ID, "armor." + itemId),
-                                armorValue,
-                                AttributeModifier.Operation.ADD_VALUE),
-                        EquipmentSlotGroup.bySlot(slot))
-                .build();
+        // MITE 护甲走平减模型（MiteArmor / FlatArmorMixin），不提供原版 ARMOR 属性点，
+        // 否则会与原版百分比减伤叠加。
 
         return new Item.Properties()
                 .setId(ResourceKey.create(Registries.ITEM,
@@ -150,8 +138,13 @@ public class ModArmorItems {
                 .stacksTo(1)
                 .durability(mat.durability(piece.numComponents(), chainmail))
                 .enchantable(mat.enchantability())
-                .equippable(slot)
-                .attributes(armorAttrs)
+                .component(DataComponents.EQUIPPABLE,
+                        Equippable.builder(slot)
+                                .setEquipSound(chainmail
+                                        ? SoundEvents.ARMOR_EQUIP_CHAIN
+                                        : SoundEvents.ARMOR_EQUIP_IRON)
+                                .setAsset(ModEquipmentAssets.humanoid(mat, chainmail))
+                                .build())
                 .component(ModDataComponents.CRAFTING_DIFFICULTY,
                         mat.durabilityCoefficient() * 100.0F * piece.numComponents());
     }

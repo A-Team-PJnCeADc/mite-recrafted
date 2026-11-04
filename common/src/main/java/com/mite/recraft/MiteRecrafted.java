@@ -3,6 +3,7 @@ package com.mite.recraft;
 import com.mite.recraft.client.ClientRegistrations;
 import com.mite.recraft.content.item.food.NutritionSystem;
 import com.mite.recraft.registry.MiteRegistrationPhases;
+import com.mite.recraft.registry.ModEntityAttributes;
 import com.mite.recraft.registry.ModFuels;
 import com.mite.recraft.registry.ModNetwork;
 
@@ -32,6 +33,8 @@ public final class MiteRecrafted {
         // 先触发附加数据描述符的类初始化，runAll 末尾要按声明表注册附件
         NutritionSystem.register();
         MiteRegistrationPhases.runAll();
+        // 生物默认属性：Fabric 在此写入，NeoForge 由 EntityAttributeCreationEvent 回调
+        ModEntityAttributes.register();
         // 客户端登记不放进 runAll：专用服务端不加载任何客户端类
         EnvExecutor.runInEnv(Env.CLIENT, () -> ClientRegistrations::registerEarly);
     }

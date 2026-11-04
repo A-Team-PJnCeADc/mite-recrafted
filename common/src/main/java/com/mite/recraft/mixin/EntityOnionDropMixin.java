@@ -1,8 +1,8 @@
 package com.mite.recraft.mixin;
 
 import com.mite.recraft.content.item.food.ModFoodItems;
-
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -39,7 +39,7 @@ public class EntityOnionDropMixin {
         int looting = EnchantmentHelper.getItemEnchantmentLevel(lootingHolder, player.getMainHandItem());
 
         // 僵尸村民：rand.nextInt(50) < 5 + looting * 2
-        var entityId = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(self.getType());
+        var entityId = BuiltInRegistries.ENTITY_TYPE.getKey(self.getType());
         if (entityId != null && entityId.getPath().equals("zombie_villager")
                 && self.getRandom().nextInt(50) < 5 + looting * 2) {
             if (self.getRandom().nextInt(6) == 5) {

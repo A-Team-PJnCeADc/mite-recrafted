@@ -248,6 +248,71 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
         tb.add("container.obsidian_furnace", "黑曜石熔炉");
         tb.add("container.netherrack_furnace", "地狱岩熔炉");
 
+        // 生物
+        tb.add("entity.mite_recrafted.ghoul", "食尸鬼");
+        tb.add("entity.mite_recrafted.longdead", "长眠者");
+        tb.add("entity.mite_recrafted.revenant", "亡魂");
+        tb.add("entity.mite_recrafted.wight", "尸妖");
+        tb.add("entity.mite_recrafted.bone_lord", "白骨领主");
+        tb.add("entity.mite_recrafted.ancient_bone_lord", "远古白骨领主");
+        tb.add("entity.mite_recrafted.wood_spider", "木蜘蛛");
+        tb.add("entity.mite_recrafted.black_widow_spider", "黑寡妇蜘蛛");
+        tb.add("entity.mite_recrafted.phase_spider", "相位蜘蛛");
+        tb.add("entity.mite_recrafted.demon_spider", "恶魔蜘蛛");
+        tb.add("entity.mite_recrafted.dire_wolf", "恐狼");
+        tb.add("entity.mite_recrafted.hellhound", "狱犬");
+        tb.add("entity.mite_recrafted.copperspine", "铜刺蠹虫");
+        tb.add("entity.mite_recrafted.hoary_silverfish", "白霜蠹虫");
+        tb.add("entity.mite_recrafted.netherspawn", "下界之子");
+        tb.add("entity.mite_recrafted.longdead_guardian", "长眠者守卫");
+        tb.add("entity.mite_recrafted.infernal_creeper", "炼狱苦力怕");
+        tb.add("entity.mite_recrafted.invisible_stalker", "无形潜伏者");
+        tb.add("entity.mite_recrafted.blob", "粘液怪");
+        tb.add("entity.mite_recrafted.ooze", "软泥怪");
+        tb.add("entity.mite_recrafted.jelly", "凝胶怪");
+        tb.add("entity.mite_recrafted.pudding", "布丁怪");
+        tb.add("entity.mite_recrafted.vampire_bat", "吸血蝙蝠");
+        tb.add("entity.mite_recrafted.giant_vampire_bat", "巨型吸血蝙蝠");
+        tb.add("entity.mite_recrafted.nightwing", "夜翼");
+        tb.add("entity.mite_recrafted.shadow", "暗影");
+        tb.add("entity.mite_recrafted.web", "蛛网");
+        tb.add("entity.mite_recrafted.brick", "砖块");
+        tb.add("entity.mite_recrafted.gelatinous_sphere", "凝胶球");
+        tb.add("entity.mite_recrafted.fire_elemental", "火元素");
+        tb.add("entity.mite_recrafted.earth_elemental", "土元素");
+        tb.add("entity.mite_recrafted.clay_golem", "黏土傀儡");
+        tb.add("entity.mite_recrafted.giant_zombie", "巨型僵尸");
+        tb.add("entity.mite_recrafted.cave_spider", "洞穴蛛");
+tb.add("item.mite_recrafted.ghoul_spawn_egg", "食尸鬼刷怪蛋");
+        tb.add("item.mite_recrafted.longdead_spawn_egg", "长眠者刷怪蛋");
+        tb.add("item.mite_recrafted.revenant_spawn_egg", "亡魂刷怪蛋");
+        tb.add("item.mite_recrafted.wight_spawn_egg", "尸妖刷怪蛋");
+        tb.add("item.mite_recrafted.bone_lord_spawn_egg", "白骨领主刷怪蛋");
+        tb.add("item.mite_recrafted.ancient_bone_lord_spawn_egg", "远古白骨领主刷怪蛋");
+        tb.add("item.mite_recrafted.wood_spider_spawn_egg", "木蜘蛛刷怪蛋");
+        tb.add("item.mite_recrafted.black_widow_spider_spawn_egg", "黑寡妇蜘蛛刷怪蛋");
+        tb.add("item.mite_recrafted.phase_spider_spawn_egg", "相位蜘蛛刷怪蛋");
+        tb.add("item.mite_recrafted.demon_spider_spawn_egg", "恶魔蜘蛛刷怪蛋");
+        tb.add("item.mite_recrafted.dire_wolf_spawn_egg", "恐狼刷怪蛋");
+        tb.add("item.mite_recrafted.hellhound_spawn_egg", "狱犬刷怪蛋");
+        tb.add("item.mite_recrafted.copperspine_spawn_egg", "铜刺蠹虫刷怪蛋");
+        tb.add("item.mite_recrafted.hoary_silverfish_spawn_egg", "白霜蠹虫刷怪蛋");
+        tb.add("item.mite_recrafted.netherspawn_spawn_egg", "下界之子刷怪蛋");
+        tb.add("item.mite_recrafted.infernal_creeper_spawn_egg", "炼狱苦力怕刷怪蛋");
+        tb.add("item.mite_recrafted.invisible_stalker_spawn_egg", "无形潜伏者刷怪蛋");
+        tb.add("item.mite_recrafted.blob_spawn_egg", "粘液怪刷怪蛋");
+        tb.add("item.mite_recrafted.ooze_spawn_egg", "软泥怪刷怪蛋");
+        tb.add("item.mite_recrafted.jelly_spawn_egg", "凝胶怪刷怪蛋");
+        tb.add("item.mite_recrafted.pudding_spawn_egg", "布丁怪刷怪蛋");
+        tb.add("item.mite_recrafted.shadow_spawn_egg", "暗影刷怪蛋");
+        tb.add("item.mite_recrafted.earth_elemental_spawn_egg", "土元素刷怪蛋");
+        tb.add("item.mite_recrafted.clay_golem_spawn_egg", "黏土傀儡刷怪蛋");
+        tb.add("item.mite_recrafted.fire_elemental_spawn_egg", "火元素刷怪蛋");
+        tb.add("item.mite_recrafted.earth_elemental_obsidian_spawn_egg", "黑曜石土元素刷怪蛋");
+        tb.add("item.mite_recrafted.earth_elemental_netherrack_spawn_egg", "地狱岩土元素刷怪蛋");
+        tb.add("item.mite_recrafted.earth_elemental_end_stone_spawn_egg", "末地石土元素刷怪蛋");
+        tb.add("item.mite_recrafted.clay_golem_hardened_spawn_egg", "硬化黏土傀儡刷怪蛋");
+
         // 工作台品质显示
         tb.add("gui.mite-recraft.workbench.quality_prefix", "%s的%s");
         tb.add("gui.mite-recraft.workbench.xp_cost", "合成花费: %d级");
@@ -268,6 +333,9 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
             if (id.equals("flour")) return "面粉";
             if (id.equals("manure")) return "粪便";
             if (id.equals("sinew")) return "皮革线";
+            if (id.equals("brick")) return "砖块";
+            if (id.equals("gelatinous_sphere")) return "凝胶球";
+            if (id.equals("acidic_gelatinous_sphere")) return "酸蚀凝胶球";
         }
         return null;
     }

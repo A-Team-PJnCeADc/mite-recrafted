@@ -1,9 +1,10 @@
 package com.mite.recraft.fabric.client.datagen;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.mite.recraft.MiteRecrafted;
-import com.mite.recraft.api.MiteIds;
-import com.mite.recraft.chest.ChestVariant;
 import com.mite.recraft.api.ItemCategory;
+import com.mite.recraft.chest.ChestVariant;
 import com.mite.recraft.client.renderer.item.NockedArrowProperty;
 import com.mite.recraft.client.renderer.item.QuicknessDrawProperty;
 import com.mite.recraft.content.block.metal.ModBarBlocks;
@@ -17,39 +18,18 @@ import com.mite.recraft.content.item.food.ModFoodItem;
 import com.mite.recraft.content.item.material.ManureItems;
 import com.mite.recraft.content.item.material.ModMaterials;
 import com.mite.recraft.content.item.record.ModRecordItems;
-import com.mite.recraft.content.item.tool.AexItems;
-import com.mite.recraft.content.item.tool.ArrowItems;
-import com.mite.recraft.content.item.tool.BattleAxeItems;
-import com.mite.recraft.content.item.tool.BowItems;
-import com.mite.recraft.content.item.tool.DaggerItems;
-import com.mite.recraft.content.item.tool.FishingRodItems;
-import com.mite.recraft.content.item.tool.HatchetItems;
-import com.mite.recraft.content.item.tool.HoeItems;
-import com.mite.recraft.content.item.tool.KnifeItems;
-import com.mite.recraft.content.item.tool.MattockItems;
-import com.mite.recraft.content.item.tool.PickaxeItems;
-import com.mite.recraft.content.item.tool.ScytheItems;
-import com.mite.recraft.content.item.tool.ShearsItems;
-import com.mite.recraft.content.item.tool.ShovelItems;
-import com.mite.recraft.content.item.tool.SwordItems;
-import com.mite.recraft.content.item.tool.WarHammerItems;
-import com.mite.recraft.content.item.tool.WoodenItems;
+import com.mite.recraft.content.item.throwable.ModThrowables;
+import com.mite.recraft.content.item.tool.*;
 import com.mite.recraft.registry.ModFurnaces;
 import com.mite.recraft.registry.ModItems;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.mite.recraft.registry.ModSpawnEggs;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.client.data.models.model.ItemModelUtils;
-import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TextureMapping;
-import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.client.data.models.model.TexturedModel;
+import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
@@ -64,11 +44,12 @@ import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.jspecify.annotations.NonNull;
-import static com.mite.recraft.registry.ModBlocks.getBlocks;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import static com.mite.recraft.registry.ModBlocks.getBlocks;
 
 public class ModModelProvider extends FabricModelProvider {
 
@@ -154,6 +135,7 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(@NonNull ItemModelGenerators gen) {
+        generateSpawnEggModels(gen);
         // 门的物品模型（flat item -> models/item/，覆盖自动生成的 block/ 路径）
         generateDoorItemModels(gen);
 
@@ -309,6 +291,15 @@ public class ModModelProvider extends FabricModelProvider {
         // 食物材料（纹理在 item/food/ 下）
         generateFlatModels(gen, "food",
                 ModMaterials.FLOUR, ManureItems.MANURE);
+        // 投掷物（纹理直接在 item/ 下）
+        for (Item item : new Item[]{ModThrowables.BRICK, ModThrowables.GELATINOUS_SPHERE,
+                ModThrowables.ACIDIC_GELATINOUS_SPHERE}) {
+            Identifier itemId = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item);
+            Identifier texId = Identifier.fromNamespaceAndPath(itemId.getNamespace(), "item/" + itemId.getPath());
+            ModelTemplates.FLAT_ITEM.create(itemId.withPrefix("item/"),
+                    TextureMapping.layer0(new Material(texId)), gen.modelOutput);
+            gen.itemModelOutput.accept(item, ItemModelUtils.plainModel(itemId.withPrefix("item/")));
+        }
         // 其他材料（纹理直接在 item/ 下）
         {
             Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/sinew");
@@ -330,6 +321,21 @@ public class ModModelProvider extends FabricModelProvider {
 
         // 护甲：纹理在 item/armor/ 下
         generateArmorModels(gen);
+    }
+
+
+    /**
+     * 刷怪蛋模型。贴图按 MITE 的蛋配色自行绘制（16x16），命名与物品 id 一致：
+     * {@code mite_recrafted:item/<id>_spawn_egg}。
+     */
+    private void generateSpawnEggModels(ItemModelGenerators gen) {
+        for (Item egg : ModSpawnEggs.all()) {
+            String path = BuiltInRegistries.ITEM.getKey(egg).getPath();
+            Identifier modelId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/spawn_egg/" + path);
+            Identifier textureId = Identifier.fromNamespaceAndPath(MiteRecrafted.MOD_ID, "item/spawn_egg/" + path);
+            ModelTemplates.FLAT_ITEM.create(modelId, TextureMapping.layer0(new Material(textureId)), gen.modelOutput);
+            gen.itemModelOutput.accept(egg, ItemModelUtils.plainModel(modelId));
+        }
     }
 
     /**

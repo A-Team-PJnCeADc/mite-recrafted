@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -53,7 +54,7 @@ public class StrongboxBlock extends ChestBlock {
 
     @Override
     protected BlockState updateShape(BlockState state, LevelReader level,
-                                     net.minecraft.world.level.ScheduledTickAccess tickView,
+                                     ScheduledTickAccess tickView,
                                      BlockPos pos, Direction direction, BlockPos neighborPos,
                                      BlockState neighborState, RandomSource random) {
         return super.updateShape(state, level, tickView, pos, direction, neighborPos, neighborState, random)

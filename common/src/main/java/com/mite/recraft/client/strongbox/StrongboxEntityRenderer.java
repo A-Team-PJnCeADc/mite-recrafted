@@ -2,7 +2,6 @@ package com.mite.recraft.client.strongbox;
 
 import com.mite.recraft.content.block.strongbox.StrongboxBlock;
 import com.mite.recraft.content.block.strongbox.StrongboxBlockEntity;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -14,6 +13,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.renderer.blockentity.state.ChestRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.sprite.SpriteGetter;
 import net.minecraft.client.resources.model.sprite.SpriteId;
@@ -58,7 +58,7 @@ public class StrongboxEntityRenderer<T extends StrongboxBlockEntity & LidBlockEn
     @Override
     public void submit(ChestRenderState state, PoseStack poseStack,
                        SubmitNodeCollector submitNodeCollector,
-                       net.minecraft.client.renderer.state.level.CameraRenderState camera) {
+                       CameraRenderState camera) {
         StrongboxRenderState renderState = (StrongboxRenderState) state;
         if (renderState.modSprite == null) {
             super.submit(state, poseStack, submitNodeCollector, camera);

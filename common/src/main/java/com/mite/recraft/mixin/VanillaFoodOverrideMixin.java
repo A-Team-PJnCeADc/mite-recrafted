@@ -4,9 +4,9 @@ import com.mite.recraft.content.item.food.CommonFood;
 import com.mite.recraft.content.item.food.EdibleOverride;
 import com.mite.recraft.content.item.food.FoodType;
 import com.mite.recraft.content.item.food.NutritionSystem;
-
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class VanillaFoodOverrideMixin {
 
     @Inject(method = "onConsume", at = @At("TAIL"))
-    private void onConsume(Level level, net.minecraft.world.entity.LivingEntity entity,
+    private void onConsume(Level level, LivingEntity entity,
                            ItemStack stack, Consumable consumable, CallbackInfo ci) {
         if (!(entity instanceof Player player)) return;
         if (!(player instanceof ServerPlayer sp)) return;

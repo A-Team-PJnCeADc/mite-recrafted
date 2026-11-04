@@ -14,5 +14,6 @@ public enum ItemCategory {
     BUCKET,
     FOOD,
     ARMOR,
-    CHEST
+    CHEST,
+    SPAWN_EGG
 }

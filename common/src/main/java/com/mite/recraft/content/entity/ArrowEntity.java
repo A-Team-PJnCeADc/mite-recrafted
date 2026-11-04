@@ -1,11 +1,11 @@
 package com.mite.recraft.content.entity;
 
+import com.mite.recraft.content.enchantment.ArrowRecovery;
 import com.mite.recraft.content.item.tool.ArrowItems;
 import com.mite.recraft.registry.ModDataComponents;
 import com.mite.recraft.registry.ModEnchantments;
 import com.mite.recraft.registry.ModEntityTypes;
 import com.mite.recraft.util.StuckArrowTracker;
-
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -65,7 +65,7 @@ public class ArrowEntity extends Arrow {
             );
             if (enchLevel > 0) {
                 float base = pickupItem.getOrDefault(ModDataComponents.RECOVERY_CHANCE, 0.0f);
-                float boosted = com.mite.recraft.content.enchantment.ArrowRecovery.calculateChance(base, enchLevel);
+                float boosted = ArrowRecovery.calculateChance(base, enchLevel);
                 this.entityData.set(DATA_RECOVERY_CHANCE, boosted);
             }
         }

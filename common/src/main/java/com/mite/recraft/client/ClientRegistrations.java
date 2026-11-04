@@ -14,10 +14,16 @@ public final class ClientRegistrations {
     private ClientRegistrations() {
     }
 
-    /** 注册表写入前的客户端登记：只做不依赖注册表内容的界面与实体渲染器。 */
+    /** 注册表写入前的客户端登记：模型层、界面与实体渲染器。模型层必须先于渲染器。 */
     public static void registerEarly() {
+        registerModelLayers();
         registerScreens();
         registerEntityRenderers();
+    }
+
+    @ExpectPlatform
+    public static void registerModelLayers() {
+        throw new AssertionError();
     }
 
     /** 注册表写入后的客户端登记：模型属性、客户端命令与依赖已注册类型的方块实体渲染器。 */

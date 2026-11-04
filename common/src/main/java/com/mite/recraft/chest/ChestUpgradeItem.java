@@ -1,5 +1,6 @@
 package com.mite.recraft.chest;
 
+import com.mite.recraft.registry.ModChests;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -71,7 +72,7 @@ public class ChestUpgradeItem extends Item {
         level.removeBlock(pos, false);
         level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(current));
 
-        BlockState replaced = com.mite.recraft.registry.ModChests.block(this.upgrade.to())
+        BlockState replaced = ModChests.block(this.upgrade.to())
                 .defaultBlockState()
                 .setValue(ChestBlock.FACING, facing)
                 .setValue(ChestBlock.WATERLOGGED, waterlogged);
@@ -102,6 +103,6 @@ public class ChestUpgradeItem extends Item {
         if (this.upgrade.from() == null) {
             return state.is(Blocks.CHEST) || state.is(Blocks.TRAPPED_CHEST);
         }
-        return state.is(com.mite.recraft.registry.ModChests.block(this.upgrade.from()));
+        return state.is(ModChests.block(this.upgrade.from()));
     }
 }

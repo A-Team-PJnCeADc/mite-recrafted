@@ -3,8 +3,8 @@ package com.mite.recraft.mixin;
 import com.mite.recraft.content.item.food.ModFoodItems;
 import com.mite.recraft.content.item.material.ManureItems;
 import com.mite.recraft.util.CompostAccess;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,7 +45,7 @@ public class ChestWormMixin {
     @Inject(method = "getTicker", at = @At("RETURN"), cancellable = true)
     private <T extends BlockEntity> void mite$serverTicker(
             Level level, BlockState state,
-            net.minecraft.world.level.block.entity.BlockEntityType<T> type,
+            BlockEntityType<T> type,
             CallbackInfoReturnable<BlockEntityTicker<T>> cir) {
         if (level.isClientSide()) return;
         cir.setReturnValue(
@@ -138,14 +139,14 @@ public class ChestWormMixin {
         if (st.is(ModFoodItems.WORM_COOKED)) return true;
         if (isLeaves(st)) return true;
         if (st.is(Blocks.PUMPKIN.asItem())) return true;
-        return st.has(net.minecraft.core.component.DataComponents.FOOD);
+        return st.has(DataComponents.FOOD);
     }
 
     @Unique
     private static float getCompostVal(ItemStack st) {
         if (isLeaves(st)) return 1.0F;
         if (st.is(Blocks.PUMPKIN.asItem())) return 1.0F;
-        var food = st.get(net.minecraft.core.component.DataComponents.FOOD);
+        var food = st.get(DataComponents.FOOD);
         return food != null ? food.nutrition() * 0.1F : 0.1F;
     }
 

@@ -1,7 +1,6 @@
 package com.mite.recraft.mixin;
 
 import com.mite.recraft.chest.ChestMenu;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;

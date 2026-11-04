@@ -1,8 +1,8 @@
 package com.mite.recraft.mixin;
 
 import com.mite.recraft.content.item.food.ModFoodItems;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,7 +33,7 @@ public class LeavesDropMixin {
         if (biomeKey.isEmpty()) return;
         if (!biomeKey.get().identifier().getPath().contains("jungle")) return;
 
-        Identifier leafId = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(state.getBlock());
+        Identifier leafId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
         var random = level.getRandom();
 
         if (leafId.getPath().equals("jungle_leaves") && random.nextFloat() < 0.005F) {

@@ -123,3 +123,15 @@ MiteEvents.CRAFT_COMPLETED.register((player, result, quality, xp) ->
 ```
 
 注册时机必须落在对应注册表的写入窗口内：Fabric 是模组初始化，NeoForge 是 `RegisterEvent`。物品栏内容在客户端打开时读取，注册完成后不需要额外刷新。
+
+## 实体渲染器的登记写法
+
+统一按「贴图能否由实体 id 推导」分成两种，不再混用：
+
+- 能推导（贴图就是 `textures/entity/mob/<实体 id>.png`）：在渲染器类里维护 `REGISTERED` 列表并给出
+  `provider(type)`，平台侧只写一个 for 循环 + 一个登记方法。目前是蜘蛛、胶质生物、蠹虫系。
+- 不能推导（同一贴图被多个实体复用，或贴图名与 id 不同）：逐个登记并显式传贴图路径。目前是蝙蝠系
+  （巨型吸血蝙蝠复用 `vampire_bat.png`）。其余人形生物各有专属渲染器类，逐个登记即可。
+
+平台侧的登记入口固定为 `ClientRegistrationsImpl.registerEntityRenderers()`，Fabric 直接调用
+`EntityRendererRegistry.register`，NeoForge 在 `EntityRenderersEvent.RegisterRenderers` 里登记。
