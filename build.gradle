@@ -15,6 +15,11 @@ allprojects {
 }
 
 subprojects {
+    // mite-view 只用于把 MITE 去混淆产物暴露到 IDE 外部库，不参与模组构建
+    if (project.name == 'mite-view') {
+        return
+    }
+
     apply plugin: 'dev.architectury.loom-no-remap'
     apply plugin: 'architectury-plugin'
     apply plugin: 'maven-publish'
@@ -68,3 +73,5 @@ subprojects {
         }
     }
 }
+
+apply from: 'tools/mite-deobf.gradle'

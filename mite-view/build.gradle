@@ -1,0 +1,22 @@
+// 只为把 MITE 去混淆产物挂到 IDE 外部库：本模块不含源码，也不参与模组构建。
+// MITE 是 1.6.4 的 net.minecraft.src，与 26.3 的 net.minecraft 不冲突；用 compileOnly，
+// 保证它不进入任何运行时类路径。
+
+plugins {
+    id 'java'
+}
+
+def miteDeobfJar = rootProject.layout.buildDirectory.file('mite-deobf/mite-1.6.4-deobf.jar').get().asFile
+
+dependencies {
+    compileOnly files(miteDeobfJar)
+}
+
+// 无源码，不产出归档
+tasks.named('jar') {
+    enabled = false
+}
+
+tasks.named('assemble') {
+    dependsOn = []
+}

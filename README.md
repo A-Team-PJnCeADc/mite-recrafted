@@ -33,7 +33,8 @@ Developing
 ## 构建
 
 ```bash
-./gradlew :fabric:runDatagen     # 生成数据，输出到 common/src/main/generated（不在版本库内）
+./gradlew miteDeobfJar           # 生成 MITE 1.6.4 去混淆 jar，供 IDE 外部库查看源码
+./gradlew :fabric:runDatagen     # 生成数据
 ./gradlew build                  # 构建两端模组，产物在 fabric/build/libs 与 neoforge/build/libs
 ./gradlew :fabric:runClient      # Fabric 客户端
 ./gradlew :fabric:runServer      # Fabric 服务端

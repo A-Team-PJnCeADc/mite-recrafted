@@ -1,0 +1,284 @@
+// MITE 1.6.4 源码查看：下载 MITE 安装包与 MCP 8.11 映射，把混淆类重命名为可读名，
+// 生成一个可挂到 IDE 外部库的 jar（IDE 会对该 jar 直接反编译显示源码）。
+//
+// 输入全部来自网络，不依赖本地安装目录：
+//   github.com/A-Team-PJnCeADc/mite-recrafted 分支 archive/1.6.4-MITE   MITE 覆盖的混淆类
+//   MCP 8.11 complete_packs/1.6.4/mcp811.zip           conf/client.srg + methods.csv + fields.csv
+//   Mojang version_manifest_v2 → 1.6.4.json            原版 1.6.4 client.jar，作为完整上下文
+//
+// 下载产物缓存在 <gradle user home>/caches/mite-deobf，重复执行不会重新下载。
+// 需要代理时用 -Pproxy.host=ip -Pproxy.port=port（或设置 http.proxyHost/http.proxyPort）。
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        // 版本与 Loom 自带的一致，离线也能从依赖缓存解析
+        classpath 'org.ow2.asm:asm:9.10.1'
+        classpath 'org.ow2.asm:asm-commons:9.10.1'
+    }
+}
+
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.commons.ClassRemapper
+import org.objectweb.asm.commons.Remapper as AsmRemapper
+
+
+
+def MITE_ZIP_URL = 'https://github.com/A-Team-PJnCeADc/mite-recrafted/archive/refs/heads/archive/1.6.4-MITE.zip'
+def MCP_ZIP_URL = 'https://raw.githubusercontent.com/GrylaMC/MCP_Archive/refs/heads/main/complete_packs/1.6.4/mcp811.zip'
+def VERSION_MANIFEST_URL = 'https://piston-meta.mojang.com/mc/game/version_manifest_v2.json'
+def MC_VERSION = '1.6.4'
+
+def cacheDir = new File(gradle.gradleUserHomeDir, 'caches/mite-deobf')
+def deobfJarFile = layout.buildDirectory.file('mite-deobf/mite-1.6.4-deobf.jar')
+
+def proxyHost = providers.gradleProperty('proxy.host').getOrElse(
+        System.getProperty('http.proxyHost', ''))
+def proxyPort = providers.gradleProperty('proxy.port').getOrElse(
+        System.getProperty('http.proxyPort', '10808')) as int
+
+def openConnection = { String url ->
+    def target = new URL(url)
+    def connection = proxyHost
+            ? target.openConnection(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)))
+            : target.openConnection()
+    connection.connectTimeout = 20000
+    connection.readTimeout = 120000
+    connection.setRequestProperty('User-Agent', 'mite-recrafted-deobf')
+    return connection
+}
+
+def fetchTo = { String url, File target ->
+    if (target.exists() && target.length() > 0) {
+        logger.info("复用缓存 ${target}")
+        return
+    }
+    target.parentFile.mkdirs()
+    logger.lifecycle("下载 ${url}")
+    def temp = new File(target.parentFile, target.name + '.part')
+    def connection = openConnection(url)
+    try {
+        temp.withOutputStream { out -> out << connection.inputStream }
+    } finally {
+        connection.disconnect()
+    }
+    if (!temp.renameTo(target)) {
+        temp.copyTo(target)
+        temp.delete()
+    }
+}
+
+def fetchText = { String url ->
+    def connection = openConnection(url)
+    try {
+        return connection.inputStream.getText('UTF-8')
+    } finally {
+        connection.disconnect()
+    }
+}
+
+// Mojang 清单里按版本号取 client jar
+def resolveVanillaJar = { File target ->
+    if (target.exists() && target.length() > 0) {
+        return
+    }
+    def manifest = new groovy.json.JsonSlurper().parseText(fetchText(VERSION_MANIFEST_URL))
+    def entry = manifest.versions.find { it.id == MC_VERSION }
+    if (entry == null) {
+        throw new GradleException("版本清单里没有 ${MC_VERSION}")
+    }
+    def versionJson = new groovy.json.JsonSlurper().parseText(fetchText(entry.url as String))
+    def clientUrl = versionJson.downloads?.client?.url
+    if (clientUrl == null) {
+        throw new GradleException("${MC_VERSION} 版本 JSON 里没有 client jar 地址")
+    }
+    fetchTo(clientUrl as String, target)
+}
+
+tasks.register('miteDeobfJar') {
+    group = 'mite'
+    description = '下载 MITE 1.6.4 与 MCP 8.11 映射，把混淆类重命名为可读名，产物供 IDE 外部库查看'
+
+    inputs.property('miteZipUrl', MITE_ZIP_URL)
+    inputs.property('mcpZipUrl', MCP_ZIP_URL)
+    inputs.property('mcVersion', MC_VERSION)
+    outputs.file(deobfJarFile)
+
+    doLast {
+        def miteZip = new File(cacheDir, 'mite-recrafted-archive-1.6.4-MITE.zip')
+        def mcpZip = new File(cacheDir, 'mcp811.zip')
+        def vanillaJar = new File(cacheDir, "minecraft-${MC_VERSION}-client.jar")
+
+        fetchTo(MITE_ZIP_URL, miteZip)
+        fetchTo(MCP_ZIP_URL, mcpZip)
+        resolveVanillaJar(vanillaJar)
+
+        def outFile = deobfJarFile.get().asFile
+        outFile.parentFile.mkdirs()
+
+        // 映射表：notch 名 -> srg 名；srg 名 -> MCP 可读名
+        def classMap = [:]
+        def methodKey = [:]
+        def fieldKey = [:]
+        def methodByNameDesc = [:].withDefault { [] }
+        def fieldByName = [:].withDefault { [] }
+
+        new java.util.zip.ZipFile(mcpZip).withCloseable { zip ->
+            def methods = [:]
+            def fields = [:]
+            zip.getInputStream(zip.getEntry('conf/methods.csv')).withReader('UTF-8') { reader ->
+                reader.eachLine { line ->
+                    def cols = line.split(',', 3)
+                    if (cols.length >= 2 && cols[0].startsWith('func_')) {
+                        methods[cols[0]] = cols[1]
+                    }
+                }
+            }
+            zip.getInputStream(zip.getEntry('conf/fields.csv')).withReader('UTF-8') { reader ->
+                reader.eachLine { line ->
+                    def cols = line.split(',', 3)
+                    if (cols.length >= 2 && cols[0].startsWith('field_')) {
+                        fields[cols[0]] = cols[1]
+                    }
+                }
+            }
+            zip.getInputStream(zip.getEntry('conf/client.srg')).withReader('UTF-8') { reader ->
+                reader.eachLine { line ->
+                    if (line.startsWith('CL: ')) {
+                        def parts = line.substring(4).split(' ')
+                        classMap[parts[0]] = parts[1]
+                    } else if (line.startsWith('FD: ')) {
+                        def parts = line.substring(4).split(' ')
+                        def notchOwner = parts[0].substring(0, parts[0].lastIndexOf('/'))
+                        def notchName = parts[0].substring(parts[0].lastIndexOf('/') + 1)
+                        def srgName = parts[1].substring(parts[1].lastIndexOf('/') + 1)
+                        def readable = fields.getOrDefault(srgName, srgName)
+                        fieldKey["$notchOwner#$notchName"] = readable
+                        fieldByName[notchName] << readable
+                    } else if (line.startsWith('MD: ')) {
+                        def parts = line.substring(4).split(' ')
+                        if (parts.length < 4) {
+                            return
+                        }
+                        def notchOwner = parts[0].substring(0, parts[0].lastIndexOf('/'))
+                        def notchName = parts[0].substring(parts[0].lastIndexOf('/') + 1)
+                        def notchDesc = parts[1]
+                        def srgName = parts[2].substring(parts[2].lastIndexOf('/') + 1)
+                        def readable = methods.getOrDefault(srgName, srgName)
+                        methodKey["$notchOwner#$notchName#$notchDesc"] = readable
+                        methodByNameDesc["$notchName#$notchDesc"] << readable
+                    }
+                }
+            }
+        }
+
+        // 继承调用拿不到声明类时，用“名称+描述唯一”的回退表
+        def uniquify = { Map index ->
+            index.collectEntries { key, values ->
+                [(key): (values.unique().size() == 1 ? values[0] : null)]
+            }
+        }
+        def methodFallback = uniquify(methodByNameDesc)
+        def fieldFallback = uniquify(fieldByName)
+
+        def remapper = new AsmRemapper() {
+            @Override
+            String map(String internalName) {
+                return classMap.getOrDefault(internalName, internalName)
+            }
+
+            @Override
+            String mapMethodName(String owner, String name, String descriptor) {
+                def direct = methodKey["$owner#$name#$descriptor"]
+                if (direct != null) {
+                    return direct
+                }
+                def fallback = methodFallback["$name#$descriptor"]
+                return fallback != null ? fallback : name
+            }
+
+            @Override
+            String mapFieldName(String owner, String name, String descriptor) {
+                def direct = fieldKey["$owner#$name"]
+                if (direct != null) {
+                    return direct
+                }
+                def fallback = fieldFallback[name]
+                return fallback != null ? fallback : name
+            }
+        }
+
+        // MITE 覆盖类，键为 class/ 之后的相对路径
+        def miteClasses = [:]
+        new java.util.zip.ZipFile(miteZip).withCloseable { zip ->
+            zip.entries().each { entry ->
+                def name = entry.name
+                if (entry.directory || !name.endsWith('.class')) {
+                    return
+                }
+                def marker = name.indexOf('/class/')
+                if (marker < 0) {
+                    return
+                }
+                miteClasses[name.substring(marker + '/class/'.length())] = zip.getInputStream(entry).bytes
+            }
+        }
+        if (miteClasses.isEmpty()) {
+            throw new GradleException("MITE 包里没有找到 class/ 目录：${miteZip}")
+        }
+
+        def remapped = 0
+        def written = new HashSet<String>()
+
+        // 固定条目时间戳，重复构建产物一致
+        def newEntry = { String name ->
+            def entry = new java.util.zip.ZipEntry(name)
+            entry.time = 1230768000000L
+            return entry
+        }
+
+        def remapEntry = { byte[] bytes, java.util.zip.ZipOutputStream out ->
+            def reader = new ClassReader(bytes)
+            def writer = new ClassWriter(0)
+            reader.accept(new ClassRemapper(writer, remapper), 0)
+            def name = remapper.map(reader.className) + '.class'
+            if (written.add(name)) {
+                out.putNextEntry(newEntry(name))
+                out.write(writer.toByteArray())
+                out.closeEntry()
+                remapped++
+            }
+        }
+
+        new java.util.zip.ZipOutputStream(new java.io.BufferedOutputStream(new FileOutputStream(outFile))).withCloseable { out ->
+            // 原版类提供完整上下文；与 MITE 覆盖类同名时跳过，保证 MITE 版本优先
+            new java.util.zip.ZipFile(vanillaJar).withCloseable { zip ->
+                zip.entries().each { entry ->
+                    if (entry.directory || entry.name.startsWith('META-INF/')) {
+                        return
+                    }
+                    def data = zip.getInputStream(entry).bytes
+                    if (entry.name.endsWith('.class')) {
+                        if (miteClasses.containsKey(entry.name)) {
+                            return
+                        }
+                        remapEntry(data, out)
+                    } else if (written.add(entry.name)) {
+                        out.putNextEntry(newEntry(entry.name))
+                        out.write(data)
+                        out.closeEntry()
+                    }
+                }
+            }
+            miteClasses.sort { it.key }.each { name, bytes ->
+                remapEntry(bytes, out)
+            }
+        }
+
+        logger.lifecycle("MITE 去混淆 jar: ${outFile}（类 ${remapped} 个，MITE 覆盖 ${miteClasses.size()} 个）")
+        logger.lifecycle("在 IDE 中 Reload Gradle Project 后，该 jar 会出现在 External Libraries 中")
+    }
+}
