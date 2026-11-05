@@ -3,13 +3,12 @@
     "package": "com.mite.recraft.client.mixin",
     "compatibilityLevel": "JAVA_25",
     "client": [
-        "AppleSkinFoodHelperMixin",
-        "RecipeCollectionMixin",
-        "RangeSelectItemModelPropertiesAccessor",
-        "FirstPersonHandsAndItemsMixin",
-        "ChestSpriteFallbackMixin",
-        "ChestMaterialFallbackMixin",
-        "SelectItemModelPropertiesAccessor"
+      "ChestMaterialFallbackMixin",
+      "ChestSpriteFallbackMixin",
+      "FirstPersonHandsAndItemsMixin",
+      "RangeSelectItemModelPropertiesAccessor",
+      "RecipeCollectionMixin",
+      "SelectItemModelPropertiesAccessor"
     ],
     "injectors": {
         "defaultRequire": 1

@@ -1,7 +1,8 @@
-package com.mite.recraft.client.mixin;
+package com.mite.recraft.neoforge.client.mixin;
 
 import com.mite.recraft.content.item.food.EdibleOverride;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -11,19 +12,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * 使 AppleSkin 将 {@link EdibleOverride} 物品识别为食物。
- *
- * <p>AppleSkin 的 {@code FoodHelper.isFood} 检查 ItemStack 是否有
- * FOOD + CONSUMABLE 组件。EdibleOverride 物品无此组件（避免渲染马赛克），
- * 导致 AppleSkin 不显示预览值。此 mixin 绕过该检查。
- * 食物预览值由 {@link com.mite.recraft.client.compat.appleskin.AppleSkinEventHandler}</p>
+ * NeoForge 版签名为 {@code isFood(ItemStack, Player)}；Fabric 版只有一个参数，实现在 fabric 模块。
  */
 @Pseudo
 @Mixin(targets = "squeek.appleskin.helpers.FoodHelper", remap = false)
 public class AppleSkinFoodHelperMixin {
 
     @Inject(method = "isFood", at = @At("RETURN"), cancellable = true, remap = false)
-    private static void mite$isFood(ItemStack itemStack, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue()) return;
+    private static void mite$isFood(ItemStack itemStack, Player player, CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValue()) {
+            return;
+        }
         if (EdibleOverride.fromItem(itemStack.getItem()) != null) {
             cir.setReturnValue(true);
         }

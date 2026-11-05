@@ -1,9 +1,11 @@
 package com.mite.recraft.client.fabric;
 
 import com.mite.recraft.chest.ChestVariant;
+import com.mite.recraft.client.ClientRegistrationsApi;
 import com.mite.recraft.client.chest.VariantChestRenderer;
 import com.mite.recraft.client.chest.VariantChestScreen;
 import com.mite.recraft.client.command.ClientNutritionCommand;
+import com.mite.recraft.client.compat.appleskin.fabric.AppleSkinCompatImpl;
 import com.mite.recraft.client.model.GhoulModel;
 import com.mite.recraft.client.renderer.*;
 import com.mite.recraft.client.renderer.item.NockedArrowProperty;
@@ -33,12 +35,10 @@ import net.minecraft.world.level.block.entity.LidBlockEntity;
 /**
  * Fabric 客户端注册实现。Fabric 的客户端注册表在初始化期可写，直接登记即可。
  */
-public final class ClientRegistrationsImpl {
+public final class ClientRegistrationsImpl implements ClientRegistrationsApi {
 
-    private ClientRegistrationsImpl() {
-    }
-
-    public static void registerScreens() {
+    @Override
+    public void registerScreens() {
         MenuScreenRegistry.registerScreenFactory(ModMenus.WORKBENCH, ModWorkbenchScreen::new);
         for (ChestVariant variant : ChestVariant.REGISTERED) {
             MenuScreenRegistry.registerScreenFactory(ModChests.menuType(variant), VariantChestScreen::new);
@@ -48,11 +48,13 @@ public final class ClientRegistrationsImpl {
         }
     }
 
-    public static void registerModelLayers() {
+    @Override
+    public void registerModelLayers() {
         ModelLayerRegistry.registerModelLayer(GhoulModel.LAYER, GhoulModel::createBodyLayer);
     }
 
-    public static void registerEntityRenderers() {
+    @Override
+    public void registerEntityRenderers() {
         EntityRendererRegistry.register(() -> ModEntityTypes.MITE_ARROW, ModArrowRenderer::new);
         EntityRendererRegistry.register(() -> ModEntityTypes.GHOUL, GhoulRenderer::new);
         EntityRendererRegistry.register(() -> ModEntityTypes.LONGDEAD, LongdeadRenderer::new);
@@ -97,7 +99,8 @@ public final class ClientRegistrationsImpl {
         EntityRendererRegistry.register(() -> type, MiteSlimeRenderer.provider(type));
     }
 
-    public static void registerBlockEntityRenderers() {
+    @Override
+    public void registerBlockEntityRenderers() {
         for (ChestVariant variant : ChestVariant.REGISTERED) {
             registerChestRenderer(ModChests.storageType(variant));
         }
@@ -111,12 +114,19 @@ public final class ClientRegistrationsImpl {
         BlockEntityRendererRegistry.register(type, VariantChestRenderer::new);
     }
 
-    public static void registerItemModelProperties() {
+    @Override
+    public void registerItemModelProperties() {
         NockedArrowProperty.register();
         QuicknessDrawProperty.register();
     }
 
-    public static void registerClientCommands() {
+    @Override
+    public void registerClientCommands() {
         ClientNutritionCommand.register();
     }
+    @Override
+    public void registerCompat() {
+        AppleSkinCompatImpl.init();
+    }
+
 }

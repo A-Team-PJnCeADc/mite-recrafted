@@ -39,3 +39,6 @@ config = "mite-recrafted.mixins.json"
 
 [[mixins]]
 config = "mite-recrafted.client.mixins.json"
+
+[[mixins]]
+config = "mite-recrafted-neoforge.client.mixins.json"

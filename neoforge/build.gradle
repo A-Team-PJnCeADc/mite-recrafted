@@ -29,6 +29,18 @@ repositories {
         name = 'NeoForged'
         url = 'https://maven.neoforged.net/releases'
     }
+    // AppleSkin API：独占该 group，避免向上面的仓库请求 appleskin 产物
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'RyanLiptak'
+                url = 'https://maven.ryanliptak.com/'
+            }
+        }
+        filter {
+            includeGroup 'squeek.appleskin'
+        }
+    }
 }
 
 dependencies {
@@ -36,6 +48,13 @@ dependencies {
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     implementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"
+
+    // AppleSkin：编译期需要完整的类（-api 产物不含 helpers，mixin 无法解析 FoodHelper）
+    compileOnly("squeek.appleskin:appleskin-neoforge:mc26.3-3.0.10") {
+        transitive = false
+    }
+    // 开发环境运行时完整 AppleSkin
+    runtimeOnly("squeek.appleskin:appleskin-neoforge:mc26.3-3.0.10")
 
     common(project(path: ':common')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')

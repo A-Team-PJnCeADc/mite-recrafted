@@ -135,3 +135,26 @@ MiteEvents.CRAFT_COMPLETED.register((player, result, quality, xp) ->
 
 平台侧的登记入口固定为 `ClientRegistrationsImpl.registerEntityRenderers()`，Fabric 直接调用
 `EntityRendererRegistry.register`，NeoForge 在 `EntityRenderersEvent.RegisterRenderers` 里登记。
+
+## 可选模组兼容：以 AppleSkin 为例
+
+AppleSkin 两端 API 不同，不能只编译一份：
+
+| 项 | Fabric | NeoForge |
+| --- | --- | --- |
+| 依赖 | `squeek.appleskin:appleskin-fabric:mc26.3-3.0.10` | `squeek.appleskin:appleskin-neoforge:mc26.3-3.0.10` |
+| 事件注册 | `FoodValuesEvent.EVENT`（Fabric API 事件） | `NeoForge.EVENT_BUS.addListener` |
+| 事件字段 | `defaultFoodComponent` / `modifiedFoodComponent` | `defaultFoodProperties` / `modifiedFoodProperties` |
+| `FoodHelper.isFood` | `isFood(ItemStack)` | `isFood(ItemStack, Player)` |
+
+处理方式：
+
+- `common` 只放与平台无关的预览值计算（`client/compat/appleskin/AppleSkinCompat#preview`）与一个
+  `@ExpectPlatform init()`，业务侧只调用 `AppleSkinCompat.init()`。
+- 实现落在 `<声明包>.fabric.AppleSkinCompatImpl` 与 `<声明包>.neoforge.AppleSkinCompatImpl`，
+  各自用本平台的注册 API，先判断模组是否加载再注册，避免未安装时触发类加载。
+- `FoodHelper.isFood` 的参数数量不同，无法抽成同一个 mixin：Fabric 版 mixin 在 `fabric` 模块，
+  NeoForge 版在 `neoforge` 模块，各自带一份 `mite-recrafted-<platform>.client.mixins.json`，
+  分别在 `fabric.mod.json` 的 `mixins` 与 `neoforge.mods.toml` 的 `[[mixins]]` 里登记。
+- 两端 gradle 都用 `compileOnly` 引 API、`runtimeOnly` 引完整模组，并用 `exclusiveContent`
+  锁定 `squeek.appleskin` 组，避免向其他仓库请求该产物。

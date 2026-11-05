@@ -2,6 +2,7 @@ package com.mite.recraft.internal.data.neoforge;
 
 import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.api.MiteData;
+import com.mite.recraft.internal.data.EntityDataApi;
 
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.IEventBus;
@@ -19,16 +20,14 @@ import java.util.Map;
  * <p>描述符对象在 {@link #register(IEventBus)} 里即时构造并存入查找表，注册动作交给
  * DeferredRegister，由 NeoForge 在自己的注册窗口内写表。存档格式为 {{@code "value": <编码值>}}。</p>
  */
-public final class EntityDataImpl {
+public final class EntityDataImpl implements EntityDataApi {
 
     private static final Map<MiteData<?>, AttachmentType<?>> TYPES = new HashMap<>();
     private static boolean registered;
 
-    private EntityDataImpl() {
-    }
-
-    /** 无参注册由 Fabric 侧调用；NeoForge 走 {@link #register(IEventBus)}。 */
-    public static void register() {
+    /** 无参注册由 common 调用；NeoForge 的附件表在 {@link #register(IEventBus)} 里写。 */
+    @Override
+    public void register() {
         // NeoForge 的附件注册表只在 DeferredRegister 窗口内可写，无参入口不做事
     }
 
@@ -66,11 +65,13 @@ public final class EntityDataImpl {
         return type;
     }
 
-    public static <T> T get(Entity entity, MiteData<T> data) {
+    @Override
+    public <T> T get(Entity entity, MiteData<T> data) {
         return ((IAttachmentHolder) entity).getData(type(data));
     }
 
-    public static <T> void set(Entity entity, MiteData<T> data, T value) {
+    @Override
+    public <T> void set(Entity entity, MiteData<T> data, T value) {
         ((IAttachmentHolder) entity).setData(type(data), value);
     }
 }

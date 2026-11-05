@@ -2,9 +2,11 @@ package com.mite.recraft.client.neoforge;
 
 import com.mite.recraft.MiteRecrafted;
 import com.mite.recraft.chest.ChestVariant;
+import com.mite.recraft.client.ClientRegistrationsApi;
 import com.mite.recraft.client.chest.VariantChestRenderer;
 import com.mite.recraft.client.chest.VariantChestScreen;
 import com.mite.recraft.client.command.ClientNutritionCommand;
+import com.mite.recraft.client.compat.appleskin.neoforge.AppleSkinCompatImpl;
 import com.mite.recraft.client.model.GhoulModel;
 import com.mite.recraft.client.renderer.*;
 import com.mite.recraft.client.renderer.item.NockedArrowProperty;
@@ -38,10 +40,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
  * <p>{@code Dist.CLIENT} 使本类只在客户端被扫描与加载。</p>
  */
 @EventBusSubscriber(modid = MiteRecrafted.MOD_ID, value = Dist.CLIENT)
-public final class ClientRegistrationsImpl {
-
-    private ClientRegistrationsImpl() {
-    }
+public final class ClientRegistrationsImpl implements ClientRegistrationsApi {
 
     @SubscribeEvent
     public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
@@ -124,28 +123,39 @@ public final class ClientRegistrationsImpl {
         event.registerBlockEntityRenderer(type, VariantChestRenderer::new);
     }
 
-    public static void registerScreens() {
+    @Override
+    public void registerScreens() {
         // 由 onRegisterMenuScreens 登记
     }
 
-    public static void registerModelLayers() {
+    @Override
+    public void registerModelLayers() {
         // 由 onRegisterLayerDefinitions 登记
     }
 
-    public static void registerEntityRenderers() {
+    @Override
+    public void registerEntityRenderers() {
         // 由 onRegisterRenderers 登记
     }
 
-    public static void registerBlockEntityRenderers() {
+    @Override
+    public void registerBlockEntityRenderers() {
         // 由 onRegisterRenderers 登记
     }
 
-    public static void registerItemModelProperties() {
+    @Override
+    public void registerItemModelProperties() {
         NockedArrowProperty.register();
         QuicknessDrawProperty.register();
     }
 
-    public static void registerClientCommands() {
+    @Override
+    public void registerClientCommands() {
         ClientNutritionCommand.register();
     }
+    @Override
+    public void registerCompat() {
+        AppleSkinCompatImpl.init();
+    }
+
 }

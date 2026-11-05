@@ -1,6 +1,7 @@
 package com.mite.recraft.internal.data.fabric;
 
 import com.mite.recraft.api.MiteData;
+import com.mite.recraft.internal.data.EntityDataApi;
 
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate;
@@ -14,17 +15,15 @@ import java.util.Map;
 /**
  * Fabric 平台实现：以 data attachment 承载附加数据。
  *
- * <p>附件类型在 {@link #register()} 中一次性创建并登记，之后只做表查询。</p>
+ * <p>附件类型在 {@link #register()} 中一次性创建并登记，之后只做表查询。实例由平台入口注入。</p>
  */
-public final class EntityDataImpl {
+public final class EntityDataImpl implements EntityDataApi {
 
     private static final Map<MiteData<?>, AttachmentType<?>> TYPES = new HashMap<>();
     private static boolean registered;
 
-    private EntityDataImpl() {
-    }
-
-    public static void register() {
+    @Override
+    public void register() {
         if (registered) {
             return;
         }
@@ -56,11 +55,13 @@ public final class EntityDataImpl {
         return type;
     }
 
-    public static <T> T get(Entity entity, MiteData<T> data) {
+    @Override
+    public <T> T get(Entity entity, MiteData<T> data) {
         return ((AttachmentTarget) entity).getAttachedOrCreate(type(data));
     }
 
-    public static <T> void set(Entity entity, MiteData<T> data, T value) {
+    @Override
+    public <T> void set(Entity entity, MiteData<T> data, T value) {
         ((AttachmentTarget) entity).setAttached(type(data), value);
     }
 }

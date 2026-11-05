@@ -1,11 +1,15 @@
 package com.mite.recraft.neoforge;
 
 import com.mite.recraft.MiteRecrafted;
+import com.mite.recraft.client.ClientRegistrations;
+import com.mite.recraft.client.neoforge.ClientRegistrationsImpl;
 import com.mite.recraft.content.item.food.NutritionSystem;
+import com.mite.recraft.internal.data.EntityData;
 import com.mite.recraft.internal.data.neoforge.EntityDataImpl;
 import com.mite.recraft.registry.MiteRegistrationPhases;
 import com.mite.recraft.registry.neoforge.ModEntityAttributesImpl;
-
+import dev.architectury.utils.Env;
+import dev.architectury.utils.EnvExecutor;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.IEventBus;
@@ -23,6 +27,8 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 public final class MiteRecraftedNeoForge {
 
     public MiteRecraftedNeoForge(IEventBus modBus) {
+        EntityData.install(new EntityDataImpl());
+        EnvExecutor.runInEnv(Env.CLIENT, () -> () -> ClientRegistrations.install(new ClientRegistrationsImpl()));
         // 触发附加数据描述符的类初始化，再交给 DeferredRegister 写表
         NutritionSystem.register();
         EntityDataImpl.register(modBus);
